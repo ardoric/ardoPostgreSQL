@@ -1,43 +1,11 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+NET/Libraries/OutSystems.HubEdition.DatabaseAbstractionLayer.dll
+NET/Libraries/IntegrationDatabaseProvider.Tests.dll
+NET/Libraries/OutSystems.HubEdition.DatabaseAbstractionLayer.XML
+NET/Libraries/plugins/database/OutSystems.HubEdition.DatabaseAbstractionLayer.dll
+NET/Libraries/plugins/database/PostgreSQLDatabaseProvider.dll
+NET/PostgreSQLDatabaseProvider.Tests/TestResult.xml
+NET/PostgreSQLDatabaseProvider.Tests/ardoPGSQLDatabaseProvider.Tests.VisualState.xml
+*.pdb
+NET/Libraries/DatabaseAbstractionLayer.csproj.FileListAbsolute.txt
+NET/Libraries/DatabaseAbstractionLayer.csprojResolveAssemblyReference.cache
+NET/Projects/DatabaseProvider.Tests/obj/Debug/*

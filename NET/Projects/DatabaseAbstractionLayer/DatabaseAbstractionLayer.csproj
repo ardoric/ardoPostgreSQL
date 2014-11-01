@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E451FEC9-2B6B-45A2-8AB9-57196F4557E8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OutSystems.HubEdition.Extensibility.Data</RootNamespace>
+    <AssemblyName>OutSystems.HubEdition.DatabaseAbstractionLayer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Libraries\</OutputPath>
+    <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Libraries\OutSystems.HubEdition.DatabaseAbstractionLayer.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Libraries\</OutputPath>
+    <IntermediateOutputPath>$(OutputPath)</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>..\..\Libraries\OutSystems.HubEdition.DatabaseAbstractionLayer.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OutSystems.RuntimeCommon, Version=9.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\OutSystems.RuntimeCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseDatabaseProvider.cs" />
+    <Compile Include="BaseProviderProperties.cs" />
+    <Compile Include="ConfigurationService\AdvancedConfiguration.cs" />
+    <Compile Include="ConfigurationService\AuthenticationType.cs" />
+    <Compile Include="ConfigurationService\BaseDatabaseConfiguration.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\AdvancedConnectionStringParam.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\ConfigurationReflectionException.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\ConnStringTemplateParam.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\IParameter.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\IUserDefinedParameter.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\MetaDatabaseConfiguration.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\Parameter.cs" />
+    <Compile Include="ConfigurationService\MetaConfiguration\UserDefinedParameter.cs" />
+    <Compile Include="ConfigurationService\ConfigurationParameter.cs" />
+    <Compile Include="ConfigurationService\ConfigurationSerializer.cs" />
+    <Compile Include="ConfigurationService\IIntegrationDatabaseConfiguration.cs" />
+    <Compile Include="DatabaseObjects\BaseDatabaseInfo.cs" />
+    <Compile Include="DatabaseObjects\BaseDataTypeInfo.cs" />
+    <Compile Include="DatabaseObjects\BaseTableSourceInfo.cs" />
+    <Compile Include="DatabaseObjects\IDatabaseInfo.cs" />
+    <Compile Include="DatabaseObjects\IDatabaseObjectFactory.cs" />
+    <Compile Include="DatabaseObjects\IDataTypeInfo.cs" />
+    <Compile Include="DatabaseObjects\InvalidDatabaseObjectIdentifierException.cs" />
+    <Compile Include="DatabaseObjects\ITableSourceColumnInfo.cs" />
+    <Compile Include="DatabaseObjects\ITableSourceForeignKeyInfo.cs" />
+    <Compile Include="DatabaseObjects\ITableSourceInfo.cs" />
+    <Compile Include="DatabasePluginProvider.cs" />
+    <Compile Include="DMLService\GenericDMLSyntaxHighlightDefinitions.Constants.cs" />
+    <Compile Include="DMLService\GenericDMLSyntaxHighlightDefinitions.cs" />
+    <Compile Include="DMLService\IDMLSyntaxHighlightDefinitions.cs" />
+    <Compile Include="IDatabasePluginSet.cs" />
+    <Compile Include="IProviderProperties.cs" />
+    <Compile Include="Platform\DatabaseObjects\IPlatformDataTypeInfo.cs" />
+    <Compile Include="Platform\DatabaseObjects\IPlatformDatabaseObjectFactory.cs" />
+    <Compile Include="Platform\DatabaseObjects\IPlatformTableSourceColumnInfo.cs" />
+    <Compile Include="Platform\DatabaseObjects\IPlatformTableSourceEventTriggerInfo.cs" />
+    <Compile Include="Platform\DatabaseObjects\IPlatformTableSourceIndexInfo.cs" />
+    <Compile Include="Platform\DatabaseObjects\IPlatformTableSourceInfo.cs" />
+    <Compile Include="Platform\DatabaseObjects\PlatformDatabaseObjectConstants.cs" />
+    <Compile Include="Platform\DatabaseObjects\PlatformDatabaseObjectFactoryExtensions.cs" />
+    <Compile Include="DMLService\BaseDMLQueries.cs" />
+    <Compile Include="DMLService\BaseDMLAggregateFunctions.cs" />
+    <Compile Include="DMLService\IDMLAggregateFunctions.cs" />
+    <Compile Include="DMLService\DMLExtensions.cs" />
+    <Compile Include="DMLService\IDMLQueries.cs" />
+    <Compile Include="IntrospectionService\IntrospectionServiceException.cs" />
+    <Compile Include="IntrospectionService\IntrospectionServiceExtensions.cs" />
+    <Compile Include="Platform\Configuration\BaseConfigurationManager.cs" />
+    <Compile Include="Platform\Configuration\BasePlatformConfigurationManager.cs" />
+    <Compile Include="Platform\Configuration\BaseSessionConfigurationManager.cs" />
+    <Compile Include="Platform\Configuration\BaseSessionDatabaseConfiguration.cs" />
+    <Compile Include="Platform\Configuration\ConfigurationOperationException.cs" />
+    <Compile Include="Platform\Configuration\PlaftormConfigurationSerializer.cs" />
+    <Compile Include="Platform\Configuration\IElevatedUserConfiguration.cs" />
+    <Compile Include="Platform\Configuration\IPlatformConfigurationManager.cs" />
+    <Compile Include="Platform\Configuration\ISessionConfigurationManager.cs" />
+    <Compile Include="Platform\Configuration\ISessionDatabaseConfiguration.cs" />
+    <Compile Include="Platform\Configuration\Suggestors.cs" />
+    <Compile Include="Platform\Configuration\UpgradeScriptArtifacts.cs" />
+    <Compile Include="Platform\Configuration\BasePlatformDatabaseConfiguration.cs" />
+    <Compile Include="Platform\Configuration\IPlatformDatabaseConfiguration.cs" />
+    <Compile Include="Platform\DatabaseProviderExtensions.cs" />
+    <Compile Include="Platform\DDLService\Permissions.cs" />
+    <Compile Include="Platform\DMLService\BasePlatformDMLProgrammaticSQL.cs" />
+    <Compile Include="Platform\DMLService\DMLServiceExtensions.cs" />
+    <Compile Include="Platform\DMLService\IPlatformDMLIdentifiers.cs" />
+    <Compile Include="Platform\DMLService\IPlatformDMLFunctions.cs" />
+    <Compile Include="Platform\DMLService\IPlatformDMLProgrammaticSQL.cs" />
+    <Compile Include="Platform\DMLService\IPlatformDMLService.cs" />
+    <Compile Include="Platform\DMLService\QueryPlaceholder.cs" />
+    <Compile Include="Platform\ExecutionService\IPlatformExecutionService.cs" />
+    <Compile Include="Platform\IntrospectionService\IPlatformIntrospectionService.cs" />
+    <Compile Include="IntrospectionService\IsTableSourceToIgnore.cs" />
+    <Compile Include="Platform\DDLService\BaseDDLService.cs" />
+    <Compile Include="Platform\DDLService\IDDLService.cs" />
+    <Compile Include="DMLService\BaseDMLDefaultValues.cs" />
+    <Compile Include="DMLService\IDMLDefaultValues.cs" />
+    <Compile Include="DMLService\IDMLOperators.cs" />
+    <Compile Include="ConfigurationService\UserDefinedConfigurationParameter.cs" />
+    <Compile Include="DMLService\BaseDMLEntityActions.cs" />
+    <Compile Include="DMLService\DMLPlaceholders\DMLPlaceholderExtensions.cs" />
+    <Compile Include="DMLService\DMLPlaceholders\StatementPlaceholder.cs" />
+    <Compile Include="DMLService\DMLPlaceholders\DeletePlaceholder.cs" />
+    <Compile Include="DMLService\DMLPlaceholders\UpdatePlaceholder.cs" />
+    <Compile Include="DMLService\DMLPlaceholders\InsertPlaceholder.cs" />
+    <Compile Include="DMLService\DMLPlaceholders\SelectPlaceholder.cs" />
+    <Compile Include="DMLService\BaseDMLService.cs" />
+    <Compile Include="DBDataType.cs" />
+    <Compile Include="DMLService\BaseDMLFunctions.cs" />
+    <Compile Include="DMLService\BaseDMLOperators.cs" />
+    <Compile Include="DMLService\IDMLEntityActions.cs" />
+    <Compile Include="DMLService\BaseDMLIdentifiers.cs" />
+    <Compile Include="DMLService\IDMLFunctions.cs" />
+    <Compile Include="DMLService\IDMLService.cs" />
+    <Compile Include="ExecutionService\ExecutionServiceExtensions.cs" />
+    <Compile Include="DMLService\IDMLIdentifiers.cs" />
+    <Compile Include="ExecutionService\BaseExecutionService.cs" />
+    <Compile Include="ExecutionService\IExecutionService.cs" />
+    <Compile Include="ConfigurationService\IRuntimeDatabaseConfiguration.cs" />
+    <Compile Include="IDatabaseProvider.cs" />
+    <Compile Include="IDatabaseServices.cs" />
+    <Compile Include="IntrospectionService\BaseIntrospectionService.cs" />
+    <Compile Include="IntrospectionService\IIntrospectionService.cs" />
+    <Compile Include="Platform\IPlatformDatabaseProvider.cs" />
+    <Compile Include="Platform\IPlatformDatabaseServices.cs" />
+    <Compile Include="Platform\IPlatformProviderProperties.cs" />
+    <Compile Include="Platform\QueryProvider\BaseQueryProvider.cs" />
+    <Compile Include="Platform\QueryProvider\IQueryProviderQualifier.cs" />
+    <Compile Include="Platform\QueryProvider\QueryProviderAttributes.cs" />
+    <Compile Include="Platform\Session\Constants.cs" />
+    <Compile Include="Platform\Session\IPlatformSessionService.cs" />
+    <Compile Include="Platform\Session\ItemState.cs" />
+    <Compile Include="Platform\Session\RepeatedInsertException.cs" />
+    <Compile Include="Platform\Session\SessionStoreException.cs" />
+    <Compile Include="TransactionService\BaseTransactionManager.cs" />
+    <Compile Include="TransactionService\BaseTransactionService.cs" />
+    <Compile Include="TransactionService\ConnectionStringsHelper.cs" />
+    <Compile Include="TransactionService\ITransactionManager.cs" />
+    <Compile Include="TransactionService\ITransactionService.cs" />
+    <Compile Include="TransactionService\TransactionExceptions.cs" />
+    <Compile Include="TransactionService\TransactionServiceConstants.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

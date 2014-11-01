@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AC3960B5-7709-4169-B3F4-BCA7289BAE0A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IntegrationDatabaseProvider.Tests</RootNamespace>
+    <AssemblyName>IntegrationDatabaseProvider.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Libraries\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Libraries\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NUnitOSAddIn.Framework">
+      <HintPath>..\..\Libraries\NUnitOSAddIn.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="OutSystems.RuntimeCommon, Version=9.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libraries\OutSystems.RuntimeCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConfigurationService\BaseDatabaseConfigurationTests.cs" />
+    <Compile Include="ConfigurationService\DatabaseConfigurationSerializerTests.cs" />
+    <Compile Include="ConfigurationService\DatabaseConfigurationTests.cs" />
+    <Compile Include="ConfigurationService\MetaDatabaseConfigurationTests.cs" />
+    <Compile Include="ConfigurationService\MockDatabaseConfiguration.cs" />
+    <Compile Include="ConfigurationService\ParameterTests.cs" />
+    <Compile Include="DMLService\DMLAggregateFunctionsTests.cs" />
+    <Compile Include="DMLService\DMLDefaultValuesTests.cs" />
+    <Compile Include="DMLService\DMLEntityActionsTests.cs" />
+    <Compile Include="DMLService\DMLFunctionsTests.cs" />
+    <Compile Include="DMLService\DMLIdentifiersTests.cs" />
+    <Compile Include="DMLService\DMLOperatorsTests.cs" />
+    <Compile Include="DMLService\DMLQueriesTests.cs" />
+    <Compile Include="DMLService\DMLTest.cs" />
+    <Compile Include="ExecutionService\ExecutionServiceTests.cs" />
+    <Compile Include="Framework\AgnosticDatabaseProviderTestConfiguration.cs" />
+    <Compile Include="Framework\BaseDatabaseProviderTest.cs" />
+    <Compile Include="Framework\BaseDatabaseProviderTestConfiguration.cs" />
+    <Compile Include="Framework\DashboardTest.cs" />
+    <Compile Include="Framework\DatabaseProviderTest.cs" />
+    <Compile Include="Framework\DatabaseProviderTestCase.cs" />
+    <Compile Include="Framework\DatabaseProviderTestConfiguration.cs" />
+    <Compile Include="Framework\DummyDebuggerDashboard.cs" />
+    <Compile Include="Framework\IDatabaseProviderTestCase.cs" />
+    <Compile Include="Framework\IDatabaseProviderTestConfiguration.cs" />
+    <Compile Include="Framework\PlatformDatabaseProviderTestCase.cs" />
+    <Compile Include="IntrospectionService\IntrospectionServiceTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransactionService\TransactionServiceTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseAbstractionLayer\DatabaseAbstractionLayer.csproj">
+      <Project>{e451fec9-2b6b-45a2-8ab9-57196f4557e8}</Project>
+      <Name>DatabaseAbstractionLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
