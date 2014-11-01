@@ -23,7 +23,12 @@ namespace OutSystems.HubEdition.DatabaseProvider.Postgres.ConfigurationService
         [UserDefinedConfigurationParameter(Label = "Password", IsPassword = true, Order = 2, Region = ParameterRegion.UserSpecific)]
         public string Password { get; set; }
 
-        private AdvancedConfiguration _advConfig = new AdvancedConfiguration("Insert configuration parameters separated by ';'. Username and Password will be inserted automatically if present.", "Connection String Parameters", "");
+
+        private AdvancedConfiguration _advConfig = 
+            new AdvancedConfiguration(
+                "Insert configuration parameters separated by ';'. Username and Password will be inserted automatically if present.", 
+                "Connection String Parameters", 
+                "Host=;Username=;Password=;Database=;SSL=True;Sslmode=Prefer;");
 
         public override AdvancedConfiguration AdvancedConfiguration
         {
@@ -44,7 +49,7 @@ namespace OutSystems.HubEdition.DatabaseProvider.Postgres.ConfigurationService
 
         protected override string AssembleBasicConnectionString()
         {
-            return string.Format("Host={0};Username={1};Password={2};Database={3}", Server, Username, Password, Database);
+            return string.Format("Host={0};Username={1};Password={2};Database={3};MaxPoolSize=100;ConnectionLifeTime=120;ApplicationName=ardoPGSQL;SSL=True;Sslmode=Prefer;", Server, Username, Password, Database);
         }
 
         public override string DatabaseIdentifier

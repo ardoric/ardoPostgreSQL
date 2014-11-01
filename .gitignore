@@ -9,3 +9,6 @@ NET/PostgreSQLDatabaseProvider.Tests/ardoPGSQLDatabaseProvider.Tests.VisualState
 NET/Libraries/DatabaseAbstractionLayer.csproj.FileListAbsolute.txt
 NET/Libraries/DatabaseAbstractionLayer.csprojResolveAssemblyReference.cache
 NET/Projects/DatabaseProvider.Tests/obj/Debug/*
+NET/Libraries/plugins/database/OutSystems.HubEdition.DatabaseAbstractionLayer.xml
+NET/PostgreConnector/PostgreConnector/obj/Debug/*
+*.suo
