@@ -1,0 +1,43 @@
+<project name="ardoPostgreSQL.Tests" default="run" basedir=".">
+	
+	<property name="lib.dir" value="../Libraries" />
+	<property name="testlist.file" value="tests.txt" />
+	<property name="provider.antfile" location="../ardoPostgreSQL/build.xml" />
+	
+	<target name="jar-sample">
+		<ant antfile="${provider.antfile}" target="jar" useNativeBasedir="true" inheritAll="false" inheritRefs="false"/>
+	</target>
+	
+	<target name="dump" depends="jar-sample">
+		<java classname="outsystems.junit.Runner" output="${testlist.file}" fork="true">
+			<env key="DASHBOARD_URL_ENVIRONMENT_VARIABLE" value="disabled" />
+			<arg value="-dump" />
+			<arg value="${lib.dir}/integrationdatabaseprovider.tests.jar" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="**.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
+	<target name="run-dump" depends="dump">
+		<java classname="outsystems.junit.Runner" input="${testlist.file}" fork="true">
+			<env key="DASHBOARD_URL_ENVIRONMENT_VARIABLE" value="disabled" />
+			<arg value="-run" />
+			<arg value="${lib.dir}/integrationdatabaseprovider.tests.jar" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="**.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
+	
+	<target name="run-clean" depends="run-dump">
+		<delete file="${testlist.file}" />
+	</target>
+	
+	<target name="run" depends="run-clean" />
+	
+</project>

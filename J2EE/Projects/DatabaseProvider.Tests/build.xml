@@ -1,0 +1,51 @@
+<project name="DatabaseProvider.Tests" default="all" basedir=".">
+
+	<property name="global.lib" location="../../Libraries" />
+	<property name="lib" location="lib" />
+	<property name="src" location="src" />
+	<property name="gensrc" location="generatedSrc" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="docs" location="docs" />
+	
+	<property name="dal.antfile" location="../DatabaseAbstractionLayer/build.xml" />
+	
+	<target name="init" >
+		<mkdir dir="${lib}" />
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	<path id="project.classpath">
+		<fileset dir="${global.lib}">
+			<include name="**.jar" />
+		</fileset>
+		<fileset dir="${lib}">
+			<include name="**.jar" />
+		</fileset>
+	</path>
+
+	<target name="jar-dal">
+		<ant antfile="${dal.antfile}" target="jar" useNativeBasedir="true" inheritAll="false" inheritRefs="false"/>
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac srcdir="${src}:${gensrc}" destdir="${build}" includeantruntime="false">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="jar-dal,compile">
+		<jar destfile="${global.lib}/integrationdatabaseprovider.tests.jar" basedir="${build}" />
+	</target>
+
+	<target name="all" depends="clean,jar" />
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${docs}" />
+	</target>
+	
+</project>
+

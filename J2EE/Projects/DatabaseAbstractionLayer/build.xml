@@ -1,0 +1,62 @@
+<project name="DatabaseAbstractionLayer" default="all" basedir=".">
+
+	<property name="global.lib" location="../../Libraries" />
+	<property name="lib" location="lib" />
+	<property name="src" location="src" />
+	<property name="gensrc" location="generatedSrc" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	<property name="docs" location="docs" />
+	
+	<target name="init" >
+		<mkdir dir="${lib}" />
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	<path id="project.classpath">
+		<fileset dir="${global.lib}">
+			<include name="**.jar" />
+		</fileset>
+		<fileset dir="${lib}">
+			<include name="**.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}:${gensrc}" destdir="${build}" includeantruntime="false">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${global.lib}/outsystems.hubedition.databaseabstractionlayer.jar" basedir="${build}" />
+	</target>
+
+	<target name="all" depends="clean,jar,javadoc" />
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${docs}" />
+	</target>
+	
+	<target name="javadoc" depends="compile" description="Generate API docs for the project's source">
+		<delete dir="${docs}"/>
+		<mkdir  dir = "${docs}" />
+		<javadoc
+			defaultexcludes  = "yes"
+			use              = "yes"
+			header           = "Database Abstraction Layer - OutSystems"
+			doctitle         = "Database Abstraction Layer - OutSystems"
+			nodeprecatedlist = "no"
+			sourcepath       = "${src}:${gensrc}"
+			destdir          = "${docs}" 
+			breakIterator	 = "yes" >	      	
+			<packageset dir="${src}" defaultexcludes="yes"/>
+			<classpath refid="project.classpath" />
+		</javadoc>
+		<zip destfile="${docs}/databaseabstractionlayer.zip" basedir="${docs}" />
+	</target>
+	
+</project>

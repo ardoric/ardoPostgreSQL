@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/**|**/_svn/**" kind="src" path="generatedSrc"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="../../Libraries/outsystems.hubedition.runtimecommon.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/outsystems.hubedition.runtimeplatformutil.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/commons-logging.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/FastInfoset.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/httpclient-4.1.1.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/httpcore-4.1.1.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/log4j.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/servlet-api.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/slf4j-log4j12.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/wstx.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/outsystems.runtimeservices.jar"/>
+	<classpathentry kind="lib" path="../../Libraries/allatori-annotations.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

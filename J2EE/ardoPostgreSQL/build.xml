@@ -1,0 +1,58 @@
+<project name="SampleDatabaseProvider" default="all" basedir=".">
+
+	<property name="global.lib" location="../Libraries" />
+	<property name="lib" location="lib" />
+	<property name="src" location="src" />
+	<property name="build" location="bin" />
+	<property name="dist" location="dist" />
+	
+	<property name="database.tests.antfile" location="../Projects/DatabaseProvider.Tests/build.xml" />
+	
+	<target name="init" >
+		<mkdir dir="${lib}" />
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	<path id="project.classpath">
+		<fileset dir="${global.lib}">
+			<include name="**.jar" />
+		</fileset>
+		<fileset dir="${lib}">
+			<include name="**.jar" />
+		</fileset>
+	</path>
+
+	<target name="jar-tests">
+		<ant antfile="${database.tests.antfile}" target="jar" useNativeBasedir="true" inheritAll="false" inheritRefs="false"/>
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="copy-driver">
+		<copy todir="${global.lib}">
+			<fileset dir="${lib}">
+				<include name="**.jar" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="jar" depends="jar-tests,compile,copy-driver">
+		<jar destfile="${global.lib}/postgresqldatabaseprovider.jar" basedir="${build}">
+			<metainf dir="${basedir}/META-INF" />
+		</jar>
+	</target>
+
+	<target name="all" depends="clean,jar" />
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+	
+</project>
+

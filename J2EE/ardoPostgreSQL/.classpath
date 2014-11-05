@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DatabaseAbstractionLayer"/>
+	<classpathentry kind="lib" path="../Libraries/outsystems.hubedition.runtimecommon.jar"/>
+	<classpathentry kind="lib" path="../Libraries/outsystems.hubedition.runtimeplatformutil.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.3-1102.jdbc3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rbs/Documents/Projects/ardoPGSQL/J2EE/Libraries/ucp.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rbs/Documents/Projects/ardoPGSQL/J2EE/Libraries/ojdbc6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

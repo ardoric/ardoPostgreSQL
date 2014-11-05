@@ -1,0 +1,5 @@
+CREATE USER ostests WITH PASSWORD 'tests' ;
+
+CREATE DATABASE ostests ENCODING = 'UTF8' LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' ;
+
+GRANT ALL PRIVILEGES ON DATABASE ostests to ostests ;
