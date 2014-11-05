@@ -38,7 +38,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Decimal.
 	 */
     public String trunc(String n) {
-        throw new UnsupportedOperationException();
+        return String.format("Trunc(%s)", n);
     }
     
     /**
@@ -48,7 +48,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String index(String t, String search) {
-        throw new UnsupportedOperationException();
+        return String.format("(position(%s in %s)-1)",search,t);
     }
     
     /**
@@ -57,7 +57,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String length(String t) {
-        throw new UnsupportedOperationException();
+        return String.format("Length(%s)", t);
     }
     
     /**
@@ -68,7 +68,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String substr(String t, String start, String length) {
-        throw new UnsupportedOperationException();
+        return String.format("substring(%s from (%s) + 1 for %s)", t, start, length);
     }
     
     /**
@@ -77,7 +77,11 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String trim(String t) {
-        throw new UnsupportedOperationException();
+        return String.format("Trim(%s)", t);
+    }
+    
+    private String addDate(String dt, String n, String unit) {
+    	return String.format("(%s + ((%s) * interval '1 %s'))", dt, n, unit);
     }
     
     /**
@@ -87,7 +91,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addDays(String dt, String n) {
-        throw new UnsupportedOperationException();
+        return addDate(dt,  n, "day");
     }
     
     /**
@@ -97,7 +101,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addHours(String dt, String n) {
-        throw new UnsupportedOperationException();
+        return addDate(dt, n, "hour");
     }
     
     /**
@@ -107,7 +111,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addMinutes(String dt, String n) {
-        throw new UnsupportedOperationException();
+        return addDate(dt, n, "hour");
     }
     
     /**
@@ -117,7 +121,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addMonths(String dt, String n) {
-        throw new UnsupportedOperationException();
+        return addDate(dt, n, "month");
     }
     
     /**
@@ -127,7 +131,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addSeconds(String dt, String n) {
-        throw new UnsupportedOperationException();
+        return addDate(dt, n, "second");
     }
     
     /**
@@ -137,7 +141,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addYears(String dt, String n) {
-        throw new UnsupportedOperationException();
+        return addDate(dt, n, "year");
     }
     
     /**
@@ -147,7 +151,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String buildDateTime(String d, String t) {
-        throw new UnsupportedOperationException();
+        return String.format("(%s + (%s - timestamp '1900-01-01 00:00:00'))", d, t);
     }
     
     /**
@@ -156,7 +160,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String day(String dt) {
-        throw new UnsupportedOperationException();
+        return String.format("extract(day from %s)", dt);
     }
     
     /**
@@ -165,7 +169,8 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String dayOfWeek(String dt) {
-        throw new UnsupportedOperationException();
+    	// XXX: NOPE! Add type converters ?
+        return String.format("cast(extract(dow from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -175,7 +180,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffDays(String dt1, String dt2) {
-        throw new UnsupportedOperationException();
+        return String.format("date_part('day', %s ::timestamp without time zone - %s :: timestamp without time zone)", dt2, dt1) ;
     }
     
     /**
@@ -185,7 +190,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffHours(String dt1, String dt2) {
-        throw new UnsupportedOperationException();
+        return "(" + diffDays(dt1,dt2) + String.format(")*24 + date_part('hour', %s - %s )", dt2, dt1);
     }
     
     /**
@@ -195,7 +200,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffMinutes(String dt1, String dt2) {
-        throw new UnsupportedOperationException();
+    	return "(" + diffHours(dt1, dt2) + String.format(")*60 + date_part('minute', %s - %s)", dt2, dt1);
     }
     
     /**
@@ -205,7 +210,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffSeconds(String dt1, String dt2) {
-        throw new UnsupportedOperationException();
+    	return "(" + diffMinutes(dt1, dt2) + String.format(")*60 + date_part('seconds', %s - %s)", dt2, dt1);
     }
     
     /**
@@ -214,7 +219,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String hour(String dt) {
-        throw new UnsupportedOperationException();
+        return String.format("extract(hour from %s)", dt);
     }
     
     /**
@@ -223,7 +228,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String minute(String dt) {
-        throw new UnsupportedOperationException();
+    	return String.format("extract(minute from %s)", dt);
     }
     
     /**
@@ -232,7 +237,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String month(String dt) {
-        throw new UnsupportedOperationException();
+    	return String.format("extract(month from %s)", dt);
     }
     
     /**
@@ -243,7 +248,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Date.
 	 */
     public String newDate(String y, String m, String d) {
-        throw new UnsupportedOperationException();
+    	return String.format("to_date(concat(%s,'-',%s,'-',%s), 'YYYY-MM-DD')",y,m,d);
     }
     
     /**
@@ -257,7 +262,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to DateTime.
 	 */
     public String newDateTime(String y, String mo, String d, String h, String m, String s) {
-        throw new UnsupportedOperationException();
+    	return String.format("(to_timestamp(concat(%s,'-',%s,'-',%s,' ',%s,':',%s,':',%s), 'YYYY-MM-DD HH24:MI:SS') :: timestamp without time zone)", y, mo, d, h, m, s);
     }
     
     /**
@@ -268,7 +273,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Time.
 	 */
     public String newTime(String h, String m, String s) {
-        throw new UnsupportedOperationException();
+        return newDateTime("1900", "01", "01", h, m, s);
     }
     
     /**
@@ -277,7 +282,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String second(String dt) {
-        throw new UnsupportedOperationException();
+        return String.format("extract(second from %s)", dt);
     }
     
     /**
@@ -286,7 +291,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String year(String dt) {
-        throw new UnsupportedOperationException();
+        return String.format("extract(year from %s)", dt);
     }
     
     /**
@@ -295,16 +300,16 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String booleanToInteger(String b) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as int)", b);
     }
     
     /**
-	 *	Returns a DML expression that convers a Boolean in its textual representation: True or False.
+	 *	Returns a DML expression that converts a Boolean in its textual representation: True or False.
 	 *	@param	b	A DML expression that evaluates to Boolean.
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String booleanToText(String b) {
-        throw new UnsupportedOperationException();
+        return String.format("(case %s when TRUE then 'True' ELSE 'False' end)", b);
     }
     
     /**
@@ -313,7 +318,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Date.
 	 */
     public String dateTimeToDate(String dt) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as date)", dt);
     }
     
     /**
@@ -323,7 +328,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String dateTimeToText(String dt, String dateFormat) {
-        throw new UnsupportedOperationException();
+        return String.format("to_char(%s, '%s HH24:MI:SS')", dt, dateFormat.toUpperCase());
     }
     
     /**
@@ -332,7 +337,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Time.
 	 */
     public String dateTimeToTime(String dt) {
-        throw new UnsupportedOperationException();
+        return String.format("(timestamp '1900-01-01 00:00:00' + cast(%s as time))", dt);
     }
     
     /**
@@ -342,7 +347,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String dateToText(String d, String dateFormat) {
-        throw new UnsupportedOperationException();
+        return String.format("to_char(%s, '%s')", d, dateFormat.toUpperCase());
     }
     
     /**
@@ -351,7 +356,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Boolean.
 	 */
     public String decimalToBoolean(String d) {
-        throw new UnsupportedOperationException();
+        return String.format("(case %s when 0.0 then FALSE else TRUE end)", d);
     }
     
     /**
@@ -360,16 +365,16 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Boolean.
 	 */
     public String decimalToInteger(String d) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as int)", d);
     }
-    
+        
     /**
 	 *	Returns a DML expression that converts a Decimal to its textual representation.
 	 *	@param	d	A DML expression that evaluates to a Decimal.
 	 *	@return	A DML expression that evaluates to a Decimal.
 	 */
     public String decimalToText(String d) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as text)", d);
     }
     
     /**
@@ -378,7 +383,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	DML expression of type Integer
 	 */
     public String entityRefIntegerToInteger(String er) {
-        throw new UnsupportedOperationException();
+        return er;
     }
     
     /**
@@ -387,7 +392,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String entityRefTextToText(String er) {
-        throw new UnsupportedOperationException();
+        return er;
     }
     
     /**
@@ -396,7 +401,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Boolean.
 	 */
     public String integerToBoolean(String i) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as boolean)",i);
     }
     
     /**
@@ -405,7 +410,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a decimal.
 	 */
     public String integerToDecimal(String i) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as decimal)", i);
     }
     
     /**
@@ -414,7 +419,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String integerToText(String i) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as text)", i);
     }
     
     /**
@@ -422,7 +427,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Date.
 	 */
     public String nullDate() {
-        throw new UnsupportedOperationException();
+        return "date '1900-01-01'";
     }
     
     /**
@@ -432,7 +437,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Date.
 	 */
     public String textToDate(String t, String dateFormat) {
-        throw new UnsupportedOperationException();
+        return String.format("to_date(%s,'%s')", t, dateFormat.toUpperCase());
     }
     
     /**
@@ -442,7 +447,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	DML expression of type DateTime
 	 */
     public String textToDateTime(String t, String dateFormat) {
-        throw new UnsupportedOperationException();
+        return String.format("(to_timestamp(%s, '%s HH24:MI:SS')::timestamp without time zone)", t, dateFormat.toUpperCase());
     }
     
     /**
@@ -451,7 +456,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String textToDecimal(String t) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as decimal)", t);
     }
     
     /**
@@ -460,7 +465,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String textToInteger(String t) {
-        throw new UnsupportedOperationException();
+        return String.format("cast(%s as integer)", t);
     }
     
     /**
@@ -469,7 +474,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Time.
 	 */
     public String textToTime(String t) {
-        throw new UnsupportedOperationException();
+        return String.format("(to_timestamp('1900-01-01 ' || %s, 'YYYY-MM-DD HH24:MI:SS')::timestamp without time zone)", t);
     }
     
     /**
@@ -478,6 +483,6 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String timeToText(String t) {
-        throw new UnsupportedOperationException();
+        return String.format("to_char(%s :: timestamp without time zone,'HH24:MI:SS')", t);
     }
 }

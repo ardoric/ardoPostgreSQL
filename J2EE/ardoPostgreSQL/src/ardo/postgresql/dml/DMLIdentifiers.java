@@ -30,6 +30,7 @@ public class DMLIdentifiers extends BaseDMLIdentifiers {
 	 *	Gets the maximum length of a simple (not compound) identifier. This value should be the minimum valid length for any kind of identifier (e.g. table name, parameter name)
 	 */
     public int getMaxLength() {
-        throw new UnsupportedOperationException();
+    	// http://www.postgresql.org/docs/9.1/static/sql-syntax-lexical.html
+        return 63;
     }
 }
