@@ -9,6 +9,7 @@ package ardo.postgresql.introspection;
 
 import outsystems.hubedition.extensibility.data.IDatabaseServices;
 import outsystems.hubedition.extensibility.data.databaseobjects.BaseTableSourceInfo;
+import outsystems.hubedition.extensibility.data.databaseobjects.IDatabaseInfo;
 import outsystems.hubedition.util.TypeInformation;
 
 /**
@@ -24,8 +25,8 @@ public class TableSourceInfo extends BaseTableSourceInfo {
 	 *	@param	name	The name.
 	 *	@param	qualifiedName	Name of the qualified.
 	 */
-    public TableSourceInfo(IDatabaseServices databaseServices, DatabaseInfo database, String name, String qualifiedName){
-        super(databaseServices, database, name, qualifiedName);
+    public TableSourceInfo(IDatabaseServices databaseServices, IDatabaseInfo database, String name){
+        super(databaseServices, database, name, database.getIdentifier() + ".\"" + name + "\"");
     }
     
     /**

@@ -7,7 +7,13 @@
 
 package ardo.postgresql.introspection;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 
 import outsystems.hubedition.extensibility.data.IDatabaseServices;
 import outsystems.hubedition.extensibility.data.databaseobjects.IDatabaseInfo;
@@ -37,8 +43,28 @@ public class IntrospectionService extends BaseIntrospectionService {
 	 *	@return	List of available databases in the given server
 	 *	@throws	SQLException	if an error occurs while accessing the database
 	 */
-    public Iterable<IDatabaseInfo> listDatabases() {
-        throw new UnsupportedOperationException();
+    public Iterable<IDatabaseInfo> listDatabases() throws SQLException {
+        List<IDatabaseInfo> result = new LinkedList<IDatabaseInfo>();
+        
+	    Connection conn = getConnection();
+	    Statement stmt = conn.createStatement();
+	    
+        try {
+        	
+		    ResultSet res = stmt.executeQuery("SELECT schema_name FROM information_schema.schemata");
+		    
+		    result.add(new DatabaseInfo(getDatabaseServices(), "public"));
+		    
+		    while (res.next()) {
+		    	result.add(new DatabaseInfo(getDatabaseServices(), res.getString(1)));
+		    }
+		    
+        } finally {
+        	stmt.close();
+        	conn.close();
+        }
+        
+        return result;
     }
     
     /**
@@ -48,8 +74,32 @@ public class IntrospectionService extends BaseIntrospectionService {
 	 *	@return	List of available table sources in the given database
 	 *	@throws	SQLException	if an error occurs while accessing the database
 	 */
-    public Iterable<ITableSourceInfo> listTableSources(IDatabaseInfo database, IsTableSourceToIgnore isTableSourceToIgnore) {
-        throw new UnsupportedOperationException();
+    public Iterable<ITableSourceInfo> listTableSources(IDatabaseInfo database, IsTableSourceToIgnore isTableSourceToIgnore) throws SQLException {
+        List<ITableSourceInfo> result = new LinkedList<ITableSourceInfo>();
+        
+    	Connection conn = getConnection();
+    	try {
+    		PreparedStatement stmt = conn.prepareStatement("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema = ?");
+    		stmt.setString(1, database.getIdentifier());
+    		
+    		try {
+    			ResultSet res = stmt.executeQuery();
+    			try {
+    				while (res.next()) {
+    					String tableName = res.getString(2);
+    					if (!isTableSourceToIgnore.execute(tableName))
+    						result.add(new TableSourceInfo(getDatabaseServices(), database, tableName) );
+    				}
+    			} finally {
+    				res.close();
+    			}
+    		} finally {
+    			stmt.close();
+    		}
+    	} finally {
+    		conn.close();
+    	}
+    	return result;
     }
     
     /**
@@ -58,8 +108,46 @@ public class IntrospectionService extends BaseIntrospectionService {
 	 *	@return	The list of foreign keys of the table
 	 *	@throws	SQLException	if an error occurs while accessing the database
 	 */
-    public Iterable<ITableSourceForeignKeyInfo> getTableSourceForeignKeys(ITableSourceInfo tableSource) {
-        throw new UnsupportedOperationException();
+    public Iterable<ITableSourceForeignKeyInfo> getTableSourceForeignKeys(ITableSourceInfo tableSource) throws SQLException {
+        List<ITableSourceForeignKeyInfo> result = new LinkedList<ITableSourceForeignKeyInfo>();
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet res = null;
+        
+        try {
+        	conn = getConnection();
+        	
+        	stmt = conn.prepareStatement("SELECT " +
+                    " key_column_usage.constraint_name    AS constraint_name, " + 
+                    " key_column_usage.column_name        AS source_column_name, " + 
+                    " table_constraints.table_catalog     AS dest_database, " + 
+                    " table_constraints.table_schema      AS dest_schema, " + 
+                    " table_constraints.table_name        AS dest_table_name, " + 
+                    " referential_constraints.delete_rule AS delete_rule, " + 
+                    " dest_usage.column_name              AS dest_column_name " + 
+                 " FROM information_schema.key_column_usage " + 
+                 " INNER JOIN information_schema.referential_constraints ON (key_column_usage.constraint_name = referential_constraints.constraint_name) " + 
+                 " INNER JOIN information_Schema.table_constraints ON (referential_constraints.unique_constraint_name = table_constraints.constraint_name) " + 
+                 " INNER JOIN information_schema.key_column_usage AS dest_usage ON (table_constraints.constraint_name = dest_usage.constraint_name) " + 
+                 " WHERE key_column_usage.table_name = ? AND key_column_usage.table_schema = ? " + 
+                 " AND table_constraints.constraint_type = 'PRIMARY KEY'");
+        	stmt.setString(1, tableSource.getName());
+        	stmt.setString(2, tableSource.getDatabase().getIdentifier());
+        	
+        	res = stmt.executeQuery();
+        	
+        	while (res.next()) {
+        		result.add(TableSourceForeignKeyInfo.create(getDatabaseServices(), tableSource, res));
+        	}
+        	
+        } finally {
+        	if (res  != null) try { res.close();  } catch (Exception e) {} 
+        	if (stmt != null) try { stmt.close(); } catch (Exception e) {}
+        	if (conn != null) try { conn.close(); } catch (Exception e) {}
+        }
+        
+        return result;
     }
     
     /**
@@ -68,7 +156,51 @@ public class IntrospectionService extends BaseIntrospectionService {
 	 *	@return	The columns of the table
 	 *	@throws	SQLException	if an error occurs while accessing the database
 	 */
-    public Iterable<ITableSourceColumnInfo> getTableSourceColumns(ITableSourceInfo tableSource) {
-        throw new UnsupportedOperationException();
+    public Iterable<ITableSourceColumnInfo> getTableSourceColumns(ITableSourceInfo tableSource) throws SQLException {
+        List<ITableSourceColumnInfo> result = new LinkedList<ITableSourceColumnInfo>();
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet res = null;
+        
+        try {
+        	conn = getConnection();
+        	stmt = conn.prepareStatement("SELECT cols.column_name, " + 
+                    " cols.data_type, " +  
+                    " cols.is_nullable, " + 
+                    " cols.column_default, " +  
+                    " cols.character_maximum_length, " + 
+                    " cols.numeric_precision, " +
+                    " cols.numeric_precision_radix, " +  
+                    " cols.numeric_scale, " + 
+                    " cons.constraint_type " + 
+            " FROM information_schema.columns cols " + 
+            " LEFT JOIN information_schema.key_column_usage usage ON (cols.column_name = usage.column_name and cols.table_name = usage.table_name) " + 
+            " LEFT JOIN information_schema.table_constraints cons ON (cons.constraint_name = usage.constraint_name AND cons.constraint_type = 'PRIMARY KEY') " + 
+            " WHERE cols.table_schema = ? " + 
+            " AND cols.table_name = ? " + 
+            " ORDER BY cols.ordinal_position");
+        	
+        	stmt.setString(1, tableSource.getDatabase().getIdentifier());
+        	stmt.setString(2, tableSource.getName());
+        	
+        	res = stmt.executeQuery();
+        	
+        	while (res.next()) {
+        		result.add(TableSourceColumnInfo.create(tableSource, res));
+        	}
+        	
+        } finally {
+        	if (res  != null) try { res.close();  } catch (Exception e) {} 
+        	if (stmt != null) try { stmt.close(); } catch (Exception e) {}
+        	if (conn != null) try { conn.close(); } catch (Exception e) {}
+        }
+        
+        return result;
     }
+    
+    private Connection getConnection() throws SQLException {
+    	return getDatabaseServices().getTransactionService().createConnection();
+    }
+    
 }

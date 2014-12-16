@@ -7,10 +7,12 @@
 
 package ardo.postgresql.introspection;
 
+import ardo.postgresql.configuration.RuntimeDatabaseConfiguration;
 import outsystems.hubedition.extensibility.data.IDatabaseServices;
 import outsystems.hubedition.extensibility.data.databaseobjects.IDatabaseInfo;
 import outsystems.hubedition.extensibility.data.databaseobjects.IDatabaseObjectFactory;
 import outsystems.hubedition.extensibility.data.databaseobjects.ITableSourceInfo;
+import outsystems.hubedition.util.StringUtils;
 import outsystems.hubedition.util.TypeInformation;
 
 /**
@@ -34,7 +36,7 @@ public class DatabaseObjectFactory implements IDatabaseObjectFactory {
 	 *	@return	Database-specific object that implements the IDatabaseInfo interface
 	 */
     public final IDatabaseInfo createLocalDatabaseInfo() {
-        throw new UnsupportedOperationException();
+        return new DatabaseInfo(databaseServices, ((RuntimeDatabaseConfiguration)databaseServices.getDatabaseConfiguration()).getDatabaseIdentifier());
     }
     
     /**
@@ -43,7 +45,10 @@ public class DatabaseObjectFactory implements IDatabaseObjectFactory {
 	 *	@return	Database-specific object that implements the IDatabaseInfo interface
 	 */
     public final IDatabaseInfo createDatabaseInfo(String databaseIdentifier) {
-        throw new UnsupportedOperationException();
+    	if (databaseIdentifier.startsWith("\"")){
+    		databaseIdentifier = databaseIdentifier.substring(1,  databaseIdentifier.length() - 1);
+    	}
+        return new DatabaseInfo(databaseServices, databaseIdentifier);
     }
     
     /**
@@ -52,6 +57,15 @@ public class DatabaseObjectFactory implements IDatabaseObjectFactory {
 	 *	@return	Database-specific object that implements the ITableSourceInfo interface
 	 */
     public final ITableSourceInfo createTableSourceInfo(String qualifiedName) {
-        throw new UnsupportedOperationException();
+        String[] parts = qualifiedName.split("\\.");
+        
+        switch (parts.length)
+        {
+        case 1:
+        	return new TableSourceInfo(databaseServices, createDatabaseInfo(""), StringUtils.trim(parts[0], '"'));
+        default:
+        	return new TableSourceInfo(databaseServices, createDatabaseInfo(parts[0].trim()), StringUtils.trim(parts[1], '"'));
+        }
+        
     }
 }

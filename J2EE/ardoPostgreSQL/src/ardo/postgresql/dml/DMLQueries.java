@@ -7,11 +7,14 @@
 
 package ardo.postgresql.dml;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import outsystems.hubedition.extensibility.data.dmlservice.BaseDMLQueries;
 import outsystems.hubedition.extensibility.data.dmlservice.IDMLService;
 import outsystems.hubedition.extensibility.data.dmlservice.dmlplaceholders.SelectPlaceholder;
+import outsystems.hubedition.extensibility.data.dmlservice.dmlplaceholders.StatementPlaceholder;
+import outsystems.hubedition.util.CollectionUtils;
 import outsystems.hubedition.util.TypeInformation;
 
 /**
@@ -28,12 +31,22 @@ public class DMLQueries extends BaseDMLQueries {
         super(dmlService);
     }
     
+    public Map<StatementPlaceholder, String> sQLPlaceholderValuesForCountQuery() {
+        Map<StatementPlaceholder, String> placeholders = new HashMap<StatementPlaceholder, String>();
+        placeholders.put(StatementPlaceholder.BeforeStatement,"SELECT COUNT(1) FROM (");
+        placeholders.put(StatementPlaceholder.AfterStatement,") as result");
+        return placeholders;
+    }
+    
     /**
 	 *	Returns the DML expressions to be inserted in a query statement, to make it count the number of records returned by the original query.
 	 *	@param	maxRecordsParam	
 	 *	@return	An T:System.Collections.Generic.IDictionary with the DML expressions.
 	 */
     public Map<SelectPlaceholder, String> sQLPlaceholderValuesForMaxRecords(String maxRecordsParam) {
-        throw new UnsupportedOperationException();
+        Map<SelectPlaceholder, String> result = new HashMap<SelectPlaceholder, String>();
+        result.put(SelectPlaceholder.BeforeStatement, "SELECT * FROM (");
+        result.put(SelectPlaceholder.AfterStatement, ") as result LIMIT " + maxRecordsParam);
+        return result;
     }
 }

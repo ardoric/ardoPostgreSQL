@@ -7,9 +7,15 @@
 
 package ardo.postgresql.dml;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import outsystems.hubedition.extensibility.data.databaseobjects.ITableSourceInfo;
 import outsystems.hubedition.extensibility.data.dmlservice.BaseDMLEntityActions;
 import outsystems.hubedition.extensibility.data.dmlservice.IDMLService;
+import outsystems.hubedition.extensibility.data.dmlservice.RetrieveIdMethod;
+import outsystems.hubedition.extensibility.data.dmlservice.dmlplaceholders.InsertPlaceholder;
+import outsystems.hubedition.util.RefParmHolder;
 import outsystems.hubedition.util.TypeInformation;
 
 /**
@@ -26,5 +32,14 @@ public class DMLEntityActions extends BaseDMLEntityActions {
     public DMLEntityActions(IDMLService dmlService, ITableSourceInfo tableSourceInfo){
         super(dmlService, tableSourceInfo);
     }
+    
+    
+    public Map<InsertPlaceholder, String> sQLPlaceholderValuesForCreateAndRetrieveId(String idColumnName, String outputParameterName, RefParmHolder<RetrieveIdMethod> retrieveIdMethod) {
+        retrieveIdMethod.setVal(RetrieveIdMethod.ReturnValue );
+        Map<InsertPlaceholder, String> result = new HashMap<InsertPlaceholder, String>();
+        result.put(InsertPlaceholder.AfterStatement, "RETURNING " + idColumnName);
+        return result;
+    }
+    
     
 }

@@ -7,6 +7,10 @@
 
 package ardo.postgresql.introspection;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import outsystems.hubedition.extensibility.data.IDatabaseServices;
 import outsystems.hubedition.extensibility.data.databaseobjects.ITableSourceForeignKeyInfo;
 import outsystems.hubedition.extensibility.data.databaseobjects.ITableSourceInfo;
 import outsystems.hubedition.util.TypeInformation;
@@ -124,5 +128,16 @@ public class TableSourceForeignKeyInfo implements ITableSourceForeignKeyInfo {
     private final void setIsCascadeDelete(boolean value) {
         _isCascadeDelete = value;
     }
+
+	public static ITableSourceForeignKeyInfo create(IDatabaseServices services, ITableSourceInfo tableSource, ResultSet res) throws SQLException {
+		String name = res.getString("constraint_name");
+		String column_name = res.getString("source_column_name");
+		boolean isCascadeDelete = "DELETE".equals(res.getString("delete_rule").toUpperCase());
+		String referencedColumnName = res.getString("dest_column_name");
+		
+		ITableSourceInfo referencedTableSource = new TableSourceInfo(services, tableSource.getDatabase(), res.getString("dest_table_name"));
+		
+		return new TableSourceForeignKeyInfo(tableSource, name, column_name, referencedTableSource, referencedColumnName, isCascadeDelete);
+	}
     
 }
