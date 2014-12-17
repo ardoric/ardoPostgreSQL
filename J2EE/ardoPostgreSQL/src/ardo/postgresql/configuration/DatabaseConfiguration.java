@@ -139,6 +139,7 @@ public class DatabaseConfiguration extends BaseDatabaseConfiguration {
     	
    		config.setConnectionString(getConnectionString());
    		config.setDatabaseIdentifier(getDatabaseIdentifier());
+   		config.setDatabaseProvider(getDatabaseProvider());
    		config.setUsername(getUsername());
     	
         return config;
