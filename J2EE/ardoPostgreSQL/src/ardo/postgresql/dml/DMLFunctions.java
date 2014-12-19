@@ -81,7 +81,7 @@ public class DMLFunctions extends BaseDMLFunctions {
     }
     
     private String addDate(String dt, String n, String unit) {
-    	return String.format("(%s + ((%s) * interval '1 %s'))", dt, n, unit);
+    	return String.format("(%s::timestamp without time zone + ((%s) * interval '1 %s'))", dt, n, unit);
     }
     
     /**
@@ -111,7 +111,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String addMinutes(String dt, String n) {
-        return addDate(dt, n, "hour");
+        return addDate(dt, n, "minute");
     }
     
     /**
@@ -151,7 +151,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a DateTime.
 	 */
     public String buildDateTime(String d, String t) {
-        return String.format("(%s + (%s - timestamp '1900-01-01 00:00:00'))", d, t);
+        return String.format("(%s :: timestamp without time zone + (%s :: timestamp without time zone - timestamp '1900-01-01 00:00:00'))", d, t);
     }
     
     /**
@@ -160,7 +160,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String day(String dt) {
-        return String.format("extract(day from %s)", dt);
+        return String.format("cast(extract(day from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -169,7 +169,6 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String dayOfWeek(String dt) {
-    	// XXX: NOPE! Add type converters ?
         return String.format("cast(extract(dow from %s :: timestamp without time zone) as int)", dt);
     }
     
@@ -180,7 +179,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffDays(String dt1, String dt2) {
-        return String.format("date_part('day', %s ::timestamp without time zone - %s :: timestamp without time zone)", dt2, dt1) ;
+        return String.format("cast(date_part('day', %s ::timestamp without time zone - %s :: timestamp without time zone) as int)", dt2, dt1) ;
     }
     
     /**
@@ -190,7 +189,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffHours(String dt1, String dt2) {
-        return "(" + diffDays(dt1,dt2) + String.format(")*24 + date_part('hour', %s - %s )", dt2, dt1);
+        return "cast((" + diffDays(dt1,dt2) + String.format(")*24 + date_part('hour', %s ::timestamp without time zone - %s ::timestamp without time zone ) as int)", dt2, dt1);
     }
     
     /**
@@ -200,7 +199,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffMinutes(String dt1, String dt2) {
-    	return "(" + diffHours(dt1, dt2) + String.format(")*60 + date_part('minute', %s - %s)", dt2, dt1);
+    	return "cast((" + diffHours(dt1, dt2) + String.format(")*60 + date_part('minute', %s ::timestamp without time zone - %s ::timestamp without time zone) as int)", dt2, dt1);
     }
     
     /**
@@ -210,7 +209,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String diffSeconds(String dt1, String dt2) {
-    	return "(" + diffMinutes(dt1, dt2) + String.format(")*60 + date_part('seconds', %s - %s)", dt2, dt1);
+    	return "cast((" + diffMinutes(dt1, dt2) + String.format(")*60 + date_part('seconds', %s ::timestamp without time zone - %s ::timestamp without time zone) as int)", dt2, dt1);
     }
     
     /**
@@ -219,7 +218,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String hour(String dt) {
-        return String.format("extract(hour from %s)", dt);
+        return String.format("cast(extract(hour from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -228,7 +227,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String minute(String dt) {
-    	return String.format("extract(minute from %s)", dt);
+    	return String.format("cast(extract(minute from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -237,7 +236,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String month(String dt) {
-    	return String.format("extract(month from %s)", dt);
+    	return String.format("cast(extract(month from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -282,7 +281,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String second(String dt) {
-        return String.format("extract(second from %s)", dt);
+        return String.format("cast(extract(second from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -291,7 +290,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String year(String dt) {
-        return String.format("extract(year from %s)", dt);
+        return String.format("cast(extract(year from %s :: timestamp without time zone) as int)", dt);
     }
     
     /**
@@ -328,7 +327,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String dateTimeToText(String dt, String dateFormat) {
-        return String.format("to_char(%s, '%s HH24:MI:SS')", dt, dateFormat.toUpperCase());
+        return String.format("to_char(%s :: timestamp without time zone, '%s HH24:MI:SS')", dt, dateFormat.toUpperCase());
     }
     
     /**
@@ -347,7 +346,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String dateToText(String d, String dateFormat) {
-        return String.format("to_char(%s, '%s')", d, dateFormat.toUpperCase());
+        return String.format("to_char(%s :: timestamp without time zone, '%s')", d, dateFormat.toUpperCase());
     }
     
     /**
@@ -485,4 +484,13 @@ public class DMLFunctions extends BaseDMLFunctions {
     public String timeToText(String t) {
         return String.format("to_char(%s :: timestamp without time zone,'HH24:MI:SS')", t);
     }
+    
+    public String timeToDateTime(String t) {
+        return "(" + t + " :: timestamp without time zone)";
+    }
+
+    public String dateToDateTime(String d) {
+        return "(" + d + " :: timestamp without time zone)";
+    }
+    
 }
