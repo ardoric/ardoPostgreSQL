@@ -1,0 +1,7 @@
+Install instructions for .NET:
+
+1) Copy dlls to C:\Program Files\OutSystems\Platform Server\plugins\database
+2) Restart all OutSystems Services
+3) Run Configuration Tool and install Service Center
+
+After this you'll get an extra value for PostgreSQL in the Databases dropdown when adding a new Database Connection.
