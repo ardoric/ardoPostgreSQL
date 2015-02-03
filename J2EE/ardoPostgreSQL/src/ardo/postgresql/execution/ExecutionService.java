@@ -8,9 +8,14 @@
 package ardo.postgresql.execution;
 
 import java.sql.SQLException;
+import java.sql.Types;
 
+import outsystems.hubedition.databaseabstractionlayer.adoadapters.ADOCommand;
+import outsystems.hubedition.databaseabstractionlayer.adoadapters.ADOParameter;
+import outsystems.hubedition.extensibility.data.DBDataType;
 import outsystems.hubedition.extensibility.data.IDatabaseServices;
 import outsystems.hubedition.extensibility.data.executionservice.BaseExecutionService;
+import outsystems.hubedition.extensibility.data.executionservice.SqlTypes;
 import outsystems.hubedition.util.TypeInformation;
 
 
@@ -36,7 +41,40 @@ public class ExecutionService extends BaseExecutionService {
     	// if so, why do I need to fill this in? Isn't the prefix always going to be @ ?
         return "@";
     }
+    
+    public SqlTypes convertToDbType(DBDataType type, String providerType) {
+        switch (type) {
+            case TEXT: {
+                return SqlTypes.VARCHAR;
+            }
+            case INTEGER: {
+                return SqlTypes.INTEGER;
+            }
+            case DECIMAL: {
+                return SqlTypes.DECIMAL;
+            }
+            case DATE_TIME: {
+                return SqlTypes.TIMESTAMP;
+            }
+            case DATE: {
+                return SqlTypes.DATE;
+            }
+            case TIME: {
+                return SqlTypes.TIME;
+            }
+            case BOOLEAN: {
+                return SqlTypes.BOOLEAN;
+            }
+            case BINARY_DATA: {
+                return SqlTypes.BINARY;
+            }
+            default: {
+                throw new UnsupportedOperationException("Unable to convert " + type.toString() + " to SqlTypes");
+            }
+        }
+    }
 
+    
     /**
 	 *	Checks if an exception was raised due to a connection error.
 	 *	@param	e	Exception raised.
