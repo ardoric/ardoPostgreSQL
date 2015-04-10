@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# NOTE: In a farm this needs to be executed in all frontends and the controller.
+
 source /etc/sysconfig/outsystems
 
 umask 022
@@ -17,4 +19,11 @@ chown outsystems:outsystems $OUTSYSTEMS_HOME/lib/postgresql-9.3-1102.jdbc3.jar
 
 $JBOSS_HOME/bin/jboss-cli.sh -c --command='/subsystem=ee:write-attribute(name=global-modules, value=[{"name" => "outsystems", "slot" => "main"},{"name" => "outsystems", "slot" => "ardopgsql"}])'
 
-$OUTSYSTEMS_HOME/configurationtool.sh /upgradeinstall /silent /scinstall
+source /etc/outsystems/os.services.conf
+
+if [ $CONTROLLER = ENABLED ]; then 
+	$OUTSYSTEMS_HOME/configurationtool.sh /upgradeinstall /silent /scinstall
+else
+	service jboss-outsystems restart
+	echo Don\'t forget to run this on all front-ends and also on the Controller
+fi
