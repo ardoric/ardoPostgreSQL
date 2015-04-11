@@ -42,7 +42,7 @@
 	</target>
 	
 	<target name="jar" depends="jar-tests,compile,copy-driver">
-		<jar destfile="${global.lib}/postgresqldatabaseprovider.jar" basedir="${build}">
+		<jar destfile="${global.lib}/ardo.databaseprovider.postgresql.jar" basedir="${build}">
 			<metainf dir="${basedir}/META-INF" />
 		</jar>
 	</target>

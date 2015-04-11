@@ -10,7 +10,7 @@
 	
 	<target name="dump" depends="jar-sample">
 		<java classname="outsystems.junit.Runner" output="${testlist.file}" fork="true">
-			<env key="DASHBOARD_URL_ENVIRONMENT_VARIABLE" value="disabled" />
+			<env key="DASHBOARD_URL" value="disabled" />
 			<arg value="-dump" />
 			<arg value="${lib.dir}/integrationdatabaseprovider.tests.jar" />
 			<classpath>
@@ -23,7 +23,7 @@
 	
 	<target name="run-dump" depends="dump">
 		<java classname="outsystems.junit.Runner" input="${testlist.file}" fork="true">
-			<env key="DASHBOARD_URL_ENVIRONMENT_VARIABLE" value="disabled" />
+			<env key="DASHBOARD_URL" value="disabled" />
 			<arg value="-run" />
 			<arg value="${lib.dir}/integrationdatabaseprovider.tests.jar" />
 			<classpath>
