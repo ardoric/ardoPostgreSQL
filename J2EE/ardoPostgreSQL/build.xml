@@ -1,4 +1,4 @@
-<project name="SampleDatabaseProvider" default="all" basedir=".">
+<project name="ardoPostgreSQL" default="all" basedir=".">
 
 	<property name="global.lib" location="../Libraries" />
 	<property name="lib" location="lib" />
@@ -28,7 +28,7 @@
 	</target>
 	
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+		<javac target="1.6" source="1.6" srcdir="${src}" destdir="${build}" includeantruntime="false">
 			<classpath refid="project.classpath" />
 		</javac>
 	</target>

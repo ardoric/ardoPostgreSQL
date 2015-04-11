@@ -24,11 +24,16 @@ namespace OutSystems.HubEdition.DatabaseProvider.Postgres.InstrospectionService
                 using (IDataReader reader = cmd.ExecuteReader()) {
                     List<IDatabaseInfo> res = new List<IDatabaseInfo>();
                     // add the public schema which always exists but isn't featured here.
-                    res.Add(new PGDatabaseInfo(DatabaseServices, "public"));
+                    bool added_public = false;
                     while (reader.Read())
                     {
+                        string schema = (string)reader["schema_name"];
                         res.Add(new PGDatabaseInfo(DatabaseServices, (string)reader["schema_name"]));
+                        if (schema == "public")
+                            added_public = true;
                     }
+                    if (!added_public)
+                        res.Add(new PGDatabaseInfo(DatabaseServices, "public"));
                     return res;
                 }
             }
@@ -81,8 +86,11 @@ namespace OutSystems.HubEdition.DatabaseProvider.Postgres.InstrospectionService
                              cols.numeric_scale,
                              cons.constraint_type
                      FROM information_schema.columns cols
-                     LEFT JOIN information_schema.key_column_usage usage ON (cols.column_name = usage.column_name and cols.table_name = usage.table_name)
-                     LEFT JOIN information_schema.table_constraints cons ON (cons.constraint_name = usage.constraint_name AND cons.constraint_type = 'PRIMARY KEY')
+                     LEFT JOIN 
+                     ( 
+                        information_schema.key_column_usage usage 
+                        INNER JOIN information_schema.table_constraints cons ON (cons.constraint_name = usage.constraint_name and cons.constraint_type = 'PRIMARY KEY') 
+                     ) ON (cols.column_name = usage.column_name and cols.table_name = usage.table_name and cols.table_schema = usage.table_schema)
                      WHERE cols.table_schema = :schema 
                      AND cols.table_name = :tableName
                      ORDER BY cols.ordinal_position");

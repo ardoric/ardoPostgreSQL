@@ -53,11 +53,15 @@ public class IntrospectionService extends BaseIntrospectionService {
         	
 		    ResultSet res = stmt.executeQuery("SELECT schema_name FROM information_schema.schemata");
 		    
-		    result.add(new DatabaseInfo(getDatabaseServices(), "public"));
-		    
+		    boolean added_public = false;
 		    while (res.next()) {
-		    	result.add(new DatabaseInfo(getDatabaseServices(), res.getString(1)));
+		    	String schema = res.getString(1);
+		    	result.add(new DatabaseInfo(getDatabaseServices(), schema));
+		    	if (schema.equals("public"))
+		    		added_public = true;
 		    }
+		    if (!added_public)
+		    	result.add(new DatabaseInfo(getDatabaseServices(), "public"));
 		    
         } finally {
         	stmt.close();
@@ -175,8 +179,11 @@ public class IntrospectionService extends BaseIntrospectionService {
                     " cols.numeric_scale, " + 
                     " cons.constraint_type " + 
             " FROM information_schema.columns cols " + 
-            " LEFT JOIN information_schema.key_column_usage usage ON (cols.column_name = usage.column_name and cols.table_name = usage.table_name) " + 
-            " LEFT JOIN information_schema.table_constraints cons ON (cons.constraint_name = usage.constraint_name AND cons.constraint_type = 'PRIMARY KEY') " + 
+            " LEFT JOIN " +  
+            " ( " + 
+            "  information_schema.key_column_usage usage " +
+            "  INNER JOIN information_schema.table_constraints cons ON (cons.constraint_name = usage.constraint_name and cons.constraint_type = 'PRIMARY KEY') " +  
+            " ) ON (cols.column_name = usage.column_name and cols.table_name = usage.table_name and cols.table_schema = usage.table_schema) " + 
             " WHERE cols.table_schema = ? " + 
             " AND cols.table_name = ? " + 
             " ORDER BY cols.ordinal_position");
