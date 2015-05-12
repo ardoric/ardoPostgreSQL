@@ -6,7 +6,7 @@ using OutSystems.HubEdition.Extensibility.Data.IntrospectionService;
 using OutSystems.HubEdition.Extensibility.Data;
 using OutSystems.HubEdition.Extensibility.Data.DatabaseObjects;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.InstrospectionService
+namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
 {
     public class PGDatabaseInfo: BaseDatabaseInfo
     {

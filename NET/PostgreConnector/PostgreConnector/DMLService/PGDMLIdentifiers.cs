@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 
 using OutSystems.HubEdition.Extensibility.Data.DMLService;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.ConfigurationService;
+using ardo.DatabaseProvider.PostgreSQL.ConfigurationService;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.DMLService
+namespace ardo.DatabaseProvider.PostgreSQL.DMLService
 {
     public class PGDMLIdentifiers: BaseDMLIdentifiers
     {

@@ -8,7 +8,7 @@ using OutSystems.HubEdition.Extensibility.Data;
 using Npgsql;
 using System.Data;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.TransactionService
+namespace ardo.DatabaseProvider.PostgreSQL.TransactionService
 {
     public class PGTransactionService : BaseTransactionService
     {

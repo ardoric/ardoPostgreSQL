@@ -8,7 +8,7 @@ using OutSystems.HubEdition.Extensibility.Data;
 using Npgsql;
 
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.ExecutionService
+namespace ardo.DatabaseProvider.PostgreSQL.ExecutionService
 {
     public class PGExecutionService: BaseExecutionService
     {

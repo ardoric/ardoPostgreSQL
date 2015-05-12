@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using OutSystems.HubEdition.Extensibility.Data;
 using OutSystems.HubEdition.Extensibility.Data.ConfigurationService;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.ConfigurationService;
+using ardo.DatabaseProvider.PostgreSQL.ConfigurationService;
 using OutSystems.RuntimeCommon;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.ExecutionService;
+using ardo.DatabaseProvider.PostgreSQL.ExecutionService;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres
+namespace ardo.DatabaseProvider.PostgreSQL
 {
     public class ardoPGSQL: BaseDatabaseProvider
     {

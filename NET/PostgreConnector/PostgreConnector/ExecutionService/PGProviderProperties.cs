@@ -5,7 +5,7 @@ using System.Text;
 using OutSystems.HubEdition.Extensibility.Data.ExecutionService;
 using OutSystems.HubEdition.Extensibility.Data;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.ExecutionService
+namespace ardo.DatabaseProvider.PostgreSQL.ExecutionService
 {
     public class PGProviderProperties: BaseProviderProperties
     {

@@ -7,7 +7,7 @@ using OutSystems.HubEdition.Extensibility.Data.IntrospectionService;
 using OutSystems.HubEdition.Extensibility.Data;
 using OutSystems.HubEdition.Extensibility.Data.DatabaseObjects;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.DMLService
+namespace ardo.DatabaseProvider.PostgreSQL.DMLService
 {
     public class PGDMLService: BaseDMLService
     {

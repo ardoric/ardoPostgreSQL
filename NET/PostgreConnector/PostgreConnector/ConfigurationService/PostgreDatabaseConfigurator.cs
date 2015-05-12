@@ -5,7 +5,7 @@ using System.Text;
 using OutSystems.HubEdition.Extensibility.Data.ConfigurationService;
 using OutSystems.HubEdition.Extensibility.Data;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.ConfigurationService
+namespace ardo.DatabaseProvider.PostgreSQL.ConfigurationService
 {
     public class PostgreDatabaseConfigurator : BaseDatabaseConfiguration
     {

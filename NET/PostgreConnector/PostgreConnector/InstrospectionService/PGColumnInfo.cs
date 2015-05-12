@@ -7,7 +7,7 @@ using System.Data;
 using OutSystems.HubEdition.Extensibility.Data.DatabaseObjects;
 using OutSystems.HubEdition.Extensibility.Data;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.InstrospectionService
+namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
 {
     public class PGColumnInfo : ITableSourceColumnInfo
     {

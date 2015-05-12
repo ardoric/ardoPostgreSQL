@@ -5,7 +5,7 @@ using System.Text;
 using OutSystems.HubEdition.Extensibility.Data.DMLService;
 using OutSystems.HubEdition.Extensibility.Data.DMLService.DMLPlaceholders;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.DMLService
+namespace ardo.DatabaseProvider.PostgreSQL.DMLService
 {
     public class PGDMLQueries: BaseDMLQueries
     {

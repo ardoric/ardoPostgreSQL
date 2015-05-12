@@ -8,13 +8,13 @@ using OutSystems.HubEdition.Extensibility.Data.DMLService;
 using OutSystems.HubEdition.Extensibility.Data.ExecutionService;
 using OutSystems.HubEdition.Extensibility.Data.IntrospectionService;
 using OutSystems.HubEdition.Extensibility.Data.TransactionService;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.ExecutionService;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.DMLService;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.InstrospectionService;
+using ardo.DatabaseProvider.PostgreSQL.ExecutionService;
+using ardo.DatabaseProvider.PostgreSQL.DMLService;
+using ardo.DatabaseProvider.PostgreSQL.InstrospectionService;
 using OutSystems.HubEdition.Extensibility.Data.DatabaseObjects;
-using OutSystems.HubEdition.DatabaseProvider.Postgres.TransactionService;
+using ardo.DatabaseProvider.PostgreSQL.TransactionService;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres
+namespace ardo.DatabaseProvider.PostgreSQL
 {
     public class ardoPGDBServices : IDatabaseServices
     {

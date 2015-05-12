@@ -8,7 +8,7 @@
     <ProjectGuid>{4A852A49-E746-4240-8991-E3D1086DBB0B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OutSystems.HubEdition.DatabaseProvider.Postgres</RootNamespace>
+    <RootNamespace>ardo.DatabaseProvider.PostgreSQL</RootNamespace>
     <AssemblyName>ardo.DatabaseProvider.PostgreSQL</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

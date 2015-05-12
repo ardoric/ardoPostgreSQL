@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OutSystems.HubEdition.Extensibility.Data.DMLService;
 
-namespace OutSystems.HubEdition.DatabaseProvider.Postgres.DMLService
+namespace ardo.DatabaseProvider.PostgreSQL.DMLService
 {
     public class PGDMLFunctions: BaseDMLFunctions
     {
