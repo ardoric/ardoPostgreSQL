@@ -24,7 +24,8 @@ public class DatabaseConfiguration extends BaseDatabaseConfiguration {
     private String _database;
     private String _username;
     private String _password;
-    private AdvancedConfiguration _advancedConfiguration = new AdvancedConfiguration("", "", "");
+    private AdvancedConfiguration _advancedConfiguration = 
+    	new AdvancedConfiguration("Example: host[:port]/database?ssl=true Check for possible configurations in https://jdbc.postgresql.org/documentation/94/connect.html", "JDBC url", "jdbc:postgresql://$AdvancedConnectionStringField");
     public static final TypeInformation<DatabaseConfiguration> TypeInfo = TypeInformation.get(DatabaseConfiguration.class);
     
     /**
@@ -127,7 +128,11 @@ public class DatabaseConfiguration extends BaseDatabaseConfiguration {
 	 *	@return	
 	 */
     protected String assembleAdvancedConnectionString() {
-        return "jdbc:postgresql://" + getAdvancedConfiguration().getAdvancedConnectionStringField();
+    	boolean has_parameters = false;
+    	if (getAdvancedConfiguration().getAdvancedConnectionStringField().contains("?"))
+    		has_parameters = true;
+    	// should I URL Encode username and password?
+        return "jdbc:postgresql://" + getAdvancedConfiguration().getAdvancedConnectionStringField() + (has_parameters?"&":"?") + "user=" + getUsername() + "&password=" + getPassword();
     }
     
     /**

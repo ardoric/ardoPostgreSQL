@@ -2,4 +2,11 @@
  <resources>
   <resource-root path="postgresql-9.4-1201.jdbc4.jar"/>   	
  </resources>
+ <dependencies>
+   <system export="true">
+     <paths>
+       <path name="javax/net/ssl"/>
+     </paths>
+   </system>
+ </dependencies>
 </module>
