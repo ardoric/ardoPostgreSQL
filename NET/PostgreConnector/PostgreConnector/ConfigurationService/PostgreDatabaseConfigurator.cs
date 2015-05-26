@@ -27,8 +27,8 @@ namespace ardo.DatabaseProvider.PostgreSQL.ConfigurationService
         private AdvancedConfiguration _advConfig = 
             new AdvancedConfiguration(
                 "Insert configuration parameters separated by ';'. Username and Password will be inserted automatically if present.", 
-                "Connection String Parameters", 
-                "Host=;Username=;Password=;Database=;SSL=True;Sslmode=Prefer;");
+                "Connection String Parameters",
+                "$AdvancedConnectionStringField;Username=$Username;Password=<hidden>");
 
         public override AdvancedConfiguration AdvancedConfiguration
         {
