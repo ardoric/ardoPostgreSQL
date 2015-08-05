@@ -29,5 +29,12 @@ namespace ardo.DatabaseProvider.PostgreSQL.ExecutionService
         {
             get { return "PostgreSQL"; }
         }
+
+        public override bool SupportsMultipleActiveResultSets
+        {
+            get { return false; }
+        }
+
+
     }
 }
