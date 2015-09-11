@@ -1,4 +1,4 @@
-CREATE TABLE "IntrospectionTestTable" (ID serial NOT NULL, DBTEXT varchar(255) NOT NULL, DBINTEGER int, DBDECIMAL decimal(37, 8), DBBOOLEAN boolean, DBDATETIME timestamp, DBBINARYDATA bytea, CONSTRAINT PK_IntrospectionTestTable PRIMARY KEY (ID));
+CREATE TABLE "IntrospectionTestTable" (ID int IDENTITY(1,1) NOT NULL, DBTEXT varchar(255) NOT NULL, DBINTEGER int, DBDECIMAL decimal(37, 8), DBBOOLEAN boolean, DBDATETIME timestamp, CONSTRAINT PK_IntrospectionTestTable PRIMARY KEY (ID));
 
 CREATE VIEW "IntrospectionViewOverTestTable" AS SELECT * FROM "IntrospectionTestTable";
 
