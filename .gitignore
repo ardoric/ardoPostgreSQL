@@ -11,6 +11,7 @@ NET/Libraries/DatabaseAbstractionLayer.csprojResolveAssemblyReference.cache
 NET/Projects/DatabaseProvider.Tests/obj/Debug/*
 NET/Libraries/plugins/database/OutSystems.HubEdition.DatabaseAbstractionLayer.xml
 NET/PostgreConnector/PostgreConnector/obj/Debug/*
+NET/PostgreConnector/RedshiftConnector/obj/Debug/*
 *.suo
 *.jar
 J2EE/ardoPostgreSQL.Tests/res.txt
