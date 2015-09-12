@@ -7,7 +7,7 @@
     <ProjectGuid>{9A0C0531-6878-46AB-B516-0715A01265E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RedshiftConnector</RootNamespace>
+    <RootNamespace>ardo.DatabaseProvider.Redshift</RootNamespace>
     <AssemblyName>ardo.DatabaseProvider.Redshift</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,7 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ardoRedshift.cs" />
+    <Compile Include="ardoRedshiftServices.cs" />
+    <Compile Include="ConfigurationService\RedshiftDatabaseConfigurator.cs" />
+    <Compile Include="ConfigurationService\RedshiftRuntimeConfiguration.cs" />
+    <Compile Include="ExecutionService\RedshiftExecutionService.cs" />
+    <Compile Include="IntrospectionService\RedshiftIntrospectionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedshiftProviderProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Projects\DatabaseAbstractionLayer\DatabaseAbstractionLayer.csproj">
@@ -55,6 +61,7 @@
       <Name>PostgreConnector</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -16,11 +16,16 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
         {
         }
 
+        protected virtual string ListDatabasesQuery()
+        {
+            return "SELECT schema_name FROM information_schema.schemata";
+        }
+
         public override IEnumerable<IDatabaseInfo> ListDatabases()
         {
             using (IDbConnection connection = GetConnection())
             {
-                IDbCommand cmd = CreateCommand(connection, "SELECT schema_name FROM information_schema.schemata");
+                IDbCommand cmd = CreateCommand(connection, ListDatabasesQuery());
                 using (IDataReader reader = cmd.ExecuteReader()) {
                     List<IDatabaseInfo> res = new List<IDatabaseInfo>();
                     // add the public schema which always exists but isn't featured here.
@@ -40,12 +45,16 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
 
         }
 
+        protected virtual string ListTableSourcesQuery()
+        {
+            return "SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema = :dbname";
+        }
+
         public override IEnumerable<ITableSourceInfo> ListTableSources(IDatabaseInfo database, IsTableSourceToIgnore isTableSourceToIgnore)
         {
             using (IDbConnection connection = GetConnection())
             {
-                IDbCommand cmd = CreateCommand(connection, 
-                    "SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema = :dbname");
+                IDbCommand cmd = CreateCommand(connection, ListTableSourcesQuery());
                 CreateParameter(cmd, "dbname", DbType.String, database.Identifier);
 
                 using (IDataReader reader = cmd.ExecuteReader())
@@ -66,17 +75,9 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
             }
         }
 
-        public override IEnumerable<ITableSourceColumnInfo> GetTableSourceColumns(ITableSourceInfo tableSource)
+        protected virtual string GetTableSourceColumnsQuery() 
         {
-            PGTableSource source = tableSource as PGTableSource;
-            if (source == null)
-                return null;
-
-            List<ITableSourceColumnInfo> res = new List<ITableSourceColumnInfo>();
-            using (IDbConnection connection = GetConnection())
-            {
-                IDbCommand cmd = CreateCommand(connection,
-                    @"SELECT cols.column_name, 
+            return @"SELECT cols.column_name, 
                              cols.data_type, 
                              cols.is_nullable,
                              cols.column_default, 
@@ -93,7 +94,19 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
                      ) ON (cols.column_name = usage.column_name and cols.table_name = usage.table_name and cols.table_schema = usage.table_schema)
                      WHERE cols.table_schema = :schema 
                      AND cols.table_name = :tableName
-                     ORDER BY cols.ordinal_position");
+                     ORDER BY cols.ordinal_position";
+        }
+
+        public override IEnumerable<ITableSourceColumnInfo> GetTableSourceColumns(ITableSourceInfo tableSource)
+        {
+            PGTableSource source = tableSource as PGTableSource;
+            if (source == null)
+                return null;
+
+            List<ITableSourceColumnInfo> res = new List<ITableSourceColumnInfo>();
+            using (IDbConnection connection = GetConnection())
+            {
+                IDbCommand cmd = CreateCommand(connection, GetTableSourceColumnsQuery());
                 
                 CreateParameter(cmd, "schema", DbType.String, source.Database.Identifier);
                 CreateParameter(cmd, "tableName", DbType.String, source.Name);
@@ -111,18 +124,9 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
             }
         }
 
-        public override IEnumerable<ITableSourceForeignKeyInfo> GetTableSourceForeignKeys(ITableSourceInfo tableSource)
+        protected virtual string GetTableSourceForeignKeysQuery()
         {
-            PGTableSource source = tableSource as PGTableSource;
-            if (source == null)
-                return null;
-
-            using (IDbConnection connection = GetConnection())
-            {
-                List<ITableSourceForeignKeyInfo> keys = new List<ITableSourceForeignKeyInfo>();
-                // should prolly do some better inner join matching
-                IDbCommand cmd = CreateCommand(connection,
-                    @"SELECT 
+            return @"SELECT 
                        key_column_usage.constraint_name    AS constraint_name,
                        key_column_usage.column_name        AS source_column_name,
                        table_constraints.table_catalog     AS dest_database,
@@ -135,7 +139,20 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
                     INNER JOIN information_Schema.table_constraints ON (referential_constraints.unique_constraint_name = table_constraints.constraint_name)
                     INNER JOIN information_schema.key_column_usage AS dest_usage ON (table_constraints.constraint_name = dest_usage.constraint_name)
                     WHERE key_column_usage.table_name = :tableName AND key_column_usage.table_schema = :schemaName
-                    AND table_constraints.constraint_type = 'PRIMARY KEY'");
+                    AND table_constraints.constraint_type = 'PRIMARY KEY'";
+        }
+
+        public override IEnumerable<ITableSourceForeignKeyInfo> GetTableSourceForeignKeys(ITableSourceInfo tableSource)
+        {
+            PGTableSource source = tableSource as PGTableSource;
+            if (source == null)
+                return null;
+
+            using (IDbConnection connection = GetConnection())
+            {
+                List<ITableSourceForeignKeyInfo> keys = new List<ITableSourceForeignKeyInfo>();
+                // should prolly do some better inner join matching
+                IDbCommand cmd = CreateCommand(connection, GetTableSourceForeignKeysQuery());
                 CreateParameter(cmd, "tableName", DbType.String, source.Name);
                 CreateParameter(cmd, "schemaName", DbType.String, source.Database.Identifier);
 

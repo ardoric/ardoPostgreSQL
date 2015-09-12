@@ -10,7 +10,7 @@ using OutSystems.HubEdition.Extensibility.Data.DatabaseObjects;
 namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
 {
 
-    class PGIntrospectionFactory : IDatabaseObjectFactory
+    public class PGIntrospectionFactory : IDatabaseObjectFactory
     {
         private IDatabaseServices services;
         

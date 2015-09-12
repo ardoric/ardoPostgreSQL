@@ -16,7 +16,7 @@ namespace ardo.DatabaseProvider.PostgreSQL
 
         public ardoPGSQL() { }
 
-        public IIntegrationDatabaseConfiguration CreateEmptyDatabaseConfiguration()
+        public virtual IIntegrationDatabaseConfiguration CreateEmptyDatabaseConfiguration()
         {
             return new PostgreDatabaseConfigurator();
         }

@@ -25,22 +25,22 @@ namespace ardo.DatabaseProvider.PostgreSQL
             configuration = dbconfig;
         }
 
-        public IRuntimeDatabaseConfiguration DatabaseConfiguration { get { return configuration; } }
+        public virtual IRuntimeDatabaseConfiguration DatabaseConfiguration { get { return configuration; } }
 
-        public IDMLService DMLService { get { return new PGDMLService(this); } }
-        public IIntrospectionService IntrospectionService { get { return new PGIntrospectionService(this); } }
+        public virtual IDMLService DMLService { get { return new PGDMLService(this); } }
+        public virtual IIntrospectionService IntrospectionService { get { return new PGIntrospectionService(this); } }
 
         // this could be a parametrized class with the IDbConnection type being used.
-        public IExecutionService ExecutionService { get { return new PGExecutionService(this); } }
+        public virtual IExecutionService ExecutionService { get { return new PGExecutionService(this); } }
 
 
 
-        public IDatabaseObjectFactory ObjectFactory
+        public virtual IDatabaseObjectFactory ObjectFactory
         {
             get { return new PGIntrospectionFactory(this); }
         }
 
-        public ITransactionService TransactionService
+        public virtual ITransactionService TransactionService
         {
             get { return new PGTransactionService(this); }
         }
