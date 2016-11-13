@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using OutSystems.HubEdition.Extensibility.Data.DatabaseObjects;
+using OutSystems.RuntimeCommon;
 
 namespace OutSystems.HubEdition.Extensibility.Data.IntrospectionService {
     public static class IntrospectionServiceExtensions {
@@ -18,7 +19,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.IntrospectionService {
         /// <returns>List of available table sources in the given database</returns>
         /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
         public static IEnumerable<ITableSourceInfo> ListTableSourcesWithoutFilter(this IIntrospectionService introspectionService, IDatabaseInfo database) {
-            return introspectionService.ListTableSources(database, _ => false);
+            return introspectionService.ListTableSources(database, dummy => false);
         }
     }
 }

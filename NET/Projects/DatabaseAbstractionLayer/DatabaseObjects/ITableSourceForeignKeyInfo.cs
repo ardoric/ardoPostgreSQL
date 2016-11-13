@@ -15,31 +15,49 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
         /// <summary>
         /// Table source that owns the foreign key.
         /// </summary>
+        /// <value>
+        /// The table source.
+        /// </value>
         ITableSourceInfo TableSource { get; }
 
         /// <summary>
         /// Name that identifies the foreign key constraint.
         /// </summary>
+        /// <value>
+        /// The name of the foreign key.
+        /// </value>
         string Name { get; }
 
         /// <summary>
         /// Name of the column.
         /// </summary>
+        /// <value>
+        /// The name of the column.
+        /// </value>
         string ColumnName { get; }
 
         /// <summary>
         /// Table source that owns the referenced column.
         /// </summary>
+        /// <value>
+        /// The referenced table source.
+        /// </value>
         ITableSourceInfo ReferencedTableSource { get; }
 
         /// <summary>
         /// Name of the referenced column.
         /// </summary>
+        /// <value>
+        /// The name of the referenced column.
+        /// </value>
         string ReferencedColumnName { get; }
 
         /// <summary>
         /// Returns True if the delete rule of the foreign key is CASCADE DELETE.
         /// </summary>
+        /// <value>
+        /// True if the cascade delete is set, False otherwise.
+        /// </value>
         bool IsCascadeDelete { get; }
     }
 }

@@ -17,21 +17,33 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
         /// <summary>
         /// Database where the table source is located.
         /// </summary>
+        /// <value>
+        /// The database where the table is located.
+        /// </value>
         IDatabaseInfo Database { get; }
 
         /// <summary>
         /// Name that identifies the table source inside the database
         /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         string Name { get; }
-        
+
         /// <summary>
         /// Fully qualified identifier of the table source, including the database information
         /// </summary>
+        /// <value>
+        /// The fully qualified identifier.
+        /// </value>
         string QualifiedName { get; }
 
         /// <summary>
-        /// Human-readable name that unambiguosly identifies the table source inside a database
+        /// Human-readable name that unambiguously identifies the table source inside a database
         /// </summary>
+        /// <value>
+        /// The display name.
+        /// </value>
         string DisplayName { get; }
 
         /// <summary>

@@ -97,7 +97,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// </summary>
         /// <param name="t">A DML expression that evaluates to Text.</param>
         /// <param name="search">A DML expression that evaluates to Text, to search for.</param>
-        /// <param name="replace">A DML expression that evaluates to Text, to replace all occurences with.</param>
+        /// <param name="replace">A DML expression that evaluates to Text, to replace all occurrences with.</param>
         /// <returns>A DML expression that evaluates to Text.</returns>
         public virtual string Replace(string t, string search, string replace) {
             return string.Format("Replace({0}, {1}, {2})", t, search, replace);
@@ -352,7 +352,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         public abstract string BooleanToInteger(string b);
 
         /// <summary>
-        /// Returns a DML expression that convers a Boolean in its textual representation: <code>True</code> or <code>False</code>.
+        /// Returns a DML expression that converts a Boolean in its textual representation: <code>True</code> or <code>False</code>.
         /// </summary>
         /// <param name="b">A DML expression that evaluates to Boolean.</param>
         /// <returns>A DML expression that evaluates to Text.</returns>
@@ -398,7 +398,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         public abstract string DateToText(string d, string dateFormat);
 
         /// <summary>
-        /// Returns an SQL expreession that converts a Decimal to a Boolean. A Decimal value of 0.0 is False, all other values are True.
+        /// Returns an SQL expression that converts a Decimal to a Boolean. A Decimal value of 0.0 is False, all other values are True.
         /// </summary>
         /// <param name="d">A DML expression that evaluates to a Decimal.</param>
         /// <returns>A DML expression that evaluates to Boolean.</returns>
@@ -408,8 +408,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// Returns a DML expression that converts a Decimal to an Integer.
         /// </summary>
         /// <param name="d">A DML expression that evaluates to a Decimal.</param>
-        /// <returns>A DML expression that evaluates to a Boolean.</returns>
+        /// <returns>A DML expression that evaluates to Integer.</returns>
         public abstract string DecimalToInteger(string d);
+
+        /// <summary>
+        /// Returns a DML expression that converts a Decimal to a Long Integer.
+        /// </summary>
+        /// <param name="d">A DML expression that evaluates to a Decimal.</param>
+        /// <returns>A DML expression that evaluates to Long Integer.</returns>
+        public abstract string DecimalToLongInteger(string d);
 
         /// <summary>
         /// Returns a DML expression that converts a Decimal to its textual representation.
@@ -419,21 +426,28 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         public abstract string DecimalToText(string d);
 
         /// <summary>
-        /// Provides a DML expression that converts EntityReference 'er' to an Integer value.
+        /// Provides a DML expression that converts Identifier 'id' to an Integer value.
         /// </summary>
-        /// <param name="er">DML expression that evaluates to an integer value</param>
+        /// <param name="id">DML expression that evaluates to an integer value</param>
         /// <returns>DML expression of type Integer</returns>
-        public abstract string EntityRefIntegerToInteger(string er);
+        public abstract string IdentifierToInteger(string id);
 
         /// <summary>
-        /// Returns a DML expression that converts an EntityReference to its textual representation.
+        /// Provides a DML expression that converts Identifier 'id' to a Long Integer value.
         /// </summary>
-        /// <param name="er">A DML expression that evaluates to Text.</param>
-        /// <returns>A DML expression that evaluates to Text.</returns>
-        public abstract string EntityRefTextToText(string er);
+        /// <param name="id">DML expression that evaluates to a Long Integer value</param>
+        /// <returns>DML expression of type Long Integer</returns>
+        public abstract string IdentifierToLongInteger(string id);
 
         /// <summary>
-        /// Returns a DML expression that convers an Integer to a Boolean.
+        /// Returns a DML expression that converts an Identifier to its textual representation.
+        /// </summary>
+        /// <param name="id">A DML expression that evaluates to Text.</param>
+        /// <returns>A DML expression that evaluates to Text.</returns>
+        public abstract string IdentifierToText(string id);
+
+        /// <summary>
+        /// Returns a DML expression that converts an Integer to a Boolean.
         /// A Decimal value of 0 is False, all other values are True.
         /// </summary>
         /// <param name="i">A DML expression that evaluates to an Integer.</param>
@@ -441,20 +455,57 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         public abstract string IntegerToBoolean(string i);
 
         /// <summary>
-        /// Returns a DML expression that convers an Integer to a Decimal.
+        /// Returns a DML expression that converts an Integer to a Decimal.
         /// </summary>
         /// <param name="i">A DML expression that evaluates to an Integer.</param>
         /// <returns>A DML expression that evaluates to a decimal.</returns>
         public abstract string IntegerToDecimal(string i);
 
         /// <summary>
-        /// Returns a DML expression that convers an Integer to an (untyped) Entity Identifier/Reference.
+        /// Returns a DML expression that converts an Integer to an (untyped) Identifier.
         /// </summary>
         /// <param name="i">A DML expression that evaluates to an Integer.</param>
         /// <returns>A DML expression that evaluates to an Integer.</returns>
-        public virtual string IntegerToEntityRefInteger(string i) {
+        public virtual string IntegerToIdentifier(string i) {
             return i;
         }
+
+        /// <summary>
+        /// Returns a DML expression that converts a Long Integer to an (untyped) Identifier.
+        /// </summary>
+        /// <param name="b">A DML expression that evaluates to a Long Integer.</param>
+        /// <returns>A DML expression that evaluates to a Long Integer.</returns>
+        public virtual string LongIntegerToIdentifier(string b) {
+            return b;
+        }
+
+        /// <summary>
+        /// Returns a DML expression that converts a Long Integer to an Integer.
+        /// </summary>
+        /// <param name="b">A DML expression that evaluates to a Long Integer.</param>
+        /// <returns>A DML expression that evaluates to Integer.</returns>
+        public abstract string LongIntegerToInteger(string b);
+
+        /// <summary>
+        /// Returns a DML expression that converts a Long Integer to a Decimal.
+        /// </summary>
+        /// <param name="b">A DML expression that evaluates to a Long Integer.</param>
+        /// <returns>A DML expression that evaluates to Decimal.</returns>
+        public abstract string LongIntegerToDecimal(string b);
+
+        /// <summary>
+        /// Returns a DML expression that converts an Integer to a Long Integer.
+        /// </summary>
+        /// <param name="b">A DML expression that evaluates to an Integer.</param>
+        /// <returns>A DML expression that evaluates to Long Integer.</returns>
+        public abstract string IntegerToLongInteger(string b);
+
+        /// <summary>
+        /// Returns a DML expression that converts a Long Integer to its textual representation.
+        /// </summary>
+        /// <param name="b">A DML expression that evaluates to a Long Integer.</param>
+        /// <returns>A DML expression that evaluates to Text.</returns>
+        public abstract string LongIntegerToText(string b);
 
         /// <summary>
         /// Returns a DML expression that converts an Integer to its textual representation.
@@ -470,7 +521,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         public abstract string NullDate();
 
         /// <summary>
-        /// Returns a DML expression that returns a Null Entity Numeric Identifier/Reference.
+        /// Returns a DML expression that returns a Null Numeric Identifier.
         /// This implementation always returns zero.
         /// </summary>
         /// <returns>A DML expression that evaluates to an Integer.</returns>
@@ -479,7 +530,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         }
 
         /// <summary>
-        /// Returns a DML expression that computes a Null Entity Text Identifier/Reference.
+        /// Returns a DML expression that computes a Null Text Identifier.
         /// This implementation always returns <code>''</code>.
         /// </summary>
         /// <returns>A DML expression that evaluates to Text.</returns>
@@ -511,20 +562,27 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         public abstract string TextToDecimal(string t);
 
         /// <summary>
-        /// Returns a DML expression that converts Text to an (untyped) Entity Identifier/Reference.
+        /// Returns a DML expression that converts Text to an (untyped) Identifier.
         /// </summary>
         /// <param name="t">A DML expression that evaluates to Text.</param>
         /// <returns>A DML expression that evaluates to Text.</returns>
-        public virtual string TextToEntityRefText(string t) {
+        public virtual string TextToIdentifier(string t) {
             return t;
         }
 
         /// <summary>
-        /// Returns a DML expression that convers Text to an Integer.
+        /// Returns a DML expression that converts Text to an Integer.
         /// </summary>
         /// <param name="t">A DML expression that evaluates to Text.</param>
         /// <returns>A DML expression that evaluates to an Integer.</returns>
         public abstract string TextToInteger(string t);
+
+        /// <summary>
+        /// Returns a DML expression that converts Text to a Long Integer.
+        /// </summary>
+        /// <param name="t">A DML expression that evaluates to Text.</param>
+        /// <returns>A DML expression that evaluates to a Long Integer.</returns>
+        public abstract string TextToLongInteger(string t);
 
         /// <summary>
         /// Returns a DML expression that converts Text to Time.

@@ -98,16 +98,6 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
             return string.Format("cast({0} as text)",d); ;
         }
 
-        public override string EntityRefIntegerToInteger(string er)
-        {
-            return er;
-        }
-
-        public override string EntityRefTextToText(string er)
-        {
-            return er;
-        }
-
         public override string IntegerToBoolean(string i)
         {
             return string.Format("cast({0} as boolean)", i);
@@ -265,6 +255,53 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
         public override string Year(string dt)
         {
             return string.Format("extract(year from {0})",dt);
+        }
+        #endregion
+
+        #region new unsorted stuff
+        public override string DecimalToLongInteger(string d)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string IdentifierToInteger(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string IdentifierToLongInteger(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string IdentifierToText(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string LongIntegerToInteger(string b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string LongIntegerToDecimal(string b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string IntegerToLongInteger(string b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string LongIntegerToText(string b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string TextToLongInteger(string t)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

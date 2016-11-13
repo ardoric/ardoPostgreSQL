@@ -28,8 +28,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
         /// </summary>
         /// <param name="databaseIdentifier">Unique identifier of the database</param>
         /// <returns>Database-specific object that implements the IDatabaseInfo interface</returns>
-        /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
-        /// <exception cref="InvalidDatabaseObjectIdentifierException">if the databaseIdentifier is invalid</exception>
+        /// <exception cref="InvalidDatabaseObjectIdentifierException">If the databaseIdentifier is invalid</exception>
         IDatabaseInfo CreateDatabaseInfo(string databaseIdentifier);
 
         /// <summary>
@@ -39,7 +38,6 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
         /// </summary>
         /// <param name="qualifiedName">Qualified identifier of the table source, including the database information</param>
         /// <returns>Database-specific object that implements the ITableSourceInfo interface</returns>
-        /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
         /// <exception cref="InvalidDatabaseObjectIdentifierException">if the qualifiedName is invalid</exception>
         ITableSourceInfo CreateTableSourceInfo(string qualifiedName);
     }

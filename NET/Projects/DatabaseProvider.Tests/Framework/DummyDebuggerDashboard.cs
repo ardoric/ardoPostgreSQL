@@ -11,55 +11,6 @@ using System.Diagnostics;
 
 namespace OutSystems.ServerTests.DatabaseProvider.Framework {
 
-    class DummyDebuggerDashboard : IDashboardSession {
-
-        public bool DashboardIsEnabled {
-            get { return false; }
-        }
-
-        public string DecodeStack(string stack, string version) {
-            return "";
-        }
-
-        public DashboardMessage[] GetExpectedMessages(string unitName) {
-            return new DashboardMessage[0];
-        }
-
-        public string GetExpectedOutput(string unitName) {
-            return "";
-        }
-
-        public void PublishAttachment(string fileName, byte[] contents, string mimeType) { }
-
-        public void PublishAttachmentToMessagesUnit(string unitName, string fileName, byte[] contents, string mimeType) { }
-
-        public void PublishAttachmentToOutputUnit(string unitName, string fileName, byte[] contents, string mimeType) { }
-
-        public void PublishErrorInMessages(string unitName, string errorMessage) {
-            Debug.WriteLine(unitName + " - " + errorMessage);
-        }
-
-        public void PublishErrorInOutput(string unitName, string errorMessage) {
-            Debug.WriteLine(unitName + " - " + errorMessage);
-        }
-
-        public void PublishHistoricalOutput(string unitName, double value) {
-            Debug.WriteLine(unitName + " - " + value);
-        }
-
-        public void PublishHtmlOutput(string unitName, string htmlOutput, bool compareStripped) {
-            Debug.WriteLine(unitName + " - " + htmlOutput);
-        }
-
-        public void PublishMessages(string unitName, DashboardMessage[] messages) {
-            Debug.WriteLine(unitName);
-            foreach (var msg in messages) {
-                Debug.WriteLine(" - " + msg.Message + " | " + msg.Detail);
-            }
-        }
-
-        public void PublishOutput(string unitName, string output) {
-            Debug.WriteLine(unitName + " - " + output);
-        }
+    class DummyDebuggerDashboard :  NullDashboardSession {
     }
 }

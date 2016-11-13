@@ -21,14 +21,6 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.IntrospectionService
         new IPlatformDatabaseServices DatabaseServices { get; }
         
         /// <summary>
-        /// Returns the list of columns of the table source (e.g. table, view)
-        /// </summary>
-        /// <param name="tableSource">Table source from which we want to fetch the list of columns</param>        
-        /// <returns>The columns of the table</returns>
-        /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
-        IEnumerable<IPlatformTableSourceColumnInfo> GetPlatformTableSourceColumns(ITableSourceInfo tableSource);
-        
-        /// <summary>
         /// Returns detailed information about database table sources (e.g. foreign keys, indexes)
         /// </summary>
         /// <param name="tables">Table sources from which we want to fetch the details</param>
@@ -43,5 +35,14 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.IntrospectionService
         /// <returns>Table sources names along with a boolean value indicating if the table source exists or not in the database</returns>
         /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
         IDictionary<string, bool> CheckTableSourcesExist(params string[] tableSourcesNames);
+
+
+        /// <summary>
+        /// Returns an aggregated hash code of the definition of all database schema meta-model elements that are related to a particular application's entity model definition (user tables, views, indexes and triggers). This method is to be used as a "fast" mechanism for detecting if the schema definition of 2 versions of the database are distinct, while avoiding the need to carry out a full introspection.
+        /// </summary>
+        /// <param name="objectNameFilter">A string present in the names of all (user-level) database schema elements that are associated to a particular application. This sequence of characters is subsequently used to filter schema elements that do not belong to the target application.</param>
+        /// <returns>The aggregated hash code of database schema elements associated to a particular target application, as indicated by the input parameter.</returns>
+        /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
+        int GetDatabaseObjectsDefinitionHash(string objectNameFilter);
     }
 }

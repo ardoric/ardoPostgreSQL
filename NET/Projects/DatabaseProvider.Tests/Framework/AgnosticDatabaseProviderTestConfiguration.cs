@@ -8,30 +8,57 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using OutSystems.HubEdition.Extensibility.Data;
 using OutSystems.HubEdition.Extensibility.Data.Platform;
+using OutSystems.RuntimeCommon;
 
 namespace OutSystems.ServerTests.DatabaseProvider.Framework {
     public abstract class BaseAgnosticDatabaseProviderTestConfiguration<TDatabaseProvider, TDatabaseProviderTestCase>
             : BaseDatabaseProviderTestConfiguration<TDatabaseProvider, TDatabaseProviderTestCase> 
                 where TDatabaseProvider: IDatabaseProvider where TDatabaseProviderTestCase: IDatabaseProviderTestCase<TDatabaseProvider>, new() {
 
-        // Plugins are loaded relative to AppBase so that they work on the developer machine and on regressions
-        private static readonly DatabasePluginProvider<TDatabaseProvider> pluginProvider =
-            new DatabasePluginProvider<TDatabaseProvider>(
-                new DirectoryInfo(Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins"), "database")));
+        protected virtual bool IsServerOnly {
+            get { return false; }
+        }
 
+        private static readonly DatabasePluginProvider<TDatabaseProvider> serverPluginProvider = null;
+        private static readonly DatabasePluginProvider<TDatabaseProvider> internalPluginProvider = null;
+
+        private IEnumerable<TDatabaseProvider> providersToTest = null;
         protected override IEnumerable<TDatabaseProvider> ProvidersToTest {
-            get { 
-                return pluginProvider.Implementations;
+            get {
+                if (providersToTest == null) {
+                    var ptt = serverPluginProvider.Implementations;
+                    if (!IsServerOnly) {
+                        ptt = ptt.Union(internalPluginProvider.Implementations);
+                    }
+                    providersToTest = ptt.ToList();
+                }
+                return providersToTest;
             }
+        }
+
+        private static DirectoryInfo BaseDirectory {
+            get { return new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);  }
+        }
+
+        static BaseAgnosticDatabaseProviderTestConfiguration() {
+            // Plugins are loaded relative to AppBase so that they work on the developer machine and on regressions
+            var serverPluginsDir = new DirectoryInfo(Path.Combine(Path.Combine(BaseDirectory.FullName, "plugins"), "database"));
+            serverPluginProvider = new DatabasePluginProvider<TDatabaseProvider>(serverPluginsDir);
+
+            // Not 100% correct since they should have a different interface, but can't reference it in this project
+            var internalPluginsDir = new DirectoryInfo(Path.Combine(serverPluginsDir.FullName, "internal"));
+            internalPluginProvider = new DatabasePluginProvider<TDatabaseProvider>(internalPluginsDir);
         }
 
     }
 
     public abstract class AgnosticDatabaseProviderTestConfiguration
-        : BaseAgnosticDatabaseProviderTestConfiguration<IDatabaseProvider, DatabaseProviderTestCase> {}
+        : BaseAgnosticDatabaseProviderTestConfiguration<IDatabaseProvider, DatabaseProviderTestCase> { }
 
     public abstract class PlatformAgnosticDatabaseProviderTestConfiguration
-        : BaseAgnosticDatabaseProviderTestConfiguration<IPlatformDatabaseProvider, PlatformDatabaseProviderTestCase> {}
+        : BaseAgnosticDatabaseProviderTestConfiguration<IPlatformDatabaseProvider, PlatformDatabaseProviderTestCase> { }
+
 }

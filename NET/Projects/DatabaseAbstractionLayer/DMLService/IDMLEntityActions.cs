@@ -38,12 +38,18 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <summary>
         /// Gets the associated DML service.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>
-        /// Gets information about this entity's underlying table source, needed by the platform for DML generation purposes. 
-        /// This information should be passed to the object's constructor in <see cref="IDMLService.GetEntityActions"/>.
+        /// Gets information about this entity's underlying table source, needed by the platform for DML generation purposes.
+        /// This information should be passed to the object's constructor in <see cref="IDMLService.GetEntityActions" />.
         /// </summary>
+        /// <value>
+        /// Information about this entity's underlying table source.
+        /// </value>
         ITableSourceInfo TableSourceInfo { get; }
 
         /// <summary>

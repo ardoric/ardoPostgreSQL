@@ -5,17 +5,12 @@
  conditions of the Generated Software, in which case such agreement shall apply. 
 */
 
-using System;
 using System.Reflection;
-using System.Resources;
-using System.Runtime.InteropServices;
-using System.Security;
 
-[assembly: AssemblyTitle("DatabaseAbstractionLayer")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCompany("OutSystems")]
+[assembly: AssemblyProduct("OutSystems Platform")]
+[assembly: AssemblyCopyright("Copyright © OutSystems 2016")]
+[assembly: AssemblyTrademark("")]
 
-[assembly: ComVisible(false)]
-[assembly: CLSCompliantAttribute(false)]
-
+[assembly: AssemblyVersion("10.0.105.0")]
+[assembly: AssemblyFileVersion("10.0.105.0")]

@@ -19,8 +19,17 @@ namespace OutSystems.HubEdition.Extensibility.Data.IntrospectionService {
         /// <summary>
         /// Sets the command timeout value to use in introspection queries.
         /// </summary>
+        /// <value>
+        /// The query timeout.
+        /// </value>
         int QueryTimeout { set; }
 
+        /// <summary>
+        /// Gets the database services.
+        /// </summary>
+        /// <value>
+        /// The database services associated.
+        /// </value>
         IDatabaseServices DatabaseServices { get; }
         
         /// <summary>
@@ -28,7 +37,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.IntrospectionService {
         /// that the plugin maps to a db-specific concept (e.g. SQL Server catalog or Oracle schema).
         /// </summary>
         /// <returns>List of available databases in the given server</returns>
-        /// <exception cref="System.Data.Common.DbException">if an error occurs while accessing the database</exception>
+        /// <exception cref="System.Data.Common.DbException">If an error occurs while accessing the database</exception>
         IEnumerable<IDatabaseInfo> ListDatabases();
         
         /// <summary>

@@ -11,6 +11,7 @@ using NUnit.Framework;
 using NUnitExtension.OutSystems.Framework;
 using OutSystems.HubEdition.Extensibility.Data.DMLService.DMLPlaceholders;
 using OutSystems.ServerTests.DatabaseProvider.Framework;
+using System;
 
 namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
 
@@ -42,8 +43,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string afterStatement = maxRecordsPlaceholders.GetPlaceholderValueTrimEnd(SelectPlaceholder.AfterStatement);
 
             string sql = beforeStatement + 
-                "SELECT " + afterSelect + "NAME " + 
-                beforeFrom + "FROM " + afterFrom + "PERSON " +
+                "SELECT " + afterSelect + "NAME " +
+                beforeFrom + "FROM " + afterFrom + "PERSON" + MachineName + " " +
                 beforeWhere + "WHERE " + afterWhere + databaseServices.DMLService.Operators.Equal("1", "1") + " " +
                 beforeGroupBy + "GROUP BY " + afterGroupBy + "NAME " +
                 beforeHaving + "HAVING " + afterHaving + databaseServices.DMLService.Operators.Equal("1", "1") + " " +
@@ -69,7 +70,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string beforeStatement = countPlaceholders.GetPlaceholderValueTrimStart(StatementPlaceholder.BeforeStatement);
             string afterStatement = countPlaceholders.GetPlaceholderValueTrimEnd(StatementPlaceholder.AfterStatement);
 
-            string sql = beforeStatement + "SELECT NAME FROM PERSON WHERE " + databaseServices.DMLService.Operators.Equal("1", "1") + afterStatement;
+            string sql = beforeStatement + "SELECT NAME FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Equal("1", "1") + afterStatement;
 
             int count = sqlExecutor.ExecuteScalar(sql).RuntimeValue<int>();
             AssertEqual(3, count, string.Format(ERROR_MESSAGE_FORMAT, "Count", sql));

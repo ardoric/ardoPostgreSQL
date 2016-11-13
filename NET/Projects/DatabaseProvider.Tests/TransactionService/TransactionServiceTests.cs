@@ -24,6 +24,16 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         }
     }
 
+    public class ServerOnlyTestConfiguration : TestConfiguration {
+
+        protected override bool IsServerOnly {
+            get {
+                return true;
+            }
+        }
+
+    }
+
     [DashboardTestFixture(DashboardTest.DashboardTestKind)]
     public class TransactionServiceTests : DatabaseProviderTest<TestConfiguration> {
 
@@ -38,21 +48,22 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
 
         private void ExpectException(Type exceptionType, Action body) {
 
-            bool gotException = false;
+            Type gotException = null;
             try {
                 body();
             } catch (Exception e) {
-                gotException = e.GetType() == exceptionType;
+                gotException = e.GetType();
             }
 
-            Assert.IsTrue(gotException, "Should have thrown " + exceptionType.Name + " exception");
+            Assert.IsNotNull(gotException, "Should have thrown " + exceptionType.Name + " exception");
+            Assert.AreEqual(exceptionType, gotException, "Should have thrown " + exceptionType.Name + " exception");
         }
 
 
         #region Transaction re-utilization based on transaction type and order
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Getting a ReadOnlyTransaction after releasing it returns the same transaction")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Getting a ReadOnlyTransaction after releasing it returns the same transaction")]
         public void GetConsecutiveTransactionsWithRelease(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             WithTransactionManager(services.TransactionService.CreateTransactionManager(), (tm) => {
@@ -64,7 +75,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         }
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Getting a PrivateTransaction after releasing a ReadOnlyTransaction doesn't return the same transaction")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Getting a PrivateTransaction after releasing a ReadOnlyTransaction doesn't return the same transaction")]
         public void GetConsecutiveTransactionsUsingPrivate(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             WithTransactionManager(services.TransactionService.CreateTransactionManager(), (tm) => {
@@ -76,7 +87,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         }
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Consecutively getting the MainTransaction returns the same transaction")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Consecutively getting the MainTransaction returns the same transaction")]
         public void GetRequestTransaction(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             WithTransactionManager(services.TransactionService.CreateTransactionManager(), (tm) => {
@@ -91,7 +102,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         #region Commit, rollback and release exceptions
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Releasing a Transaction causes an InvalidReleaseException")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Releasing a Transaction causes an InvalidReleaseException")]
         public void PrivateTransactionNotReleasable(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             ExpectException(typeof(InvalidTransactionReleaseException), () => {
@@ -103,7 +114,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         }
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Commiting a ReadOnly Transaction causes an InvalidCommitOrRollbackException")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Commiting a ReadOnly Transaction causes an InvalidCommitOrRollbackException")]
         public void ReadOnlyTransactionNotCommitable(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             ExpectException(typeof(InvalidCommitOrRollbackTransactionException), () => {
@@ -115,7 +126,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         }
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Commiting a Main Transaction causes an InvalidCommitOrRollbackException")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Commiting a Main Transaction causes an InvalidCommitOrRollbackException")]
         public void MainTransactionNotCommitable(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             ExpectException(typeof(InvalidCommitOrRollbackTransactionException), () => {
@@ -130,7 +141,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         #region Busy transaction pool count
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Getting a PrivateTransactions increments busy transaction pool count")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Getting a PrivateTransactions increments busy transaction pool count")]
         public void BusyPrivateTransactionPoolCount(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             WithTransactionManager(services.TransactionService.CreateTransactionManager(), (tm) => {
@@ -141,7 +152,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.TransactionService {
         }
 
         [TestDetails(TestIssue = "568662", Feature = "Database Abstraction Layer")]
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Freeing up resources zeroes busy transaction pool count")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Freeing up resources zeroes busy transaction pool count")]
         public void FreeupResourcesClearsBusyTransactionPool(DatabaseProviderTestCase tc) {
             var services = tc.Services;
             WithTransactionManager(services.TransactionService.CreateTransactionManager(), (tm) => {

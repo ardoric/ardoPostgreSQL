@@ -19,13 +19,19 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
     public interface IExecutionService {
 
         /// <summary>
-        /// Gets the <see cref="IDatabaseServices"/> instance associated with this service.
+        /// Gets the <see cref="IDatabaseServices" /> instance associated with this service.
         /// </summary>
+        /// <value>
+        /// The database services associated.
+        /// </value>
         IDatabaseServices DatabaseServices { get; }
 
         /// <summary>
         /// Gets the prefix used to qualify command parameters (e.g. @)
         /// </summary>
+        /// <value>
+        /// The parameter prefix.
+        /// </value>
         string ParameterPrefix { get; }
         
         /// <summary>
@@ -35,7 +41,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// <param name="name">Parameter name.</param>
         /// <param name="dbType">Parameter type.</param>
         /// <param name="paramValue">Parameter value.</param>
-        /// <returns>The parameter associated to the comand.</returns>
+        /// <returns>The parameter associated to the command.</returns>
         IDbDataParameter CreateParameter(IDbCommand cmd, string name, DbType dbType, object paramValue);
         
         /// <summary>
@@ -53,7 +59,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// <param name="e">Exception thrown during execution.</param>
         /// <param name="cmd">Command that was running when the exception was raised.</param>
         /// <param name="reader">Reader created from executing the command, if applicable.</param>
-        /// <param name="conn">Connection that creates the transaction where the exception occured, if applicable.</param>
+        /// <param name="conn">Connection that creates the transaction where the exception occurred, if applicable.</param>
         /// <param name="trans">Transaction where the exception was produced, if applicable.</param>
         /// <param name="manager">Transaction manager associated with this command, if applicable.</param>
         void OnExecuteException(DbException e, IDbCommand cmd, IDataReader reader, IDbConnection conn, IDbTransaction trans, ITransactionManager manager);
@@ -84,7 +90,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// </summary>
         /// <param name="connection">The connection where the command is going to be executed.</param>
         /// <param name="sql">The SQL statement to be executed.</param>
-        /// <returns>An SQL command command.</returns>
+        /// <returns>An SQL command.</returns>
         IDbCommand CreateCommand(IDbConnection connection, string sql);
 
         /// <summary>

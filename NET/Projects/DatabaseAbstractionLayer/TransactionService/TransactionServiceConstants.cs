@@ -13,7 +13,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
     public class TransactionServiceConstants {
 
         /// <summary>
-        /// Time, in miliseconds, to wait for a connection retry.
+        /// Time, in milliseconds, to wait for a connection retry.
         /// </summary>
         public const int RETRY_CONNECTION_TIME = 1000;
 

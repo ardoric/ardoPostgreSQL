@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using OutSystems.RuntimeCommon;
 
 namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
     public interface IPlatformConfigurationManager {
@@ -16,10 +17,13 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// If the DB doesn’t allow rollback of all statements and does implicit commits, it should have this property set to true.
         /// when set to true, indicates that its statements can do autocommit.
         /// </summary>
+        /// <value>
+        /// True if a Database backup is recommended, False otherwise.
+        /// </value>
         bool RecommendDatabaseBackup {
             get;
         }
-
+        
         /// <summary>
         /// This method will obtain the version that is being installed.
         /// </summary>
@@ -35,6 +39,25 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// <returns>Set of statements to execute. This includes tagged statements (--%TAG%)</returns>
         IEnumerable<Block> PlatformStatements(Version currentModelVersion);
 
+
+
+        /// <summary>
+        /// Validates if elevated privileges are actually required
+        /// If plugin has ImplementsElevatedPrivilegesOperations=false, this method should return false.
+        /// This ensures pre create or upgrade logic can be ran by hand to avoid elevated privileges during setup 
+        /// <returns>Elevated privileges operations still need to run for setup to be complete</returns>
+        /// </summary>
+        bool RequiresElevatedPrivilges();
+
+
+        /// <summary>
+        /// Generates a setup script containing operations that require elevated privileges 
+        /// <returns>Setup script with elevated privileges operations</returns>
+        /// </summary>
+        string GenerateSetupScript();
+
+
+
         /// <summary>
         /// Allows the plugin to run instructions before the create/upgrade is done.
         /// This operation requires an elevated user privilege.
@@ -49,7 +72,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// </summary>
         /// <param name="source">Specifies the component that will use the configuration (e.g. service or application).</param>
         /// <param name="friendlyMessage">Message with information regarding the result of the test.</param>
-        /// <returns>True if connection was sucessfully established</returns>
+        /// <returns>True if connection was successfully established</returns>.
         bool TestAdminConnection(out string friendlyMessage, Source source);
 
         /// <summary>
@@ -58,7 +81,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// </summary>
         /// <param name="source">Specifies the component that will use the configuration (e.g. service or application).</param>
         /// <param name="friendlyMessage">Message with information regarding the result of the test.</param>
-        /// <returns>True if connection was sucessfully established</returns>
+        /// <returns>True if connection was successfully established</returns>
         bool TestRuntimeConnection(out string friendlyMessage, Source source);
 
         /// <summary>
@@ -67,7 +90,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// </summary>
         /// <param name="source">Specifies the component that will use the configuration (e.g. service or application).</param>
         /// <param name="friendlyMessage">Message with information regarding the result of the test.</param>
-        /// <returns>True if connection was sucessfully established</returns>
+        /// <returns>True if connection was successfully established</returns>
         bool TestLogConnection(out string friendlyMessage, Source source);
     }
 }

@@ -21,6 +21,10 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
             get { return this is IElevatedUserConfiguration; }
         }
 
+        public virtual bool RequiresElevatedPrivileges {
+            get { return this is IElevatedUserConfiguration; }
+        }
+
         public abstract AuthenticationType AuthenticationMode { get; }
 
         public abstract IRuntimeDatabaseConfiguration RuntimeDatabaseConfiguration(Source source, User userType);

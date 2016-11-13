@@ -5,12 +5,15 @@
  conditions of the Generated Software, in which case such agreement shall apply. 
 */
 
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using OutSystems.RuntimeCommon;
 
 namespace OutSystems.HubEdition.Extensibility.Data.TransactionService { 
 	public class ConnectionStringsHelper {
 		private static readonly Regex _passwordRegex = new Regex(@"(password=\s*)([^ ;]+)(\s*;)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        private static readonly Regex _IntegratedSecuriyRegex = new Regex(@"(integrated security=\s*[^ ;]+\s*;)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
         private static readonly Regex _userIdReplaceRegex = new Regex(@"(user id=\s*)([^ ;]+)(\s*;)", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
 		private static readonly Regex _userIdRegex = new Regex(@"user id=\s*([^ ;]+)\s*;", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);			
 
@@ -65,9 +68,17 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
                 return "";
             }
 
-            return _passwordRegex.Replace(connectionString, m => {
-                return m.Groups[1].Value + password + m.Groups[3].Value;
-            });
+            if (_IntegratedSecuriyRegex.IsMatch(connectionString)) {
+                connectionString = _IntegratedSecuriyRegex.Replace(connectionString, "");
+                if (!connectionString.EndsWith(";")) {
+                    connectionString += ";";
+                }
+                return connectionString + "password={0};".F(password);
+            } 
+
+            return _passwordRegex.Replace(connectionString, m =>
+                    m.Groups[1].Value + password + m.Groups[3].Value
+            );
             
         }
     }

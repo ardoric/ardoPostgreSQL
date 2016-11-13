@@ -146,7 +146,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// <summary>
         /// Defines the URL where the help link will point to.
         /// </summary>
-        /// <value>The URL the hellp link will point to</value>
+        /// <value>The URL the help link will point to</value>
         public string Url {
             get;
             set;

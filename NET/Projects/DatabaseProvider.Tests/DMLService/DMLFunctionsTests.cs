@@ -6,6 +6,7 @@
 */
 
 using NUnitExtension.OutSystems.Framework;
+using OutSystems.Common;
 using OutSystems.HubEdition.Extensibility.Data;
 using OutSystems.RuntimeCommon;
 using OutSystems.ServerTests.DatabaseProvider.Framework;
@@ -19,11 +20,11 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
     public class DMLFunctionsTests : DMLTest {
                 
         private static readonly string[] DATE_FORMATS = new[] {
-            "dd/MM/yyyy", "dd-MM-yyyy", "MM-dd-yyyy", "MM/dd/yyyy", "yyyy-MM-dd", "yyyy/MM/dd"
+            "dd/MM/yyyy", "dd-MM-yyyy", "MM-dd-yyyy", "MM/dd/yyyy", CommonConstants.DefaultDateFormat, "yyyy/MM/dd"
         };
 
         private const string DEFAULT_TIME_FORMAT = "HH:mm:ss";
-        private const string DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
+        private const string DEFAULT_DATE_FORMAT = CommonConstants.DefaultDateFormat;
 
         private const string ERROR_MESSAGE_FORMAT = "Error executing function {0} with parameters: {1}. Executed SQL: {2}";
 
@@ -60,13 +61,12 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             return (T)((object[])objArray)[index];
         }
 
-        #region Math
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Abs function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestAbs(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Abs",
-                "SELECT " + databaseServices.DMLService.Functions.Abs("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Abs("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -1.44m, 4.21m, 0m, -2m, 50m },
                 o => ScriptableBuiltInFunction.Abs(Convert.ToDecimal(o)));
         }
@@ -76,17 +76,17 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestRound(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Round",
-                "SELECT " + databaseServices.DMLService.Functions.Round("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Round("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { -2.145453m, 0m, 50m, 3.14m },
                 o => ScriptableBuiltInFunction.Round(Convert.ToDecimal(o)));
         }
 
-        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Sqrt function is coherent with the behavior of the built-in function in code")]
+        [IterativeTestCase(typeof(ServerOnlyDMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Sqrt function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestSqrt(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Sqrt",
-                "SELECT " + databaseServices.DMLService.Functions.Sqrt("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Sqrt("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { 0m, 1m, 2.25m, 9m },
                 o => ScriptableBuiltInFunction.Sqrt(Convert.ToDecimal(o)));
         }
@@ -96,19 +96,17 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTrunc(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Trunc",
-                "SELECT " + databaseServices.DMLService.Functions.Trunc("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Trunc("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { 0m, 1m, 3.14m, 10.34563434m },
                 o => ScriptableBuiltInFunction.Trunc(Convert.ToDecimal(o)));
         }
-        #endregion
 
-        #region Text
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Concat function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestConcat(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Concat",
-                "SELECT " + databaseServices.DMLService.Functions.Concat("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Concat("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { "Dave", "Lauper" }, new object[] { "Out", "Systems" }, new object[] { "First", "" }, new object[] { "", "Last" }, new object[] { "", "" } },
                 o => ScriptableBuiltInFunction.Concat(GetArgValue<string>(o, 0), GetArgValue<string>(o, 1)));
         }
@@ -118,7 +116,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestIndex(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Index",
-                "SELECT " + databaseServices.DMLService.Functions.Index("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Index("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { "Test", "NotFound" }, new object[] { "MyTest1 MyTest2", "Test" }, new object[] { "", "NotFound" } },
                 o => ScriptableBuiltInFunction.Index(GetArgValue<string>(o, 0), GetArgValue<string>(o, 1)));
         }
@@ -128,7 +126,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestLength(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Length",
-                "SELECT " + databaseServices.DMLService.Functions.Length("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Length("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { "DaveLauper", "Test With Spaces", "" },
                 o => ScriptableBuiltInFunction.Length(o.ToString()));
         }
@@ -138,7 +136,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestReplace(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Replace",
-                "SELECT " + databaseServices.DMLService.Functions.Replace("{0}", "{1}", "{2}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Replace("{0}", "{1}", "{2}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { "DaveLauper", "NotFound", "" }, new object[] { "Test1Test2Test3", "Test", "0" }, new object[] { "Test1Test2Test3", "3", "1" }, new object[] { "Test1Test2Test3", "Test", "" } },
                 o => ScriptableBuiltInFunction.Replace(GetArgValue<string>(o, 0), GetArgValue<string>(o, 1), GetArgValue<string>(o, 2)));
         }
@@ -148,7 +146,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestSubstr(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Substr",
-                "SELECT " + databaseServices.DMLService.Functions.Substr("{0}", "{1}", "{2}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Substr("{0}", "{1}", "{2}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { "DaveLauper", 0, 4 }, new object[] { "DaveLauper", 4, 6 }, new object[] { "DaveLauper", 4, 0 }, new object[] { "DaveLauper", 10, 0 }, new object[] { "DaveLauper", 0, 100 } },
                 o => ScriptableBuiltInFunction.Substr(GetArgValue<string>(o, 0), GetArgValue<int>(o, 1), GetArgValue<int>(o, 2)));
         }
@@ -158,7 +156,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestToLower(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "ToLower",
-                "SELECT " + databaseServices.DMLService.Functions.ToLower("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.ToLower("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { "DaveLauper", "Test With Spaces", "" },
                 o => ScriptableBuiltInFunction.ToLower(o.ToString()));
         }
@@ -168,7 +166,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestToUpper(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "ToUpper",
-                "SELECT " + databaseServices.DMLService.Functions.ToUpper("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.ToUpper("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { "DaveLauper", "Test With Spaces", "" },
                 o => ScriptableBuiltInFunction.ToUpper(o.ToString()));
         }
@@ -178,7 +176,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTrim(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Trim",
-                "SELECT " + databaseServices.DMLService.Functions.Trim("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Trim("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { "DaveLauper", " LeftSpace", "RightSpace", " BothSpaces ", "" },
                 o => ScriptableBuiltInFunction.Trim(o.ToString()));
         }
@@ -188,7 +186,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTrimEnd(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "TrimEnd",
-                "SELECT " + databaseServices.DMLService.Functions.TrimEnd("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.TrimEnd("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { "DaveLauper", " LeftSpace", "RightSpace", " BothSpaces ", "" },
                 o => ScriptableBuiltInFunction.TrimEnd(o.ToString()));
         }
@@ -198,19 +196,17 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTrimStart(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "TrimStart",
-                "SELECT " + databaseServices.DMLService.Functions.TrimStart("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.TrimStart("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { "DaveLauper", " LeftSpace", "RightSpace", " BothSpaces ", "" },
                 o => ScriptableBuiltInFunction.TrimStart(o.ToString()));
         }
-        #endregion
 
-        #region Date & Time
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the AddDays function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestAddDays(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "AddDays",
-                "SELECT " + databaseServices.DMLService.Functions.AddDays("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.AddDays("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 } },
                 o => ScriptableBuiltInFunction.AddDays(GetArgValue<DateTime>(o, 0), GetArgValue<int>(o, 1)));
         }
@@ -220,7 +216,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestAddHours(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "AddHours",
-                "SELECT " + databaseServices.DMLService.Functions.AddHours("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.AddHours("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 } },
                 o => ScriptableBuiltInFunction.AddHours(GetArgValue<DateTime>(o, 0), GetArgValue<int>(o, 1)));
         }
@@ -230,7 +226,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestAddMinutes(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "AddMinutes",
-                "SELECT " + databaseServices.DMLService.Functions.AddMinutes("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.AddMinutes("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 } },
                 o => ScriptableBuiltInFunction.AddMinutes(GetArgValue<DateTime>(o, 0), GetArgValue<int>(o, 1)));
         }
@@ -240,8 +236,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestAddMonths(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "AddMonths",
-                "SELECT " + databaseServices.DMLService.Functions.AddMonths("{0}", "{1}") + " FROM DUMMY",
-                new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 }, new object[] { new DateTime(2012, 1, 30, 1, 2, 3), 1 } },
+                "SELECT " + databaseServices.DMLService.Functions.AddMonths("{0}", "{1}") + " FROM DUMMY"+MachineName,
+                new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 }, new object[] { new DateTime(2012, 1, 30, 1, 2, 3), 1 }, new object[] { new DateTime(2012, 3, 30, 1, 2, 3), -1 } },
                 o => ScriptableBuiltInFunction.AddMonths(GetArgValue<DateTime>(o, 0), GetArgValue<int>(o, 1)));
         }
 
@@ -250,7 +246,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestAddSeconds(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "AddSeconds",
-                "SELECT " + databaseServices.DMLService.Functions.AddSeconds("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.AddSeconds("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 } },
                 o => ScriptableBuiltInFunction.AddSeconds(GetArgValue<DateTime>(o, 0), GetArgValue<int>(o, 1)));
         }
@@ -260,8 +256,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestAddYears(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "AddYears",
-                "SELECT " + databaseServices.DMLService.Functions.AddYears("{0}", "{1}") + " FROM DUMMY",
-                new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 }, new object[] { new DateTime(2012, 2, 29, 1, 2, 3), 1 } },
+                "SELECT " + databaseServices.DMLService.Functions.AddYears("{0}", "{1}") + " FROM DUMMY"+MachineName,
+                new object[] { new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), -15 }, new object[] { new DateTime(2014, 1, 1, 10, 0, 0), 0 }, new object[] { new DateTime(1900, 1, 1, 0, 0, 0), 1 }, new object[] { new DateTime(2012, 2, 29, 1, 2, 3), 1 }, new object[] { new DateTime(2012, 2, 29, 1, 2, 3), -1 } },
                 o => ScriptableBuiltInFunction.AddYears(GetArgValue<DateTime>(o, 0), GetArgValue<int>(o, 1)));
         }
 
@@ -270,7 +266,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestBuildDateTime(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "BuildDateTime",
-                "SELECT " + databaseServices.DMLService.Functions.BuildDateTime("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.BuildDateTime("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(1900, 1, 1), new DateTime(1900, 1, 1, 0, 0, 0) }, new object[] { new DateTime(2100, 1, 1), new DateTime(1900, 1, 1, 0, 0, 0) }, new object[] { new DateTime(1900, 1, 1), new DateTime(1900, 1, 1, 10, 11, 12) }, new object[] { new DateTime(2100, 1, 1), new DateTime(1900, 1, 1, 10, 11, 12) } },
                 o => ScriptableBuiltInFunction.BuildDateTime(GetArgValue<DateTime>(o, 0), GetArgValue<DateTime>(o, 1)));
         }
@@ -280,7 +276,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDay(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Day",
-                "SELECT " + databaseServices.DMLService.Functions.Day("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Day("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.Day(Convert.ToDateTime(o)));
         }
@@ -290,7 +286,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDayOfWeek(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DayOfWeek",
-                "SELECT " + databaseServices.DMLService.Functions.DayOfWeek("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DayOfWeek("{0}") + " FROM DUMMY"+MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.DayOfWeek(Convert.ToDateTime(o)));
         }
@@ -300,7 +296,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDiffDays(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DiffDays",
-                "SELECT " + databaseServices.DMLService.Functions.DiffDays("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DiffDays("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0) }, new object[] { new DateTime(2012, 2, 29, 10, 11, 12), new DateTime(2012, 2, 28, 0, 1, 2) }, new object[] { new DateTime(2012, 2, 28, 0, 1, 2), new DateTime(2012, 2, 29, 10, 11, 12) } },
                 o => ScriptableBuiltInFunction.DiffDays(GetArgValue<DateTime>(o, 0), GetArgValue<DateTime>(o, 1)));
         }
@@ -310,7 +306,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDiffHours(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DiffHours",
-                "SELECT " + databaseServices.DMLService.Functions.DiffHours("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DiffHours("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0) }, new object[] { new DateTime(2012, 2, 29, 10, 11, 12), new DateTime(2012, 2, 28, 0, 1, 2) }, new object[] { new DateTime(2012, 2, 28, 0, 1, 2), new DateTime(2012, 2, 29, 10, 11, 12) } },
                 o => ScriptableBuiltInFunction.DiffHours(GetArgValue<DateTime>(o, 0), GetArgValue<DateTime>(o, 1)));
         }
@@ -320,7 +316,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDiffMinutes(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DiffMinutes",
-                "SELECT " + databaseServices.DMLService.Functions.DiffMinutes("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DiffMinutes("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0) }, new object[] { new DateTime(2012, 2, 29, 10, 11, 12), new DateTime(2012, 2, 28, 0, 1, 2) }, new object[] { new DateTime(2012, 2, 28, 0, 1, 2), new DateTime(2012, 2, 29, 10, 11, 12) } },
                 o => ScriptableBuiltInFunction.DiffMinutes(GetArgValue<DateTime>(o, 0), GetArgValue<DateTime>(o, 1)));
         }
@@ -330,7 +326,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDiffSeconds(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DiffSeconds",
-                "SELECT " + databaseServices.DMLService.Functions.DiffSeconds("{0}", "{1}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DiffSeconds("{0}", "{1}") + " FROM DUMMY"+MachineName,
                 new object[] { new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 0, 0, 0) }, new object[] { new DateTime(2012, 2, 29, 10, 11, 12), new DateTime(2012, 2, 28, 0, 1, 2) }, new object[] { new DateTime(2012, 2, 28, 0, 1, 2), new DateTime(2012, 2, 29, 10, 11, 12) } },
                 o => ScriptableBuiltInFunction.DiffSeconds(GetArgValue<DateTime>(o, 0), GetArgValue<DateTime>(o, 1)));
         }
@@ -340,7 +336,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestHour(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Hour",
-                "SELECT " + databaseServices.DMLService.Functions.Hour("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Hour("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.Hour(Convert.ToDateTime(o)));
         }
@@ -350,7 +346,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestMinute(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Minute",
-                "SELECT " + databaseServices.DMLService.Functions.Minute("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Minute("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.Minute(Convert.ToDateTime(o)));
         }
@@ -360,7 +356,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestMonth(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Month",
-                "SELECT " + databaseServices.DMLService.Functions.Month("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Month("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.Month(Convert.ToDateTime(o)));
         }
@@ -370,7 +366,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestNewDate(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "NewDate",
-                "SELECT " + databaseServices.DMLService.Functions.NewDate("{0}", "{1}", "{2}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.NewDate("{0}", "{1}", "{2}") + " FROM DUMMY" + MachineName,
                 new object[] { new object[] { 1900, 1, 1 }, new object[] { 2012, 2, 29 }, new object[] { 2100, 1, 31 } },
                 o => ScriptableBuiltInFunction.NewDate(GetArgValue<int>(o, 0), GetArgValue<int>(o, 1), GetArgValue<int>(o, 2)));
         }
@@ -380,7 +376,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestNewDateTime(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "NewDateTime",
-                "SELECT " + databaseServices.DMLService.Functions.NewDateTime("{0}", "{1}", "{2}", "{3}", "{4}", "{5}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.NewDateTime("{0}", "{1}", "{2}", "{3}", "{4}", "{5}") + " FROM DUMMY" + MachineName,
                 new object[] { new object[] { 1900, 1, 1, 0, 0, 0 }, new object[] { 2012, 2, 29, 23, 59, 59 }, new object[] { 2100, 1, 31, 10, 11, 12 } },
                 o => ScriptableBuiltInFunction.NewDateTime(GetArgValue<int>(o, 0), GetArgValue<int>(o, 1), GetArgValue<int>(o, 2), GetArgValue<int>(o, 3), GetArgValue<int>(o, 4), GetArgValue<int>(o, 5)));
         }
@@ -390,7 +386,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestNewTime(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "NewTime",
-                "SELECT " + databaseServices.DMLService.Functions.NewTime("{0}", "{1}", "{2}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.NewTime("{0}", "{1}", "{2}") + " FROM DUMMY" + MachineName,
                 new object[] { new object[] { 0, 0, 0 }, new object[] { 23, 59, 59 }, new object[] { 10, 11, 12 } },
                 o => ScriptableBuiltInFunction.NewTime(GetArgValue<int>(o, 0), GetArgValue<int>(o, 1), GetArgValue<int>(o, 2)));
         }
@@ -400,7 +396,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestSecond(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Second",
-                "SELECT " + databaseServices.DMLService.Functions.Second("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Second("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.Second(Convert.ToDateTime(o)));
         }
@@ -410,21 +406,17 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestYear(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "Year",
-                "SELECT " + databaseServices.DMLService.Functions.Year("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.Year("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.Year(Convert.ToDateTime(o)));
         }
-                
-        #endregion
-
-        #region Data Conversion
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the BooleanToInteger function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestBooleanToInteger(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "BooleanToInteger",
-                "SELECT " + databaseServices.DMLService.Functions.BooleanToInteger("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.BooleanToInteger("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { true, false },
                 o => ScriptableBuiltInFunction.BooleanToInteger(Convert.ToBoolean(o)));
         }
@@ -434,7 +426,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestBooleanToText(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "BooleanToText",
-                "SELECT " + databaseServices.DMLService.Functions.BooleanToText("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.BooleanToText("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { true, false },
                 o => ScriptableBuiltInFunction.BooleanToText(Convert.ToBoolean(o)));
         }
@@ -444,7 +436,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDateTimeToDate(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DateTimeToDate",
-                "SELECT " + databaseServices.DMLService.Functions.DateTimeToDate("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DateTimeToDate("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.DateTimeToDate(Convert.ToDateTime(o)));
         }
@@ -457,7 +449,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             try {
                 foreach (var dateFormat in DATE_FORMATS) {
                     AssertValues(databaseServices, "DateTimeToText",
-                        "SELECT " + databaseServices.DMLService.Functions.DateTimeToText("{0}", dateFormat) + " FROM DUMMY",
+                        "SELECT " + databaseServices.DMLService.Functions.DateTimeToText("{0}", dateFormat) + " FROM DUMMY" + MachineName,
                         new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                         o => {
                             ChangeDateFormat(dateFormat);
@@ -474,7 +466,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDateTimeToTime(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DateTimeToTime",
-                "SELECT " + databaseServices.DMLService.Functions.DateTimeToTime("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DateTimeToTime("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(2012, 2, 29, 23, 59, 59), new DateTime(2100, 1, 31, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.DateTimeToTime(Convert.ToDateTime(o)));
         }
@@ -484,7 +476,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDateToDateTime(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DateToDateTime",
-                "SELECT " + databaseServices.DMLService.Functions.DateToDateTime("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DateToDateTime("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1), new DateTime(2012, 2, 29), new DateTime(2100, 1, 31) },
                 o => ScriptableBuiltInFunction.DateToDateTime(Convert.ToDateTime(o)));
         }
@@ -497,7 +489,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             try {
                 foreach (var dateFormat in DATE_FORMATS) {
                     AssertValues(databaseServices, "DateToText",
-                        "SELECT " + databaseServices.DMLService.Functions.DateToText("{0}", dateFormat) + " FROM DUMMY",
+                        "SELECT " + databaseServices.DMLService.Functions.DateToText("{0}", dateFormat) + " FROM DUMMY" + MachineName,
                         new object[] { new DateTime(1900, 1, 1), new DateTime(2012, 2, 29), new DateTime(2100, 1, 31) },
                         o => {
                             ChangeDateFormat(dateFormat);
@@ -514,7 +506,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDecimalToBoolean(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DecimalToBoolean",
-                "SELECT " + databaseServices.DMLService.Functions.DecimalToBoolean("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DecimalToBoolean("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -1.44m, -1m, 0m, 1m, 50m, 100.123456m },
                 o => ScriptableBuiltInFunction.DecimalToBoolean(Convert.ToDecimal(o)));
         }
@@ -524,7 +516,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDecimalToInteger(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DecimalToInteger",
-                "SELECT " + databaseServices.DMLService.Functions.DecimalToInteger("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DecimalToInteger("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -1.44m, -1m, 0m, 1m, 50m, 100.123456m },
                 o => ScriptableBuiltInFunction.DecimalToInteger(Convert.ToDecimal(o)));
         }
@@ -534,29 +526,29 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestDecimalToText(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "DecimalToText",
-                "SELECT " + databaseServices.DMLService.Functions.DecimalToText("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.DecimalToText("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -1.44m, -1m, 0m, 1m, 50m, 100.123456m },
                 o => ScriptableBuiltInFunction.DecimalToText(Convert.ToDecimal(o)));
         }
 
-        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the EntityRefIntegerToInteger function is coherent with the behavior of the built-in function in code")]
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IdentifierToInteger function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestEntityRefIntegerToInteger(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValues(databaseServices, "EntityRefIntegerToInteger",
-                "SELECT " + databaseServices.DMLService.Functions.EntityRefIntegerToInteger("{0}") + " FROM DUMMY",
+            AssertValues(databaseServices, "IdentifierToInteger",
+                "SELECT " + databaseServices.DMLService.Functions.IdentifierToInteger("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { 0, 1, 100, 1000 },
-                o => ScriptableBuiltInFunction.EntityRefIntegerToInteger(Convert.ToInt32(o)));
+                o => ScriptableBuiltInFunction.IdentifierToInteger(Convert.ToInt32(o)));
         }
 
-        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the EntityRefTextToText function is coherent with the behavior of the built-in function in code")]
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IdentifierToText function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestEntityRefTextToText(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValues(databaseServices, "EntityRefTextToText",
-                "SELECT " + databaseServices.DMLService.Functions.EntityRefTextToText("{0}") + " FROM DUMMY",
+            AssertValues(databaseServices, "IdentifierToText",
+                "SELECT " + databaseServices.DMLService.Functions.IdentifierToText("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { "", "abc", "1", Guid.NewGuid().ToString() },
-                o => ScriptableBuiltInFunction.EntityRefTextToText(Convert.ToString(o)));
+                o => ScriptableBuiltInFunction.IdentifierToText(Convert.ToString(o)));
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IntegerToBoolean function is coherent with the behavior of the built-in function in code")]
@@ -564,7 +556,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestIntegerToBoolean(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "IntegerToBoolean",
-                "SELECT " + databaseServices.DMLService.Functions.IntegerToBoolean("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.IntegerToBoolean("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -10, -1, 0, 1, 50 },
                 o => ScriptableBuiltInFunction.IntegerToBoolean(Convert.ToInt32(o)));
         }
@@ -574,19 +566,29 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestIntegerToDecimal(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "IntegerToDecimal",
-                "SELECT " + databaseServices.DMLService.Functions.IntegerToDecimal("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.IntegerToDecimal("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -10, -1, 0, 1, 50 },
                 o => ScriptableBuiltInFunction.IntegerToDecimal(Convert.ToInt32(o)));
         }
 
-        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IntegerToEntityRefInteger function is coherent with the behavior of the built-in function in code")]
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the LongIntegerToDecimal function is coherent with the behavior of the Convert.ToDecimal function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "lef")]
+        public void TestLongIntegerToDecimal(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "LongIntegerToDecimal",
+                "SELECT " + databaseServices.DMLService.Functions.LongIntegerToDecimal("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { -1234567890123L, -10L, -1L, 0L, 1L, 50L, 1234567890123L },
+                o => Convert.ToDecimal(Convert.ToInt64(o)));
+        }
+
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IntegerToIdentifier function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestIntegerToEntityRefInteger(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValues(databaseServices, "IntegerToEntityRefInteger",
-                "SELECT " + databaseServices.DMLService.Functions.IntegerToEntityRefInteger("{0}") + " FROM DUMMY",
+            AssertValues(databaseServices, "IntegerToIdentifier",
+                "SELECT " + databaseServices.DMLService.Functions.IntegerToIdentifier("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { 0, 1, 50 },
-                o => ScriptableBuiltInFunction.IntegerToEntityRefInteger(Convert.ToInt32(o)));
+                o => ScriptableBuiltInFunction.IntegerToIdentifier(Convert.ToInt32(o)));
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IntegerToText function is coherent with the behavior of the built-in function in code")]
@@ -594,7 +596,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestIntegerToText(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "IntegerToText",
-                "SELECT " + databaseServices.DMLService.Functions.IntegerToText("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.IntegerToText("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { -10, -1, 0, 1, 50 },
                 o => ScriptableBuiltInFunction.IntegerToText(Convert.ToInt32(o)));
         }
@@ -604,7 +606,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestNullDate(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "NullDate",
-                "SELECT " + databaseServices.DMLService.Functions.NullDate() + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.NullDate() + " FROM DUMMY" + MachineName,
                 new object[0],
                 o => ScriptableBuiltInFunction.NullDate());
         }
@@ -614,7 +616,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestNullIdentifier(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "NullIdentifier",
-                "SELECT " + databaseServices.DMLService.Functions.NullIdentifier() + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.NullIdentifier() + " FROM DUMMY" + MachineName,
                 new object[0],
                 o => ScriptableBuiltInFunction.NullIdentifier());
         }
@@ -624,7 +626,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestNullTextIdentifier(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "NullTextIdentifier",
-                "SELECT " + databaseServices.DMLService.Functions.NullTextIdentifier() + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.NullTextIdentifier() + " FROM DUMMY" + MachineName,
                 new object[0],
                 o => ScriptableBuiltInFunction.NullTextIdentifier());
         }
@@ -637,7 +639,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             try {
                 foreach (var dateFormat in DATE_FORMATS) {
                     AssertValues(databaseServices, "TextToDate",
-                        "SELECT " + databaseServices.DMLService.Functions.TextToDate("{0}", dateFormat) + " FROM DUMMY",
+                        "SELECT " + databaseServices.DMLService.Functions.TextToDate("{0}", dateFormat) + " FROM DUMMY" + MachineName,
                         new object[] { new DateTime(1900, 1, 1).ToString(dateFormat), new DateTime(2012, 2, 29).ToString(dateFormat), new DateTime(2100, 1, 31).ToString(dateFormat) },
                         o => {
                             ChangeDateFormat(dateFormat);
@@ -658,7 +660,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
                 foreach (var dateFormat in DATE_FORMATS) {
                     string dateTimeFormat = dateFormat + " " + DEFAULT_TIME_FORMAT;
                     AssertValues(databaseServices, "TextToDateTime",
-                        "SELECT " + databaseServices.DMLService.Functions.TextToDateTime("{0}", dateFormat) + " FROM DUMMY",
+                        "SELECT " + databaseServices.DMLService.Functions.TextToDateTime("{0}", dateFormat) + " FROM DUMMY" + MachineName,
                         new object[] { new DateTime(1900, 1, 1, 0, 0, 0).ToString(dateTimeFormat), new DateTime(2012, 2, 29, 23, 59, 59).ToString(dateTimeFormat), new DateTime(2100, 1, 31, 10, 11, 12).ToString(dateTimeFormat) },
                         o => {
                             ChangeDateFormat(dateFormat, /*isDateTime*/true);
@@ -675,19 +677,19 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTextToDecimal(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "TextToDecimal",
-                "SELECT " + databaseServices.DMLService.Functions.TextToDecimal("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.TextToDecimal("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { "-1.44", "-1", "0", "1", "50", "100.123456" },
                 o => ScriptableBuiltInFunction.TextToDecimal(Convert.ToString(o)));
         }
 
-        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the TextToEntityRefText function is coherent with the behavior of the built-in function in code")]
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the TextToIdentifier function is coherent with the behavior of the built-in function in code")]
         [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestTextToEntityRefText(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValues(databaseServices, "TextToEntityRefText",
-                "SELECT " + databaseServices.DMLService.Functions.TextToEntityRefText("{0}") + " FROM DUMMY",
+            AssertValues(databaseServices, "TextToIdentifier",
+                "SELECT " + databaseServices.DMLService.Functions.TextToIdentifier("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { "", "abc", "1", Guid.NewGuid().ToString() },
-                o => ScriptableBuiltInFunction.TextToEntityRefText(Convert.ToString(o)));
+                o => ScriptableBuiltInFunction.TextToIdentifier(Convert.ToString(o)));
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the TextToInteger function is coherent with the behavior of the built-in function in code")]
@@ -695,7 +697,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTextToInteger(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "TextToInteger",
-                "SELECT " + databaseServices.DMLService.Functions.TextToInteger("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.TextToInteger("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { "-10", "-1", "0", "1", "50" },
                 o => ScriptableBuiltInFunction.TextToInteger(Convert.ToString(o)));
         }
@@ -708,7 +710,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             try {
                 ChangeDateFormat(DEFAULT_DATE_FORMAT, /*isDateTime*/true);
                 AssertValues(databaseServices, "TextToTime",
-                    "SELECT " + databaseServices.DMLService.Functions.TextToTime("{0}") + " FROM DUMMY",
+                    "SELECT " + databaseServices.DMLService.Functions.TextToTime("{0}") + " FROM DUMMY" + MachineName,
                     new object[] { new DateTime(1900, 1, 1, 0, 0, 0).ToString(DEFAULT_TIME_FORMAT), new DateTime(2012, 2, 29, 23, 59, 59).ToString(DEFAULT_TIME_FORMAT), new DateTime(2100, 1, 31, 10, 11, 12).ToString(DEFAULT_TIME_FORMAT) },
                     o => ScriptableBuiltInFunction.TextToTime(Convert.ToString(o)));
             } finally {
@@ -721,7 +723,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTimeToDateTime(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "TimeToDateTime",
-                "SELECT " + databaseServices.DMLService.Functions.TimeToDateTime("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.TimeToDateTime("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 23, 59, 59), new DateTime(1900, 1, 1, 10, 11, 12) },
                 o => Convert.ToDateTime(o)); // There is no equivalent built-in function, the function exists because of implicit conversions
         }
@@ -731,15 +733,71 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestTimeToText(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValues(databaseServices, "TimeToText",
-                "SELECT " + databaseServices.DMLService.Functions.TimeToText("{0}") + " FROM DUMMY",
+                "SELECT " + databaseServices.DMLService.Functions.TimeToText("{0}") + " FROM DUMMY" + MachineName,
                 new object[] { new DateTime(1900, 1, 1, 0, 0, 0), new DateTime(1900, 1, 1, 23, 59, 59), new DateTime(1900, 1, 1, 10, 11, 12) },
                 o => ScriptableBuiltInFunction.TimeToText(Convert.ToDateTime(o)));
             
         }
 
-        #endregion
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the TextToLongInteger function is coherent with the behavior of the built-in function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer, Long Integers Project", CreatedBy = "rls")]
+        public void TestTextToLongInteger(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "TextToLongInteger",
+                "SELECT " + databaseServices.DMLService.Functions.TextToLongInteger("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { "-100000000000000", "-10000", "0", "10000", "100000000000000" },
+                o => ScriptableBuiltInFunction.TextToLongInteger(Convert.ToString(o)));
+        }
 
-        #region Misc
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the LongIntegerToText function is coherent with the behavior of the built-in function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer, Long Integers Project", CreatedBy = "rls")]
+        public void TestLongIntegerToText(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "LongIntegerToText",
+                "SELECT " + databaseServices.DMLService.Functions.LongIntegerToText("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { -100000000, -1, 0, 1, 100000000 },
+                o => ScriptableBuiltInFunction.LongIntegerToText(Convert.ToInt64(o)));
+        }
+
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IdentifierToLongInteger function is coherent with the behavior of the built-in function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer, Long Integers Project", CreatedBy = "rls")]
+        public void TestIdentifierToLongInteger(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "IdentifierToLongInteger",
+                "SELECT " + databaseServices.DMLService.Functions.IdentifierToLongInteger("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { 0, 1000000000 },
+                o => ScriptableBuiltInFunction.IdentifierToLongInteger(Convert.ToInt64(o)));
+        }
+
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the LongIntegerToIdentifier function is coherent with the behavior of the built-in function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer, Long Integers Project", CreatedBy = "rls")]
+        public void TestLongIntegerToIdentifier(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "LongIntegerToIdentifier",
+                "SELECT " + databaseServices.DMLService.Functions.LongIntegerToIdentifier("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { 0, 1000000000 },
+                o => ScriptableBuiltInFunction.LongIntegerToIdentifier(Convert.ToInt64(o)));
+        }
+
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the LongIntegerToInteger function is coherent with the behavior of the built-in function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer, Long Integers Project", CreatedBy = "rls")]
+        public void TestLongIntegerToInteger(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "LongIntegerToInteger",
+                "SELECT " + databaseServices.DMLService.Functions.LongIntegerToInteger("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { -1000000000, -1000, 0, 1000, 1000000000 },
+                o => ScriptableBuiltInFunction.LongIntegerToInteger(Convert.ToInt64(o)));
+        }
+
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the DecimalToLongInteger function is coherent with the behavior of the built-in function in code")]
+        [TestDetails(TestIssue = "610148", Feature = "Database Abstraction Layer, Long Integers Project", CreatedBy = "rls")]
+        public void TestDecimalToLongInteger(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValues(databaseServices, "DecimalToLongInteger",
+                "SELECT " + databaseServices.DMLService.Functions.DecimalToLongInteger("{0}") + " FROM DUMMY" + MachineName,
+                new object[] { -1.44444444m, -1m, 0m, 1m, 50m, 100.123456789m },
+                o => ScriptableBuiltInFunction.DecimalToLongInteger(Convert.ToDecimal(o)));
+        }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the If function is correct for true and false conditions")]
         [TestDetails(TestIssue = "644181", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
@@ -747,8 +805,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             var databaseServices = tc.Services;
             string trueCondition = databaseServices.DMLService.Operators.Equal("1", "1");
             string falseCondition = databaseServices.DMLService.Operators.LessThen("1", "0");
-            string ifTrue = "SELECT " + databaseServices.DMLService.Functions.IfElse(trueCondition, "{0}", "{1}") + " FROM DUMMY";
-            string ifFalse = "SELECT " + databaseServices.DMLService.Functions.IfElse(falseCondition, "{0}", "{1}") + " FROM DUMMY";
+            string ifTrue = "SELECT " + databaseServices.DMLService.Functions.IfElse(trueCondition, "{0}", "{1}") + " FROM DUMMY" + MachineName;
+            string ifFalse = "SELECT " + databaseServices.DMLService.Functions.IfElse(falseCondition, "{0}", "{1}") + " FROM DUMMY" + MachineName;
 
             AssertValues(databaseServices, "If", ifTrue, new object[] { new object[] { 1, 0 } }, o => GetArgValue<int>(o, 0));
             AssertValues(databaseServices, "If", ifFalse, new object[] { new object[] { 1, 0 } }, o => GetArgValue<int>(o, 1));
@@ -774,29 +832,25 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string falseCondition = databaseServices.DMLService.Operators.LessThen("1", "0");
             string ifTrueTrue = "SELECT " + databaseServices.DMLService.Functions.IfElse(trueCondition,
                 databaseServices.DMLService.Functions.IfElse(trueCondition, "{0}", "{1}"),
-                databaseServices.DMLService.Functions.IfElse(trueCondition, "{2}", "{3}")) + " FROM DUMMY";
+                databaseServices.DMLService.Functions.IfElse(trueCondition, "{2}", "{3}")) + " FROM DUMMY" + MachineName;
 
             string ifTrueFalse = "SELECT " + databaseServices.DMLService.Functions.IfElse(trueCondition,
                 databaseServices.DMLService.Functions.IfElse(falseCondition, "{0}", "{1}"),
-                databaseServices.DMLService.Functions.IfElse(trueCondition, "{2}", "{3}")) + " FROM DUMMY";
+                databaseServices.DMLService.Functions.IfElse(trueCondition, "{2}", "{3}")) + " FROM DUMMY" + MachineName;
 
             string ifFalseTrue = "SELECT " + databaseServices.DMLService.Functions.IfElse(falseCondition,
                 databaseServices.DMLService.Functions.IfElse(trueCondition, "{0}", "{1}"),
-                databaseServices.DMLService.Functions.IfElse(trueCondition, "{2}", "{3}")) + " FROM DUMMY";
+                databaseServices.DMLService.Functions.IfElse(trueCondition, "{2}", "{3}")) + " FROM DUMMY" + MachineName;
 
             string ifFalseFalse = "SELECT " + databaseServices.DMLService.Functions.IfElse(falseCondition,
                 databaseServices.DMLService.Functions.IfElse(falseCondition, "{0}", "{1}"),
-                databaseServices.DMLService.Functions.IfElse(falseCondition, "{2}", "{3}")) + " FROM DUMMY";
+                databaseServices.DMLService.Functions.IfElse(falseCondition, "{2}", "{3}")) + " FROM DUMMY" + MachineName;
 
             AssertValues(databaseServices, "If(true, If(true, A, b), If(true, c, d))", ifTrueTrue, new object[] { new object[] { "a", "b", "c", "d" } }, o => GetArgValue<string>(o, 0));
             AssertValues(databaseServices, "If(true, If(false, a, B), If(true, c, d))", ifTrueFalse, new object[] { new object[] { "a", "b", "c", "d" } }, o => GetArgValue<string>(o, 1));
             AssertValues(databaseServices, "If(false, If(true, a, b), If(true, C, d))", ifFalseTrue, new object[] { new object[] { "a", "b", "c", "d" } }, o => GetArgValue<string>(o, 2));
             AssertValues(databaseServices, "If(false, If(false, a, b), If(false, c, D))", ifFalseFalse, new object[] { new object[] { "a", "b", "c", "d" } }, o => GetArgValue<string>(o, 3));
         }
-
-        #endregion
-
-        #region Test Utils
 
         private static string DefaultDateFormat {
             get {
@@ -812,6 +866,6 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             
             FormatInfoLogic.SetDefaultDateAndDateTimeFormatString(newFormat, newFormat);
         } 
-        #endregion
+
     }
 }

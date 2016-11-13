@@ -23,20 +23,6 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
                 return new IntegrationSerializer();
             }
         }
-
-
-        public static Serializer<IRuntimeDatabaseConfiguration> ForRuntime {
-            get {
-                Func<IRuntimeDatabaseConfiguration, IEnumerable<IParameter>> e =
-                    c => {
-                        var meta = new MetaDatabaseConfiguration(c);
-                        return meta.Parameters.Where(p => p.Persist);
-                    };
-
-                return new Serializer<IRuntimeDatabaseConfiguration>("RuntimeDatabaseConfiguration", e);
-            }
-        
-        }
     }
 
     sealed public class Serializer<TConfiguration> {

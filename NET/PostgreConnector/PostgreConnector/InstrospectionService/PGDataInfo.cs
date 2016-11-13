@@ -109,25 +109,25 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
         public int Decimals
         {
             get;
-            private set;
+            set;
         }
 
         public int Length
         {
             get;
-            private set;
+            set;
         }
 
         public string SqlDataType
         {
             get;
-            private set;
+            set;
         }
 
         public DBDataType Type
         {
             get;
-            private set;
+            set;
         }
     }
 }

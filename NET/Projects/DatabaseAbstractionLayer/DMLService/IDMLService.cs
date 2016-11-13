@@ -15,50 +15,75 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
     public interface IDMLService {
 
         /// <summary>
-        /// Gets the <see cref="IDatabaseServices"/> instance associated with this service.
+        /// Gets the <see cref="IDatabaseServices" /> instance associated with this service.
         /// </summary>
+        /// <value>
+        /// The database services associated.
+        /// </value>
         IDatabaseServices DatabaseServices { get; }
 
         /// <summary>
         /// Gets an object that generates the SQL fragments required to perform specific queries (e.g. count query).
         /// </summary>
+        /// <value>
+        /// The queries.
+        /// </value>
         IDMLQueries Queries { get; }
 
         /// <summary>
         /// Gets an object that generates the SQL fragments required to perform entity actions.
         /// </summary>
         /// <param name="tableSourceInfo">Information about the entity's underlying table source</param>
+        /// <returns>An object that generates the SQL fragments required to perform entity actions</returns>
         IDMLEntityActions GetEntityActions(ITableSourceInfo tableSourceInfo);
-        
+
         /// <summary>
         /// Gets an object that generates and manipulates SQL identifiers.
         /// </summary>
+        /// <value>
+        /// An object that generates and manipulates SQL identifiers.
+        /// </value>
         IDMLIdentifiers Identifiers { get; }
 
         /// <summary>
         /// Gets an object that generates the SQL operators required to execute simple queries.
         /// </summary>
+        /// <value>
+        /// An object that generates the SQL operators required to execute simple queries.
+        /// </value>
         IDMLOperators Operators { get; }
 
         /// <summary>
-        /// Gets an object that generates the SQL functions required to execute simple queries
+        /// Gets an object that generates the SQL functions required to execute simple queries.
         /// </summary>
+        /// <value>
+        /// An object that generates the SQL functions required to execute simple queries
+        /// </value>
         IDMLFunctions Functions { get; }
 
         /// <summary>
-        /// Gets an object that generates the SQL aggregate functions required to execute DataSet queries
+        /// Gets an object that generates the SQL aggregate functions required to execute DataSet queries.
         /// </summary>
+        /// <value>
+        /// An object that generates the SQL aggregate functions required to execute DataSet queries
+        /// </value>
         IDMLAggregateFunctions AggregateFunctions { get; }
 
         /// <summary>
         /// Gets an object that generates the SQL default values for each database type.
         /// </summary>
+        /// <value>
+        /// An object that generates the SQL default values for each database type.
+        /// </value>
         IDMLDefaultValues DefaultValues { get; }
 
         /// <summary>
-        /// Gets an object that defines a set of fragments (e.g. keywords, operators) of the database-specific dialect 
+        /// Gets an object that defines a set of fragments (e.g. keywords, operators) of the database-specific dialect
         /// that can be used to provide syntax highlighting in SQL statements
         /// </summary>
+        /// <value>
+        /// The syntax highlight definitions.
+        /// </value>
         IDMLSyntaxHighlightDefinitions SyntaxHighlightDefinitions { get;}
 
         /// <summary>
@@ -68,6 +93,14 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <param name="type">Database type of the literal.</param>
         /// <returns>DML expression that transforms the value.</returns>
         string TransformDatabaseValue(string value, DBDataType type);
+
+        /// <summary>
+        /// Returns an SQL expression that transforms a value of a specified type, so that it can be used in a query condition or calculated column.
+        /// </summary>
+        /// <param name="value">DML expression that evaluates to a specific type.</param>
+        /// <param name="type">Database type of the literal.</param>
+        /// <returns>DML expression that transforms the value.</returns>
+        string TransformValue(string value, DBDataType type);
 
         /// <summary>
         /// Escapes special characters in a text value to be used in SQL statements (e.g replace ' by '').

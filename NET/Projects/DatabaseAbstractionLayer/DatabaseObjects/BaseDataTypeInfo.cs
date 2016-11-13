@@ -14,9 +14,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
             Decimals = decimals;
         }
 
-        public virtual DBDataType Type { get; private set; }
+        public virtual DBDataType Type { get; set; }
         public virtual string SqlDataType { get; private set; }
-        public virtual int Length { get; private set; }
+        public virtual int Length { get; set; }
         public virtual int Decimals { get; private set; }
     }
 }

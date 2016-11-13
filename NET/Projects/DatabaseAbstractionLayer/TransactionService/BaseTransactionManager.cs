@@ -28,6 +28,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// <summary>
         /// This property represents the transaction pool used by this manager.
         /// </summary>
+        /// <value>
+        /// The transaction pool.
+        /// </value>
         protected Hashtable TransactionPool { get; private set; }
 
         /// <summary>
@@ -40,33 +43,45 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// Stores information about transaction state providing methods that allow its manipulation.
         /// </summary>
         protected class TransactionInfo {
-			private IDbConnection _conn;
-            private IDbTransaction _trans;
-            private bool _free;
-            private bool _isReleasable;
-            private bool _isPoolable;
+            private volatile IDbConnection _conn;
+            private volatile IDbTransaction _trans;
+            private volatile bool _free;
+            private volatile bool _isReleasable;
+            private volatile bool _isPoolable;
             private DateTime _creationTime;
             private DateTime _lastChange;
-            private IList<IDataReader> _readers = new List<IDataReader>();
+            private volatile IList<IDataReader> _readers = new List<IDataReader>();
 
             /// <summary>
             /// Returns true if the transaction is free.
             /// </summary>
+            /// <value>
+            /// True if the transaction is free, False otherwise.
+            /// </value>
             public bool Free { get { return _free; } }
 
             /// <summary>
             /// Gets the transaction creation time.
             /// </summary>
+            /// <value>
+            /// The creation time.
+            /// </value>
             public DateTime CreationTime { get { return _creationTime; } }
 
             /// <summary>
             /// Gets the time of the last modification to the transaction
             /// </summary>
+            /// <value>
+            /// The time when the transaction was change for last.
+            /// </value>
 			public DateTime LastChange { get { return _lastChange; } }
 
             /// <summary>
             /// Gets the number of readers associated with the transaction.
             /// </summary>
+            /// <value>
+            /// The number of readers associated.
+            /// </value>
             public int ReaderCount { 
                 get { 
                     lock (_readers) { 
@@ -76,7 +91,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
             }
 
             /// <summary>
-            /// This propety informs if the transaction can be released.
+            /// This property informs if the transaction can be released.
             /// </summary>
             /// <value>
             /// <c>true</c> if this instance is releasable; otherwise, <c>false</c>.
@@ -87,7 +102,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
             }
 
             /// <summary>
-            /// This propety informs if the transaction can be returned to the pool.
+            /// This property informs if the transaction can be returned to the pool.
             /// </summary>
             /// <value>
             /// <c>true</c> if this instance is poolable; otherwise, <c>false</c>.
@@ -98,13 +113,19 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
             }
 
             /// <summary>
-            /// Returns the <see cref="IDbTransaction"/> object being wrapped.
+            /// Returns the <see cref="IDbTransaction" /> object being wrapped.
             /// </summary>
+            /// <value>
+            /// The transaction.
+            /// </value>
             public IDbTransaction Transaction { get { return _trans; } }
 
             /// <summary>
-            /// Returns the <see cref="IDbConnection"/> object being wrapped.
+            /// Returns the <see cref="IDbConnection" /> object being wrapped.
             /// </summary>
+            /// <value>
+            /// The connection.
+            /// </value>
             public IDbConnection Connection { get { return _conn; } }
 
             /// <summary>
@@ -114,8 +135,8 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
             /// causing the later to appear as Zombie and making <code>trans.Connection == null</code>. 
             /// Because of that, an explicit reference is kept both to the connection and the transaction.
 			/// </summary>
-			/// <param name="transaction"></param>
-			/// <param name="connection"></param>
+			/// <param name="transaction">The transaction to be used.</param>
+            /// <param name="connection">The connection to be used.</param>
 			public TransactionInfo( IDbTransaction transaction, IDbConnection connection ) {
 				_conn = connection;
                 _trans = transaction;
@@ -237,8 +258,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         }
 
         /// <summary>
-        /// Gets the <see cref="IExecutionService"/> created by the associated DatabaseService.
+        /// Gets the <see cref="IExecutionService" /> created by the associated DatabaseService.
         /// </summary>
+        /// <value>
+        /// The execution service associated.
+        /// </value>
         public IExecutionService ExecutionService { get { return transactionService.DatabaseServices.ExecutionService; } }
 
         /// <summary>
@@ -256,7 +280,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
 
         /// <summary>
         /// Returns a transaction to be used during a web request.
-        /// This transaction is only commited or rolled back by invoking <see cref="FreeupResources"/>.
+        /// This transaction is only committed or rolled back by invoking <see cref="FreeupResources"/>.
         /// </summary>
         /// <returns>A transaction to be used in the applications.</returns>
         public virtual IDbTransaction GetRequestTransaction() {
@@ -297,10 +321,10 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         }
 
         /// <summary>
-        /// Returns a transaction that ismanaged by extension developers.
+        /// Returns a transaction that is managed by extension developers.
         /// Extension developers explicitly commit or rollback this transaction.
         /// </summary>
-        /// <returns>A commitable transaction managed by the user.</returns>
+        /// <returns>A committable transaction managed by the user.</returns>
         public virtual IDbTransaction GetCommitableTransaction() {
             TransactionInfo transInfo = AddToPoolAndReserve();
             transInfo.IsPoolable = false;
@@ -444,7 +468,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// If the transaction is poolable, it is released and put back into the pool, otherwise it is removed.
         /// Throws an <see cref="InvalidTransactionReleaseException"/> if the transaction is not releasable.
         /// </summary>
-        /// <exception cref="InvalidTransactionReleaseException"/>
+        /// <exception cref="InvalidTransactionReleaseException">Occurs if the transaction is not releasable.</exception>
         /// <param name="trans">Transaction to be released.</param>
         public virtual void ReleaseTransaction(IDbTransaction trans) {
             if (trans == null) return;
@@ -483,7 +507,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
 
         /// <summary>
         /// Commits a transaction.
-        /// The transaction is commited, the connection is closed and put back into the pool.
+        /// The transaction is committed, the connection is closed and put back into the pool.
         /// </summary>
         /// <param name="trans">The transaction to be committed.</param>
         public virtual void CommitTransaction(IDbTransaction trans) {
@@ -533,7 +557,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         }
 
         /// <summary>
-        /// Ends a transaction by commiting or rolling back.
+        /// Ends a transaction by committing or rolling back.
         /// </summary>
         /// <param name="trans">Transaction to commit.</param>
         /// <param name="commit">If True, the transaction is committed, otherwise is rolled back.</param>
@@ -577,7 +601,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// An error if an exception is raised.
         /// </summary>
         /// <param name="transInfo">Object containing information about the transaction.</param>
-        /// <param name="commit">If True, all transaction are commited. Otherwise, they are rolled back.</param>
+        /// <param name="commit">If True, all transaction are committed. Otherwise, they are rolled back.</param>
         /// <param name="toFreeResources">If True, all resources are released and connections returned to the pool.</param>
         protected virtual void EndTransaction(TransactionInfo transInfo, bool commit, bool toFreeResources) {
             TransactionPool.Remove(transInfo.Transaction);
@@ -599,7 +623,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// This implementation calls the <see cref="EndTransaction"/> method to end the transactions
         /// and sets the <see cref="RequestTransactionInfo"/> to Null.
         /// </summary>
-        /// <param name="commit">If True, all transaction are commited. Otherwise, they are rolled back.</param>
+        /// <param name="commit">If True, all transaction are committed. Otherwise, they are rolled back.</param>
         public virtual void FreeupResources(bool commit) {
             lock (TransactionPool.SyncRoot) {
                 // Note: The "new ArrayList" duplicates the values because "endTransaction" deletes them.
@@ -682,10 +706,40 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
 #if DEBUG
                 throw new Exception("Crashed on dispose, check for leaks!!!!", e);
 #else
-                OSTrace.Exception(e);
+                OSTrace.Error("Exception on Dispose", e);
 #endif
             } finally {
                 isDisposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Aborts a transaction and releases it.
+        /// </summary>
+        /// <param name="trans">Transaction to be aborted.</param>
+        public void AbortTransaction(IDbTransaction trans) {
+            if (trans == null) {
+                return;
+            }
+
+            bool isRequestTransaction;
+            TransactionInfo transInfo = GetTransactionInfo(trans, out isRequestTransaction);
+
+            if (transInfo != null) {
+#if DEBUG_DBCONNECTIONPOOLING
+                OSTrace.Info("DBConnectionPooling[TID=" + transInfo.Transaction.GetHashCode() + "] - returned to pool");
+                OSTrace.Error(new StackTrace().ToString());
+#endif
+
+                transInfo.Release();
+
+                if (isRequestTransaction) {
+                    RequestTransactionInfo = null;
+                } else {
+                    TransactionPool.Remove(transInfo.Transaction);
+                }
+
+                transInfo.ReturnConnectionToPool();
             }
         }
 

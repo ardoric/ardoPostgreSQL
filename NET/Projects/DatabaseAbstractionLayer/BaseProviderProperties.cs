@@ -26,9 +26,16 @@ namespace OutSystems.HubEdition.Extensibility.Data {
         public virtual IDatabaseProvider DatabaseProvider { get; private set; }
 
         /// <summary>
-        /// Gets the friendly name of the database provider
+        /// Gets the friendly name of the database provider.
         /// </summary>
         public abstract string DisplayName { get; }
+
+        /// <summary>
+        /// Gets the friendly name of the database provider, when used to run the OutSystems Platform.
+        /// </summary>
+        public virtual string PlatformDisplayName {
+            get { return DisplayName; }
+        }
 
         /// <summary>
         /// Gets the friendly name of the database container (e.g. database, catalog, schema, ...), used 

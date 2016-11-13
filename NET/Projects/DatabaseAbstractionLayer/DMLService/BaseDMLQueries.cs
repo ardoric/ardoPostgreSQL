@@ -39,5 +39,14 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
             placeholders.Add(StatementPlaceholder.AfterStatement, ")");
             return placeholders;
         }
+
+        /// <summary>
+        /// Determines if the given join type is supported.
+        /// </summary>
+        /// <param name="joinType">The join type</param>
+        /// <returns>True if the join type is supported, false otherwise</returns>
+        public virtual bool IsSupported(QueryJoinType joinType) {
+            return true;
+        }
     }
 }

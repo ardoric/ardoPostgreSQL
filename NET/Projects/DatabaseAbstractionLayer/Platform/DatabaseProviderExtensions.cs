@@ -46,7 +46,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform {
 
         /// <summary>
         /// Creates an instance of a type that inherits from <typeparamref name="BaseType"/>, from a list of possible 
-        /// Types (<paramref name="specificTypes"/>). If none is found, reurns an instance of <typeparamref name="BaseType"/>.
+        /// Types (<paramref name="specificTypes"/>). If none is found, returns an instance of <typeparamref name="BaseType"/>.
         /// </summary>
         /// <typeparam name="BaseType">Base type to return</typeparam>
         /// <param name="provider">Database provider used to filter the <paramref name="specificTypes"/></param>

@@ -15,6 +15,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <summary>
         /// Gets the associated DML service.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>

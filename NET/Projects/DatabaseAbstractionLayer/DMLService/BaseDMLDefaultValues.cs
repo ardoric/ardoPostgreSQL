@@ -58,6 +58,16 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         }
 
         /// <summary>
+        /// Gets a DML expression that returns the default value for Long elements.
+        /// This implementation always returns zero.
+        /// </summary>
+        /// <returns>DML expression of type Long</returns>
+        public virtual string LongInteger {
+            get { return "0"; }
+        }
+
+
+        /// <summary>
         /// Gets a DML expression that returns the default value for Decimal elements.
         /// This implementation always returns zero.
         /// </summary>

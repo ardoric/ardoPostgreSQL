@@ -12,8 +12,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
     public interface IDMLOperators {
 
         /// <summary>
-        /// Gets the associated <see cref="IDMLService"/>.
+        /// Gets the associated <see cref="IDMLService" />.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>

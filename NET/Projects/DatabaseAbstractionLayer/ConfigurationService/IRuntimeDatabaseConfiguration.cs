@@ -15,22 +15,34 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// <summary>
         /// The user that this configuration uses to connect to the database.
         /// </summary>
+        /// <value>
+        /// The username.
+        /// </value>
         string Username { get; }
 
         /// <summary>
         /// Gets the database provider. It provides information about the database,
         /// and access to its services.
         /// </summary>
+        /// <value>
+        /// The database provider.
+        /// </value>
         IDatabaseProvider DatabaseProvider { get; }
 
         /// <summary>
         /// Gets the connection string that allows connecting to a database.
         /// </summary>
+        /// <value>
+        /// The connection string.
+        /// </value>
         string ConnectionString { get; }
 
         /// <summary>
         /// Gets the database identifier to be used in the configuration.
         /// </summary>
+        /// <value>
+        /// The database identifier.
+        /// </value>
         string DatabaseIdentifier { get; }
 
     }

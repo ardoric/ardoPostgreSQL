@@ -8,6 +8,7 @@
 using NUnitExtension.OutSystems.Framework;
 using OutSystems.HubEdition.Extensibility.Data.DMLService;
 using OutSystems.ServerTests.DatabaseProvider.Framework;
+using System;
 
 namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
 
@@ -21,7 +22,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             var sqlExecutor = new SQLExecutor(databaseServices);
             IDMLIdentifiers dmlIdentifiers = databaseServices.DMLService.Identifiers;
 
-            string sql = "SELECT " + dmlIdentifiers.EscapeIdentifier("DUMMY") + "." + dmlIdentifiers.EscapeIdentifier("SELECT") + " FROM " + dmlIdentifiers.EscapeIdentifier("DUMMY");
+            string sql = "SELECT " + dmlIdentifiers.EscapeIdentifier("DUMMY" + MachineName) + "." + dmlIdentifiers.EscapeIdentifier("SELECT") + " FROM " + dmlIdentifiers.EscapeIdentifier("DUMMY" + MachineName);
             int value = sqlExecutor.ExecuteScalar(sql).RuntimeValue<int>();
             AssertEqual(123, value, "Escape function didn't work as expected. SQL: " + sql);
         }
@@ -39,7 +40,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             }
             string paramName = dmlIdentifiers.GetValidIdentifier("inparam" + param, true);
             string parameterForSQL = paramPrefix + paramName;
-            string sql = string.Format("SELECT {0} FROM DUMMY", parameterForSQL);
+            string sql = string.Format("SELECT {0} FROM DUMMY" + MachineName, parameterForSQL);
 
             int value = sqlExecutor.ExecuteScalar(sql, (i,t) => paramPrefix + paramName, 1).RuntimeValue<int>();
             AssertEqual(1, value, "GetValidIdentifier didn't work as expected. SQL: " + sql);

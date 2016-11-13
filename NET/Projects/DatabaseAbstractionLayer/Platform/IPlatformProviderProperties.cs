@@ -15,6 +15,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform {
         /// <summary>
         /// Returns true if the Multiple Database feature is supported for this provider.
         /// </summary>
+        /// <value>
+        /// True if Multiple Database feature is supported, False otherwise.
+        /// </value>
         bool SupportsMultipleDatabases { get; }
 
     }

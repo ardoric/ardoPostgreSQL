@@ -21,6 +21,10 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
             get { return this is IElevatedUserConfiguration; }
         }
 
+        public virtual bool RequiresElevatedPrivileges {
+            get { return this is IElevatedUserConfiguration; }
+        }
+
         public abstract AuthenticationType AuthenticationMode { get; set; }
 
         public ISuggestor UserNameSuggestor {
@@ -60,6 +64,10 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
             get {
                 return new NetworkCredential(SessionUser, SessionPassword);
             }
+            set {
+                SessionUser = value.UserName;
+                SessionPassword = value.Password;
+            }
         }
 
         public abstract bool Equals(ISessionDatabaseConfiguration other);
@@ -80,6 +88,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
             get {
                 return "";
             }
+        }
+
+        protected const int DEFAULT_DELETEEXPIREDSESSIONSROWCOUNT_VALUE = 100;
+
+        [ConfigurationParameter]
+        public int DeleteExpiredSessionsAvoidLockRowCount { get; set; }
+
+        public BaseSessionDatabaseConfiguration() {
+            DeleteExpiredSessionsAvoidLockRowCount = DEFAULT_DELETEEXPIREDSESSIONSROWCOUNT_VALUE;
         }
     }
 }

@@ -5,16 +5,28 @@
  conditions of the Generated Software, in which case such agreement shall apply. 
 */
 
+using OutSystems.RuntimeCommon;
+
 namespace OutSystems.HubEdition.Extensibility.Data.Platform.QueryProvider {
-    public abstract class BaseQueryProvider<QueryProviderType, QueryProviderQualifier> 
+    public abstract class BaseQueryProvider<QueryProviderType, QueryProviderQualifier>
         where QueryProviderType : class, new()
         where QueryProviderQualifier : IQueryProviderQualifier, new() {
 
-#if JAVA
-        private static QueryProviderType instance;
-#else
-        private static volatile QueryProviderType instance;
-#endif
+        private static class QueryProviderTypeInstanceHolder {
+
+            private static QueryProviderType instance;
+
+            public static QueryProviderType Instance {
+                get {
+                    if (instance == null) {
+                        QueryProviderQualifier qualifier = new QueryProviderQualifier();
+                        providerName = qualifier.DatabaseProvider.Properties.DisplayName;
+                        instance = qualifier.DatabaseProvider.GetProviderSpecificOrBaseType<QueryProviderType>(qualifier.ProviderSpecificTypes);
+                    }
+                    return instance;
+                }
+            }
+        }
 
         private static QueryProviderType overrideInstance;
         private static string providerName;
@@ -22,24 +34,18 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.QueryProvider {
         private static readonly object locker = new object();
 
         /// <summary>
-        /// Returns an instance of a <typeparamref name="QueryProviderType"/> that can be used
-        /// to execute platform queries against a specific <see cref="IDatabaseProvider"/>
+        /// Returns an instance of a <typeparamref name="QueryProviderType" /> that can be used
+        /// to execute platform queries against a specific <see cref="IDatabaseProvider" />
         /// </summary>
+        /// <value>
+        /// The instance to execute the queries.
+        /// </value>
         public static QueryProviderType Instance {
             get {
                 if (overrideInstance != null) {
                     return overrideInstance;
                 }
-                if (instance == null) {
-                    lock (locker) {
-                        if (instance == null) {
-                            QueryProviderQualifier qualifier = new QueryProviderQualifier();
-                            providerName = qualifier.DatabaseProvider.Properties.DisplayName;
-                            instance = qualifier.DatabaseProvider.GetProviderSpecificOrBaseType<QueryProviderType>(qualifier.ProviderSpecificTypes);
-                        }
-                    }
-                }
-                return instance;
+                return QueryProviderTypeInstanceHolder.Instance;
             }
         }
 

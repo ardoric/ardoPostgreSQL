@@ -8,13 +8,14 @@
 using System.IO;
 using OutSystems.RuntimeCommon;
 using OutSystems.RuntimeCommon.Extensibility.Plugins;
+using System.Collections.Generic;
 
 namespace OutSystems.HubEdition.Extensibility.Data {
     public sealed class DatabasePluginProvider<TDatabaseProvider> : AbstractPluginProvider<DatabaseProviderKey, TDatabaseProvider>, IDatabasePluginSet<TDatabaseProvider>
             where TDatabaseProvider: IDatabaseProvider {
-        
-        private readonly DirectoryInfo pluginsDirectory;
-        
+
+        private IEnumerable<DirectoryInfo> pluginDirectories;
+        protected override IEnumerable<DirectoryInfo> PluginDirectories { get { return pluginDirectories; } }
         
         protected override string PluginsNameMask {
             get {
@@ -25,15 +26,15 @@ namespace OutSystems.HubEdition.Extensibility.Data {
         protected override DatabaseProviderKey GetKey(TDatabaseProvider p) {
             return p.Key;
         }
-        
-        public DatabasePluginProvider(DirectoryInfo pluginsDirectory) {
-            this.pluginsDirectory = pluginsDirectory;
+
+        public DatabasePluginProvider(DirectoryInfo plugins) : this(new DirectoryInfo[1] { plugins }) { }
+
+        public DatabasePluginProvider(IEnumerable<DirectoryInfo> plugins) {
+            pluginDirectories = plugins;
 
             LoadPlugins((e, s) => {
-                OSTrace.InfoException(e, s);
+                OSTrace.Info(s, e);
             });
         }
-
-        public override DirectoryInfo PluginsDirectory { get { return pluginsDirectory; } }
     }
 }

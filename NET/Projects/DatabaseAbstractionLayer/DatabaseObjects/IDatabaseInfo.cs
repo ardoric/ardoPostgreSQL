@@ -13,10 +13,13 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
     /// Contains information about a database.
     /// </summary>
     public interface IDatabaseInfo : IEquatable<IDatabaseInfo> {
-        
+
         /// <summary>
         /// Name that identifies the database
         /// </summary>
+        /// <value>
+        /// The identifier of the database.
+        /// </value>
         string Identifier { get; }
 
         /// <summary>

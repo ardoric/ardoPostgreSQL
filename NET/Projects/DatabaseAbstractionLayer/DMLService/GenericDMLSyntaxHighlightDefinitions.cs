@@ -15,14 +15,21 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
     /// "SQL in a nutshell - A Desktop Quick Reference", from Kevin Kline and Daniel Kline (2001)
     /// </summary>
     public partial class GenericDMLSyntaxHighlightDefinitions : IDMLSyntaxHighlightDefinitions {
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericDMLSyntaxHighlightDefinitions"/> class.
+        /// </summary>
+        /// <param name="dmlService">The DML service.</param>
         public GenericDMLSyntaxHighlightDefinitions(IDMLService dmlService) {
             DMLService = dmlService;
         }
 
         /// <summary>
-        /// This property represents the associated <see cref="IDMLService"/>.
+        /// This property represents the associated <see cref="IDMLService" />.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         public IDMLService DMLService { get; private set; }
 
         /// <summary>

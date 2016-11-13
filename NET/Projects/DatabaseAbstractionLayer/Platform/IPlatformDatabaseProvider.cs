@@ -22,33 +22,43 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform {
         new IPlatformProviderProperties Properties { get; }
 
         /// <summary>
-        /// Creates a new Empty <code>IRuntimeDatabaseConfiguration</code>
+        /// Creates a new Empty <code>IRuntimeDatabaseConfiguration.</code>
         /// </summary>
+        /// <returns>An empty runtime database configuration.</returns>
         IRuntimeDatabaseConfiguration CreateEmptyRuntimeDatabaseConfiguration();
 
         /// <summary>
-        /// Creates a new Empty <code>IPlatformDatabaseConfiguration</code> 
+        /// Creates a new Empty <code>IPlatformDatabaseConfiguration</code>
         /// </summary>
+        /// <returns>An empty platform database configuration.</returns>
         IPlatformDatabaseConfiguration CreateEmptyPlatformDatabaseConfiguration();
 
         /// <summary>
         /// Creates a new Empty <code>ISessionDatabaseConfiguration</code>
         /// </summary>
+        /// <returns>An empty session database configuration.</returns>
         ISessionDatabaseConfiguration CreateEmptySessionDatabaseConfiguration();
 
         /// <summary>
         /// Creates a new PlatformConfigurationManager <code>IPlatformConfigurationManager</code>
         /// </summary>
+        /// <param name="uiConfiguration">The UI configuration.</param>
+        /// <returns>A configuration manager.</returns>
         IPlatformConfigurationManager GetConfigurationManager(IPlatformDatabaseConfiguration uiConfiguration);
 
         /// <summary>
         /// Creates a new SessionConfigurationManager <code>ISessionConfigurationManager</code>
         /// </summary>
-        ISessionConfigurationManager GetConfigurationManager(ISessionDatabaseConfiguration uiConfiguration);
+        /// <param name="uiConfiguration">The UI configuration.</param>
+        /// <param name="platformConfiguration">The Platform configuration.</param>
+        /// <returns>A configuration manager.</returns>
+        ISessionConfigurationManager GetConfigurationManager(ISessionDatabaseConfiguration uiConfiguration, IPlatformDatabaseConfiguration platformConfiguration);
 
         /// <summary>
         /// Returns an instance of <code>IPlatformDatabaseServices</code> that uses the supplied configuration to access the database.
         /// </summary>
+        /// <param name="databaseConfiguration">The database configuration.</param>
+        /// <returns>A platform database configuration.</returns>
         IPlatformDatabaseServices GetPlatformDatabaseServices(IRuntimeDatabaseConfiguration databaseConfiguration);
     }
 }

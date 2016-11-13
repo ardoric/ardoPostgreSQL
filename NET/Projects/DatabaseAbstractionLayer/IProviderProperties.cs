@@ -13,24 +13,44 @@ namespace OutSystems.HubEdition.Extensibility.Data {
     public interface IProviderProperties {
 
         /// <summary>
-        /// Gets the associated <see cref="IDatabaseProvider"/> instance.
+        /// Gets the associated <see cref="IDatabaseProvider" /> instance.
         /// </summary>
+        /// <value>
+        /// The database provider associated.
+        /// </value>
         IDatabaseProvider DatabaseProvider { get; }
 
         /// <summary>
-        /// Gets the friendly name of the database provider
+        /// Gets the friendly name of the database provider.
         /// </summary>
+        /// <value>
+        /// The display name.
+        /// </value>
         string DisplayName { get; }
 
         /// <summary>
-        /// Gets the friendly name of the object used to represent a database container (e.g. database, catalog, schema, ...), used 
+        /// Gets the friendly name of the database provider, when used to run the OutSystems Platform.
+        /// </summary>
+        /// <value>
+        /// The display name.
+        /// </value>
+        string PlatformDisplayName { get; }
+
+        /// <summary>
+        /// Gets the friendly name of the object used to represent a database container (e.g. database, catalog, schema, ...), used
         /// for UI generation and messages displayed to the end-user.
         /// </summary>
+        /// <value>
+        /// The name of the database container.
+        /// </value>
         string DatabaseContainerName { get; }
 
         /// <summary>
         /// Indicates if the provider's driver supports more than one active result set for a single connection.
         /// </summary>
+        /// <value>
+        /// True if it supports multiple active result sets for a single connection, False otherwise.
+        /// </value>
         bool SupportsMultipleActiveResultSets { get; }
     }
 }

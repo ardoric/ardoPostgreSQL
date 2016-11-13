@@ -10,28 +10,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using OutSystems.RuntimeCommon;
+using System.Collections.Concurrent;
 
 namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService.MetaConfiguration {
-    /// <summary>
-    /// Represents the meta-information about a database configuration.
-    /// </summary>
-    public class MetaDatabaseConfiguration {
-        private readonly object configuration;
-        private readonly IList<IParameter> parameters;
 
-        public MetaDatabaseConfiguration(object configuration) {
-            this.configuration = configuration;
-            parameters = FindParameters();
+    internal class MetaParameterExtractor {
+
+        internal enum MetaParamType {
+            Parameter,
+            UserDefinedParameter,
+            UserChosenOptionParameter
         }
 
-        private IList<IParameter> FindParameters() {
-            IDictionary<string, IParameter> results = new Dictionary<string, IParameter>();
-            Type type = configuration.GetType();
+        internal class MetaParam {
+
+            public MetaParamType Type { get; set; }
+            public string PropName { get; set; }
+            public MethodInfo Getter { get; set; }
+            public MethodInfo Setter { get; set; }
+            public bool Encrypt { get; set; }
+            public bool Persist { get; set; }
+            public MethodInfo visibilityChecker { get; set; }
+            public UserDefinedConfigurationParameter UserConfigurationParameter { get; set; }
+            public Dictionary<string, KeyValuePair<string, string>> HelpInfo { get; set; }
+
+            public IParameter ToParameter(object configuraiton) {
+                switch (Type) {
+                    case MetaParamType.Parameter:
+                        return new Parameter(PropName, Getter, Setter, Encrypt, Persist, configuraiton);
+                    case MetaParamType.UserDefinedParameter:
+                        return new UserDefinedParameter(PropName, Getter, Setter, configuraiton, Encrypt, Persist, visibilityChecker, UserConfigurationParameter);
+#if !JAVA
+                    case MetaParamType.UserChosenOptionParameter:
+                        return new UserChosenOptionParameter(PropName, Getter, Setter, configuraiton, Encrypt, Persist, visibilityChecker, UserConfigurationParameter, HelpInfo);
+#endif
+                    default:
+                        throw new InvalidOperationException("Unexpected parameter type" + Type);
+                }
+            }
+        }
+
+
+        private readonly IList<MetaParam> parameters;
+
+        public MetaParameterExtractor(Type configurationType) {
+            this.parameters = FindParameters(configurationType);
+        }
+
+        private IList<MetaParam> FindParameters(Type type) {
+            IDictionary<string, MetaParam> results = new Dictionary<string, MetaParam>();
             for (Type t = type; t != null; t = t.BaseType) {
                 foreach (PropertyInfo prop in t.GetProperties()) {
                     Attribute param = GetConfigurationParameter(prop);
                     if (param != null && !results.ContainsKey(prop.Name)) {
-                        results.Add(prop.Name, GetParameterToAdd(param, prop));
+                        results.Add(prop.Name, GetParameterToAdd(type, param, prop));
                     }
                 }
             }
@@ -39,15 +71,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService.MetaConf
         }
 
         private static Attribute GetConfigurationParameter(PropertyInfo prop) {
-            var attrs = (ConfigurationParameter[]) prop.GetCustomAttributes(typeof (ConfigurationParameter), false);
+            var attrs = (ConfigurationParameter[]) prop.GetCustomAttributes(typeof(ConfigurationParameter), false);
             return attrs.Length == 0 ? null : attrs[0];
         }
 
         private static Attribute[] GetHelpLinksForEnum(PropertyInfo prop) {
-            return (HelpLinkForEnumConfigurationParameter[]) prop.GetCustomAttributes(typeof (HelpLinkForEnumConfigurationParameter), false);
+            return (HelpLinkForEnumConfigurationParameter[]) prop.GetCustomAttributes(typeof(HelpLinkForEnumConfigurationParameter), false);
         }
 
-        private Parameter GetParameterToAdd(Attribute param, PropertyInfo prop) {
+        private MetaParam GetParameterToAdd(Type type, Attribute param, PropertyInfo prop) {
             
             string propName = prop.Name;
 
@@ -62,12 +94,12 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService.MetaConf
             if (userDefinedConfigParam != null) {
                 MethodInfo visibilityChecker = null;
                 if (!string.IsNullOrEmpty(userDefinedConfigParam.VisibilityChecker)) {
-                    visibilityChecker = configuration.GetType().GetMethod(userDefinedConfigParam.VisibilityChecker);
+                    visibilityChecker = type.GetMethod(userDefinedConfigParam.VisibilityChecker);
                 }
 #if !JAVA
                 if (prop.PropertyType.IsEnum) {
 
-                    Dictionary<String, KeyValuePair<String, String>> helpInfo = null;
+                    Dictionary<string, KeyValuePair<string, string>> helpInfo = null;
 
                     foreach (HelpLinkForEnumConfigurationParameter help in GetHelpLinksForEnum(prop)) {
                         if (helpInfo == null) {
@@ -75,14 +107,67 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService.MetaConf
                         }
                         helpInfo.Add(help.EnumValue, new KeyValuePair<string, string>(help.Text, help.Url));
                     }
-                    return new UserChosenOptionParameter(propName, getter, setter, configuration, userDefinedConfigParam.Encrypt, userDefinedConfigParam.Persist, visibilityChecker, userDefinedConfigParam, helpInfo);
+                    return new MetaParam {
+                        Type = MetaParamType.UserChosenOptionParameter,
+                        PropName = propName,
+                        Getter = getter,
+                        Setter = setter,
+                        Encrypt = userDefinedConfigParam.Encrypt,
+                        Persist = userDefinedConfigParam.Persist,
+                        visibilityChecker = visibilityChecker,
+                        UserConfigurationParameter = userDefinedConfigParam,
+                        HelpInfo = helpInfo
+                    };
                 }
 #endif
-                return new UserDefinedParameter(propName, getter, setter, configuration, userDefinedConfigParam.Encrypt, userDefinedConfigParam.Persist, visibilityChecker, userDefinedConfigParam);
+
+                return new MetaParam {
+                    Type = MetaParamType.UserDefinedParameter,
+                    PropName = propName,
+                    Getter = getter,
+                    Setter = setter,
+                    Encrypt = userDefinedConfigParam.Encrypt,
+                    Persist = userDefinedConfigParam.Persist,
+                    visibilityChecker = visibilityChecker,
+                    UserConfigurationParameter = userDefinedConfigParam
+                };
             }
 
             var configParam = (ConfigurationParameter) param;
-            return new Parameter(propName, getter, setter, configParam.Encrypt, configParam.Persist, configuration);
+            return new MetaParam {
+                Type = MetaParamType.Parameter,
+                PropName = propName,
+                Getter = getter,
+                Setter = setter,
+                Encrypt = configParam.Encrypt,
+                Persist = configParam.Persist
+            };
+        }
+
+        public IList<IParameter> ToParameters(object configuration) {
+            return parameters.Select(p => p.ToParameter(configuration)).ToList();
+        }
+
+    }
+
+    /// <summary>
+    /// Represents the meta-information about a database configuration.
+    /// </summary>
+
+    public class MetaDatabaseConfiguration {
+
+        private static readonly ConcurrentDictionary<Type, MetaParameterExtractor> parameterExtractorCache = new ConcurrentDictionary<Type, MetaParameterExtractor>();
+
+        private readonly object configuration;
+        private readonly IList<IParameter> parameters;
+        
+        public MetaDatabaseConfiguration(object configuration) {
+            this.configuration = configuration;
+            this.parameters = parameterExtractorCache
+                                .GetOrAdd(
+                                    configuration.GetType(),
+                                    t => new MetaParameterExtractor(t))
+                                .ToParameters(configuration);
         }
 
         /// <summary>
@@ -98,15 +183,6 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService.MetaConf
 
             return Parameters.FirstOrDefault(matchesName) ??
                    AdvancedModeParameters().Cast<IParameter>().FirstOrDefault(matchesName);
-        }
-
-        public string GetOrElse(string name, string orElse) {
-            var param = GetParameter(name);
-            if (param != null) {
-                return param.Get();
-            } else {
-                return orElse;
-            }
         }
 
         private IEnumerable<IUserDefinedParameter> AdvancedModeParameters() {

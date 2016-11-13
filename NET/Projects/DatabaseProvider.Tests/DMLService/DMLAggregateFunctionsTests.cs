@@ -15,12 +15,12 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
     [DashboardTestFixture(DashboardTest.DashboardTestKind)]
     public class DMLAggregateFunctionsTests : DMLTest {
                 
-        private const string SQL_FORMAT = "SELECT {0} FROM PERSON";
+        private const string SQL_FORMAT = "SELECT {0} FROM PERSON{1}";
         private const string ERROR_MESSAGE_FORMAT = "Error executing function {0} with SQL: {1}";
 
         private static void AssertValues<T>(IDatabaseServices services, string sqlFunctionFragment, T expectedValue) {
             var sqlExecutor = new SQLExecutor(services);
-            string sql = string.Format(SQL_FORMAT, sqlFunctionFragment);
+            string sql = string.Format(SQL_FORMAT, sqlFunctionFragment, MachineName);
             T result = sqlExecutor.ExecuteScalar(sql).RuntimeValue<T>();
             AssertEqual(expectedValue, result, string.Format(ERROR_MESSAGE_FORMAT, sqlFunctionFragment, sql));
         }

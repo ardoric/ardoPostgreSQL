@@ -45,7 +45,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="lockId">The lock identifier.</param>
-        /// <param name="locked">True, if the requeired session is locked. False, otherwise.</param>
+        /// <param name="locked">True, if the required session is locked. False, otherwise.</param>
         /// <param name="lockAge">How long is the session locked.</param>
         /// <param name="state">The state.</param>
         /// <returns>The requested session data stored.</returns>
@@ -59,7 +59,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="lockId">The lock identifier.</param>
-        /// <param name="locked">True, if the requeired session is locked. False, otherwise.</param>
+        /// <param name="locked">True, if the required session is locked. False, otherwise.</param>
         /// <param name="lockAge">How long is the session locked.</param>
         /// <param name="state">The state.</param>
         /// <returns>The requested session data stored.</returns>
@@ -220,7 +220,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
     public interface ISessionModuleStoreOperations {
 
         /// <summary>
-        /// Gets the data of a module's item identified by the given item's id and associated to the refered session.
+        /// Gets the data of a module's item identified by the given item's id and associated to the referred session.
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="itemId">The item identifier.</param>
@@ -244,7 +244,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
         void InsertModuleItem(string sessionId, string itemId, byte[] data, int userId, string cookieId);
 
         /// <summary>
-        /// Updates the infomration stored about a module's item identified by the given item's id and associated to the refered session.
+        /// Updates the information stored about a module's item identified by the given item's id and associated to the referred session.
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="itemId">The item identifier.</param>
@@ -283,7 +283,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
         void UpdateModuleItemUser(string sessionId, string itemId, int userId, string cookieId);
 
         /// <summary>
-        /// Deletes all the items associated to the session identified by the refered session's id.
+        /// Deletes all the items associated to the session identified by the referred session's id.
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <exception cref="OutSystems.HubEdition.Extensibility.Data.Platform.Session.SessionStoreException">
@@ -292,7 +292,17 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
         void DeleteModuleItems(string sessionId);
 
         /// <summary>
-        /// Resets the timeout for the items associated to the session idenfied by the refered session's id.
+        /// Returns the userID associated to the session identified by the referred session's id.
+        /// </summary>
+        /// <param name="sessionId">The session identifier.</param>
+		/// <returns>The Id of the user currently logged in or 0 if no user is logged in</returns>
+        /// <exception cref="OutSystems.HubEdition.Extensibility.Data.Platform.Session.SessionStoreException">
+        /// Thrown when it's not possible to complete the operation.
+        /// </exception>
+        int GetUserBySessionId(string sessionId);
+
+        /// <summary>
+        /// Resets the timeout for the items associated to the session identified by the referred session's id.
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <exception cref="OutSystems.HubEdition.Extensibility.Data.Platform.Session.SessionStoreException">
@@ -329,15 +339,21 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Session {
         /// <summary>
         /// Sets the command timeout value in seconds to use in session queries.
         /// </summary>
+        /// <value>
+        /// The query timeout.
+        /// </value>
         /// <remarks>
-        /// A default value for this property must exist. The platform migh not set its value before
+        /// A default value for this property must exist. The platform might not set its value before
         /// calling a method of the API.
         /// </remarks>
         int QueryTimeout { set; }
 
         /// <summary>
-        /// Gets the <see cref="IPlatformDatabaseServices"/> instance associated with this service.
+        /// Gets the <see cref="IPlatformDatabaseServices" /> instance associated with this service.
         /// </summary>
+        /// <value>
+        /// The database services associated.
+        /// </value>
         IPlatformDatabaseServices DatabaseServices { get; }
 
     }

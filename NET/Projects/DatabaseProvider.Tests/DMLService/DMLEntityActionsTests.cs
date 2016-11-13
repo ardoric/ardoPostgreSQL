@@ -53,7 +53,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string afterWhere = getPlaceholders.GetPlaceholderValueTrimStart(SelectPlaceholder.AfterWhereKeyword);
             string afterStatement = getPlaceholders.GetPlaceholderValueTrimEnd(SelectPlaceholder.AfterStatement);
 
-            string sql = beforeStatement + "SELECT " + afterSelect + "ID " + beforeFrom + "FROM " + afterFrom + "DUMMY " +
+            string sql = beforeStatement + "SELECT " + afterSelect + "ID " + beforeFrom + "FROM " + afterFrom + "DUMMY"+MachineName+" " +
                 beforeWhere + "WHERE " + afterWhere + databaseServices.DMLService.Operators.Equal("ID", "1") + afterStatement;
 
             var sqlExecutor = new SQLExecutor(databaseServices);
@@ -73,8 +73,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string afterStatement = insertPlaceholders.GetPlaceholderValueTrimEnd(InsertPlaceholder.AfterStatement);
 
             int value = 2;
-            string insertSql = beforeStatement + "INSERT INTO DUMMY (VAL) " + beforeValuesKeyword + "VALUES (" + value + ")" + afterStatement;
-            string selectSql = "SELECT VAL FROM DUMMY WHERE VAL = " + value;
+            string insertSql = beforeStatement + "INSERT INTO DUMMY"+MachineName+" (VAL) " + beforeValuesKeyword + "VALUES (" + value + ")" + afterStatement;
+            string selectSql = "SELECT VAL FROM DUMMY"+MachineName+" WHERE VAL = " + value;
 
             ExecuteSQL(databaseServices, (service, tran) => {
                 using (IDbCommand cmd = service.CreateCommand(tran, insertSql)) {
@@ -104,7 +104,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string beforeValuesKeyword = insertPlaceholders.GetPlaceholderValueTrimStart(InsertPlaceholder.BeforeValuesKeyword);
             string afterStatement = insertPlaceholders.GetPlaceholderValueTrimEnd(InsertPlaceholder.AfterStatement);
 
-            string sql = beforeStatement + "INSERT INTO DUMMY (VAL) " + beforeValuesKeyword + "VALUES (" + value + ")" + afterStatement;
+            string sql = beforeStatement + "INSERT INTO DUMMY"+MachineName+" (VAL) " + beforeValuesKeyword + "VALUES (" + value + ")" + afterStatement;
             if (retrieveIdMethod == RetrieveIdMethod.ReturnValue) {
                 ExecuteSQL(databaseServices, (service, tran) => {
                     int returnedId;
@@ -130,7 +130,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         }
 
         private void ValidateInsertedValue(IExecutionService service, IDbTransaction tran, int expectedValue, int returnedId, string executedSql) {
-            string sql = "SELECT VAL FROM DUMMY WHERE ID = " + returnedId;
+            string sql = "SELECT VAL FROM DUMMY"+MachineName+" WHERE ID = " + returnedId;
             using (IDbCommand cmd = service.CreateCommand(tran, sql)) {
                 int insertedValue = (int)Convert.ChangeType(service.ExecuteScalar(cmd), typeof(int));
                 AssertEqual(expectedValue, insertedValue, string.Format(errorMessageFormat, "CreateEntityRetrievingId", executedSql));
@@ -148,8 +148,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string afterStatement = updatePlaceholders.GetPlaceholderValueTrimEnd(UpdatePlaceholder.AfterStatement);
 
             int value = 2;
-            string updateSql = beforeStatement + "UPDATE DUMMY SET VAL = " + value + " " + beforeWhereKeyword + "WHERE ID = 1" + afterStatement;
-            string selectSql = "SELECT VAL FROM DUMMY WHERE ID = 1";
+            string updateSql = beforeStatement + "UPDATE DUMMY"+MachineName+" SET VAL = " + value + " " + beforeWhereKeyword + "WHERE ID = 1" + afterStatement;
+            string selectSql = "SELECT VAL FROM DUMMY"+MachineName+" WHERE ID = 1";
 
             ExecuteSQL(databaseServices, (service, tran) => {
                 using (IDbCommand cmd = service.CreateCommand(tran, updateSql)) {
@@ -174,8 +174,8 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string beforeWhereKeyword = deletePlaceholders.GetPlaceholderValueTrimStart(DeletePlaceholder.BeforeWhereKeyword);
             string afterStatement = deletePlaceholders.GetPlaceholderValueTrimEnd(DeletePlaceholder.AfterStatement);
 
-            string deleteSql = beforeStatement + "DELETE FROM DUMMY " + beforeWhereKeyword + "WHERE ID = 1" + afterStatement;
-            string selectSql = "SELECT VAL FROM DUMMY WHERE ID = 1";
+            string deleteSql = beforeStatement + "DELETE FROM DUMMY"+MachineName+" " + beforeWhereKeyword + "WHERE ID = 1" + afterStatement;
+            string selectSql = "SELECT VAL FROM DUMMY" + MachineName + " WHERE ID = 1";
 
             ExecuteSQL(databaseServices, (service, tran) => {
                 using (IDbCommand cmd = service.CreateCommand(tran, deleteSql)) {

@@ -33,7 +33,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
         public string QualifiedName { get; private set; }
 
         /// <summary>
-        /// Human-readable name that unambiguosly identifies the table source inside a database.
+        /// Human-readable name that unambiguously identifies the table source inside a database.
         /// This implementation returns the <see cref="Name"/>.
         /// </summary>
         public virtual string DisplayName {
@@ -58,6 +58,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
 
         public override int GetHashCode() {
             return Database.GetHashCode() ^ Name.GetHashCode() ^ QualifiedName.GetHashCode();
+        }
+
+        public string ValidationWarning {
+            set;
+            get;
         }
     }
 }

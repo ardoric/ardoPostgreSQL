@@ -19,6 +19,9 @@ namespace OutSystems.HubEdition.Extensibility.Data {
         /// <summary>
         /// Returns a unique identifier of the database provider, used to identify it as a plugin
         /// </summary>
+        /// <value>
+        /// A unique identifier of the provider.
+        /// </value>
         DatabaseProviderKey Key { get; }
         
         /// <summary>
@@ -28,14 +31,16 @@ namespace OutSystems.HubEdition.Extensibility.Data {
         IProviderProperties Properties { get; }
 
         /// <summary>
-        /// Returns an empty <see cref="IIntegrationDatabaseConfiguration"/>.
+        /// Returns an empty <see cref="IIntegrationDatabaseConfiguration" />.
         /// </summary>
+        /// <returns>An empty configuration.</returns>
         IIntegrationDatabaseConfiguration CreateEmptyIntegrationDatabaseConfiguration();
 
         /// <summary>
         /// Returns the services provided by the DBMS.
-        /// </summary>\
+        /// </summary>
         /// <param name="databaseConfiguration">The database configuration.</param>
+        /// <returns>The Integration Database Service provided from DBMS.</returns>
         IDatabaseServices GetIntegrationDatabaseServices(IRuntimeDatabaseConfiguration databaseConfiguration);
 
         /// <summary>

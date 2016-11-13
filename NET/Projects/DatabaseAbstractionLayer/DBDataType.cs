@@ -15,6 +15,7 @@ namespace OutSystems.HubEdition.Extensibility.Data {
         BINARY_DATA,
         BOOLEAN,
         INTEGER,
+        LONGINTEGER,
         DECIMAL,
         DATE_TIME,
         DATE,
@@ -46,6 +47,8 @@ namespace OutSystems.HubEdition.Extensibility.Data {
                     return "Boolean";
                 case DBDataType.INTEGER:
                     return "Integer";
+                case DBDataType.LONGINTEGER:
+                    return "Long Integer";
                 case DBDataType.DECIMAL:
                     return "Decimal";
                 case DBDataType.DATE_TIME:
@@ -56,7 +59,7 @@ namespace OutSystems.HubEdition.Extensibility.Data {
                     return "Time";
                 case DBDataType.UNKNOWN:
                 default:
-                    return "Unknoown";
+                    return "Unknown";
             }
         }
 

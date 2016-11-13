@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
-   public enum Tag {
+    public enum Tag {
         //Block tags
         SCRIPT_VERSION,
         VERSION_UPGRADE,
@@ -24,6 +24,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         END_IGNORING_BLOCK,
         TOUCH_VERSION,
         CHECK,
+        INDEX_NOT_EXISTS,
+        INDEX_EXISTS,
+        PRIMARY_KEY_NOT_EXISTS,
 
         //Statement tags
         DROP_COLUMN,
@@ -36,7 +39,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         List<string> statements;
 
         public void SetTagValue(string tag, string val) {
-            this.conditionTag = (Tag) Enum.Parse(typeof(Tag), tag);
+            this.conditionTag = (Tag)Enum.Parse(typeof(Tag), tag);
             this.val = val;
             statements = new List<string>();
         }

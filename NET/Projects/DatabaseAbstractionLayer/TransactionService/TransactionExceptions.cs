@@ -20,7 +20,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
     }
 
     /// <summary>
-    /// Exception raised when its not possible to commit our rollback a transaction.
+    /// Exception raised when it's not possible to commit or rollback a transaction.
     /// Check the message to see the reason of the exception.
     /// </summary>
     public class InvalidCommitOrRollbackTransactionException : TransactionException {
@@ -28,7 +28,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
     }
 
     /// <summary>
-    /// Exception raised when its not possible to release a transaction.
+    /// Exception raised when it's not possible to release a transaction.
     /// Check the message to see the reason of the exception.
     /// </summary>
     public class InvalidTransactionReleaseException : TransactionException {

@@ -23,6 +23,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// <summary>
         /// Returns true if connection string advanced parameters are set.
         /// </summary>
+        /// <returns>True if the advanced parameters are set, False otherwise.</returns>
         public bool IsSet() {
             return AdvancedConnectionStringField != null;
         }
@@ -31,12 +32,18 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// This property represents the field that will store connection string advanced parameters.
         /// This field is displayed when defining an advanced database connection.
         /// </summary>
+        /// <value>
+        /// The advanced connection string.
+        /// </value>
         public string AdvancedConnectionStringField { get; set; }
 
         /// <summary>
-        /// Help text that is displayed next to the advanced connection string parameters field in the user interface. 
+        /// Help text that is displayed next to the advanced connection string parameters field in the user interface.
         /// This text should provide information regarding the format of the configuration parameters and examples on how to define them.
         /// </summary>
+        /// <value>
+        /// A help message to display in the user interface.
+        /// </value>
         public string AdvancedConnectionStringFieldHelp {
             get {
                 return advancedConnectionStringFieldHelp;
@@ -46,6 +53,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// <summary>
         /// Gets the label text to display in the user interface for the connection string advanced parameters field.
         /// </summary>
+        /// <value>
+        /// The label to display in the user interface.
+        /// </value>
         public string AdvancedConnectionStringFieldLabel  {
             get {
                 return advancedConnectionStringFieldLabel;
@@ -57,12 +67,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// This expression should be a string that contains tokens that match the name of the AdvancedConnectionStringField property
         /// as well as additional configuration parameters that belong to the 'UserSpecific' region.
         /// A typical use for this expression is to hide sensitive information like passwords.
-        /// In the following example, the value for the 'Username' and the 'AdvancedConnectionStringField' 
+        /// In the following example, the value for the 'Username' and the 'AdvancedConnectionStringField'
         /// parameters, set by the user, will replace the corresponding tokens.
-        /// This allows the user interface to be updated with these values without disclosing 
+        /// This allows the user interface to be updated with these values without disclosing
         /// the value of the password field showing an hard-coded value, in this case '&lt;hidden&gt;'.
         /// Example: <code>[user id=$Username;password=&lt;hidden&gt;;]$AdvancedConnectionStringField"</code>
         /// </summary>
+        /// <value>
+        /// An expression that creates a preview of the resulting connection string.
+        /// </value>
         public string ConnectionStringTemplateExpression  {
             get {
                 return connectionStringTemplateExpression;

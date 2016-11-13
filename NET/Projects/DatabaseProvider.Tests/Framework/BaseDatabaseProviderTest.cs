@@ -14,13 +14,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace OutSystems.ServerTests.DatabaseProvider.Framework {
-    public abstract class BaseDatabaseProviderTest: DashboardTest { 
-        public abstract class BaseDatabaseProviderTestCase<TDatabaseProvider, TDatabaseServices>: IDatabaseProviderTestCase<TDatabaseProvider> 
-                where TDatabaseProvider: IDatabaseProvider
-                where TDatabaseServices: IDatabaseServices {
+    public abstract class BaseDatabaseProviderTest: DashboardTest {
+        public abstract class BaseDatabaseProviderTestCase<TDatabaseProvider, TDatabaseServices> : IDatabaseProviderTestCase<TDatabaseProvider>
+            where TDatabaseProvider : IDatabaseProvider
+            where TDatabaseServices : IDatabaseServices {
 
             public string Name { get; set; }
 
@@ -38,6 +39,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
 
             public TDatabaseServices BootstrapServices { get; protected set; }
 
+
             public IEnumerable<string> BootstrapScripts { get; set; }
 
             public IEnumerable<string> TeardownScripts { get; set; }
@@ -45,6 +47,9 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
             public bool ExecuteScriptsWithoutTransaction { get; set; }
 
             private void ExecuteScripts(IEnumerable<string> scripts, bool throwExceptions) {
+
+
+
                 if (scripts == null) {
                     return;
                 }
@@ -71,6 +76,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
                 }
             }
 
+            [System.Diagnostics.DebuggerNonUserCode]
             public void ExecuteTeardown() {
                 try {
                     ExecuteScripts(TeardownScripts, false);
@@ -80,6 +86,10 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
             }
 
             public void ExecuteBootstrap() {
+                try {
+                    ExecuteTeardown();
+                } catch { }
+
                 try {
                     ExecuteScripts(BootstrapScripts, true);
                 } catch (Exception bootstrapException) {
@@ -94,7 +104,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
                 }
             }
 
-            public abstract void InitializeServices(TDatabaseProvider provider, IRuntimeDatabaseConfiguration runtimeConfiguration, 
+            public abstract void InitializeServices(TDatabaseProvider provider, IRuntimeDatabaseConfiguration runtimeConfiguration,
                 IRuntimeDatabaseConfiguration bootstrapConfiguration, bool runWithBootstrapServices);
         }
 
@@ -236,6 +246,23 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
         }
 
         private const string PARAM_NAME_PREFIX = "param";
+
+        private static string _machineName = null;
+
+        public static string MachineName {
+            get {
+                if (_machineName == null) {
+                    string machine = Environment.MachineName.ToUpperInvariant();
+
+                    // Reduce machine name length to avoid long oracle identifiers
+                    machine = Regex.Replace(machine, "^(RE?G?|VM)", "");
+                    machine = Regex.Replace(machine, "0|-", "");
+                    _machineName = machine.Substring(0, Math.Min(8, machine.Length));
+                }
+
+                return _machineName;
+            }
+        }
     }
 
     public abstract class BaseDatabaseProviderTest<TDatabaseProvider, TConfiguration>: BaseDatabaseProviderTest 
@@ -248,6 +275,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
         }
+
 
         public override void SetUp() {
             base.SetUp();

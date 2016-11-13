@@ -23,33 +23,51 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform {
         /// <summary>
         /// Returns a factory capable of creating platform introspection objects.
         /// </summary>
+        /// <value>
+        /// A factory capable of creating platform introspection objects.
+        /// </value>
         new IPlatformDatabaseObjectFactory ObjectFactory { get; }
-        
+
         /// <summary>
         /// Gets the <code>IPlatformIntrospectionService</code> associated with the platform database
         /// </summary>
+        /// <value>
+        /// The introspection service.
+        /// </value>
         new IPlatformIntrospectionService IntrospectionService { get; }
 
         /// <summary>
-        /// Gets the <see cref="IPlatformDMLService"/>object associated with the database.
+        /// Gets the <see cref="IPlatformDMLService" />object associated with the database.
         /// Represents a service that generates SQL statements.
         /// </summary>
+        /// <value>
+        /// The DML service.
+        /// </value>
         new IPlatformDMLService DMLService { get; }
 
 
         /// <summary>
         /// Gets the <code>IPlatformExecutionService</code> associated with the platform database
         /// </summary>
+        /// <value>
+        /// The execution service.
+        /// </value>
         new IPlatformExecutionService ExecutionService { get; }
 
         /// <summary>
         /// Gets the <code>IDDLService</code> associated with the platform database
         /// </summary>
+        /// <value>
+        /// The DDL service.
+        /// </value>
         IDDLService DDLService { get; }
 
         /// <summary>
         /// Gets the <code>IPlatformSessionService</code> associated with the platform database
         /// </summary>
+        /// <value>
+        /// The session service.
+        /// </value>
         IPlatformSessionService SessionService { get; }
     }
 }

@@ -18,21 +18,33 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DatabaseObjects {
         /// <summary>
         /// List of columns of the table source
         /// </summary>
+        /// <value>
+        /// The list of columns.
+        /// </value>
         IEnumerable<IPlatformTableSourceColumnInfo> Columns { get; }
 
         /// <summary>
         /// List of foreign keys of the table source
         /// </summary>
+        /// <value>
+        /// The foreign keys.
+        /// </value>
         IEnumerable<ITableSourceForeignKeyInfo> ForeignKeys { get; }
 
         /// <summary>
         /// List of indexes of the table source
         /// </summary>
+        /// <value>
+        /// The indexes.
+        /// </value>
         IEnumerable<IPlatformTableSourceIndexInfo> Indexes { get; }
 
         /// <summary>
         /// Event trigger associated with the table source, if one exists. Otherwise, returns null;
         /// </summary>
+        /// <value>
+        /// The event trigger associated.
+        /// </value>
         IPlatformTableSourceEventTriggerInfo EventTrigger { get; }
 
     }

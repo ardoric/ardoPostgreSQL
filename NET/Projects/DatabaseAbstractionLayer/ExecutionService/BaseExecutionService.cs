@@ -8,6 +8,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using OutSystems.HubEdition.Extensibility.Data.ConfigurationService;
 using OutSystems.HubEdition.Extensibility.Data.TransactionService;
 using OutSystems.RuntimeCommon;
@@ -33,7 +34,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// <param name="e">Exception thrown during execution.</param>
         /// <param name="cmd">Command that was running when the exception was raised.</param>
         /// <param name="reader">Reader created from executing the command, if applicable.</param>
-        /// <param name="conn">Connection that creates the transaction where the exception occured, if applicable.</param>
+        /// <param name="conn">Connection that creates the transaction where the exception occurred, if applicable.</param>
         /// <param name="trans">Transaction where the exception was produced, if applicable.</param>
         /// <param name="manager">Transaction manager associated with this command, if applicable.</param>
         public virtual void OnExecuteException(DbException e, IDbCommand cmd, IDataReader reader, IDbConnection conn, IDbTransaction trans, ITransactionManager manager) {
@@ -51,6 +52,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
 
                 
                 DatabaseServices.TransactionService.ReleasePooledConnections(e.Message);
+
+		        // Close reader if open
+                if (reader != null && !reader.IsClosed) {
+                    reader.Close();
+                }
+
+                if (manager != null && trans != null) {
+                    manager.AbortTransaction(trans);
+                }
             }
         }
         
@@ -197,7 +207,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// </summary>
         /// <param name="connection">The connection where the command is going to be executed.</param>
         /// <param name="sql">The SQL statement to be executed.</param>
-        /// <returns>An SQL command command.</returns>
+        /// <returns>An SQL command.</returns>
 		public virtual IDbCommand CreateCommand(IDbConnection connection, string sql) {
 			IDbCommand cmd = CreateCommand(connection);
             cmd.CommandText = sql.Replace("\r\n", "\n");
@@ -213,7 +223,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// <param name="name">Parameter name.</param>
         /// <param name="dbType">Parameter type.</param>
         /// <param name="paramValue">Parameter value.</param>
-        /// <returns>The parameter already associated to the comand.</returns>
+        /// <returns>The parameter already associated to the command.</returns>
         public virtual IDbDataParameter CreateParameter(IDbCommand cmd, string name, DbType dbType, object paramValue) {
 			IDbDataParameter param = cmd.CreateParameter();
 			param.ParameterName = name;
@@ -247,13 +257,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
 				return DbType.Decimal;
 			} else if (type == typeof(bool)) {
 				return DbType.Boolean;
+            } else if(type == typeof(Int64)) {
+                return DbType.Int64;
 			} else {
 				throw new NotSupportedException("Unable to convert " + type.ToString() + " to DbType");
 			}
 		}
 
         /// <summary>
-        /// Converts a type to its equivalent type in the the target framework.
+        /// Converts a type to its equivalent type in the target framework.
         /// </summary>
         /// <param name="type">The type to be converted.</param>
         /// <param name="providerType">The name of the type used by the provider.</param>
@@ -264,6 +276,8 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
                 return DbType.String;
             if (DBDataType.INTEGER == type)
                 return DbType.Int32;
+            if (DBDataType.LONGINTEGER == type)
+                return DbType.Int64;
             if (DBDataType.DECIMAL == type)
                 return DbType.Decimal;
             if (DBDataType.DATE_TIME == type)
@@ -280,7 +294,6 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
             throw new NotSupportedException("Unable to convert " + type.ToString() + " to DbType");
         }
 
-		/* TODO: detect timeout exception in java */
         /// <summary>
         /// Checks if an exception was raised due to a timeout.
         /// This implementation checks if the exception is a <see cref="DbException"/>, and its error code is -2.
@@ -307,7 +320,31 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
         /// <param name="dbType">Database type.</param>
         /// <param name="value">Value to transform.</param>
         /// <returns>The transformed object.</returns>
-        public virtual object TransformRuntimeToDatabaseValue(DbType dbType, object value) { return value; }
+        public virtual object TransformRuntimeToDatabaseValue(DbType dbType, object value) {
+            
+            if (value != null && value.Equals(String.Empty)) {
+
+                var numericTypes = new DbType[] {
+                DbType.Int16, DbType.Int32, DbType.Int64,
+                DbType.UInt16, DbType.UInt32, DbType.UInt64,
+                DbType.Byte, DbType.SByte };
+
+                var decimalTypes = new DbType[] {
+                DbType.Currency, DbType.Decimal,
+                DbType.Single, DbType.Double,
+                DbType.VarNumeric };
+
+                if (decimalTypes.Contains(dbType)) {
+                    return new Decimal(0);
+                }
+
+                if (numericTypes.Contains(dbType)) {
+                    return 0;
+                }
+            }
+
+            return value;
+        }
 
         
 #if !JAVA
@@ -348,13 +385,14 @@ namespace OutSystems.HubEdition.Extensibility.Data.ExecutionService {
                                 cmd.ExecuteNonQuery();
                             }
                         } catch (Exception e) {
+                            OSTrace.Error("Exception writing data to table " + datatable.TableName + " : " + e.Message);
                             row.RowError = e.Message;
                             try {
                                 row.RowError += "\r\nValues:\r\n";
                                 foreach (DataColumn col in datatable.Columns) {
                                     row.RowError += col.ColumnName + "='" + row[col].ToString().Replace("'", "''") + "'\r\n";
                                 }
-                            } catch (Exception) {
+                            } catch (Exception) {                                
                             }
                         }
                     }

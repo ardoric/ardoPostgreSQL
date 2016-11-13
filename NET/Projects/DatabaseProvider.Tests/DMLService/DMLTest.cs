@@ -19,6 +19,15 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         }
     }
 
+    public class ServerOnlyDMLTestsConfiguration : DMLTestsConfiguration {
+
+        protected override bool IsServerOnly {
+            get {
+                return true;
+            }
+        }
+    }
+
     public class DMLTest : DatabaseProviderTest<DMLTestsConfiguration> {
 
         /// <summary>

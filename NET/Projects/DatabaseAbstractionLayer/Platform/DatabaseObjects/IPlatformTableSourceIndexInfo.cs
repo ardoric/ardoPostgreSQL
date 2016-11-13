@@ -18,26 +18,41 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DatabaseObjects {
         /// <summary>
         /// Table source that owns the index.
         /// </summary>
+        /// <value>
+        /// The table source.
+        /// </value>
         ITableSourceInfo TableSource { get; }
 
         /// <summary>
         /// Name that identifies the index.
         /// </summary>
+        /// <value>
+        /// The name of the index.
+        /// </value>
         string Name { get; }
 
         /// <summary>
         /// Columns used in the index.
         /// </summary>
+        /// <value>
+        /// The columns affected by the index.
+        /// </value>
         IEnumerable<IPlatformTableSourceColumnInfo> Columns { get; }
 
         /// <summary>
         /// Returns true if the index is a unique index, false otherwise.
         /// </summary>
+        /// <value>
+        /// True if this index is unique, False otherwise.
+        /// </value>
         bool IsUnique { get; }
 
         /// <summary>
         /// Returns true if the index is a primary key index, false otherwise.
         /// </summary>
+        /// <value>
+        /// True if this index is for primary key, False otherwise.
+        /// </value>
         bool IsPrimaryKey { get; }
     }
 }

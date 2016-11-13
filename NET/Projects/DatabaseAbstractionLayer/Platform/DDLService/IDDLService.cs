@@ -37,6 +37,25 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DDLService {
         bool CanAlterColumn(IPlatformTableSourceColumnInfo existingColumn, IPlatformTableSourceColumnInfo newColumn, out string errorMessage);
 
         /// <summary>
+        /// Returns true if the <paramref name="newColumn"/> can be created in the database,
+        /// If the column cannot be created, an <paramref name="errorMessage"/> is also returned.
+        /// </summary>
+        /// <param name="newColumn">New column, inspected from the application model</param>
+        /// <param name="errorMessage">Reason</param>
+        /// <returns>True if a create column operation can be performed, false otherwise</returns>
+        bool CanCreateColumn(IPlatformTableSourceColumnInfo newColumn, out string errorMessage);
+
+        /// <summary>
+        /// Returns true if the <paramref name="newTable"/> can be created in the database,
+        /// If the table cannot be created, an <paramref name="errorMessage"/> is also returned.
+        /// </summary>
+        /// <param name="newTable">New table, inspected from the application model</param>
+        /// <param name="columns">Columns, inspected from the application model</param>
+        /// <param name="errorMessage">Reason</param>
+        /// <returns>True if a create table operation can be performed, false otherwise</returns>
+        bool CanCreateTable(ITableSourceInfo newTable, ColumnDetails[] columns, out string errorMessage);
+
+        /// <summary>
         /// This method generates the SQL to create a new table.
         /// </summary>
         /// <param name="newTable">Info about the table to create.</param>

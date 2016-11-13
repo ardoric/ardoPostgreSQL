@@ -20,38 +20,56 @@ namespace OutSystems.HubEdition.Extensibility.Data {
     public interface IDatabaseServices {
 
         /// <summary>
-        /// Gets the <see cref="IIntegrationDatabaseConfiguration"/>object associated with a database.
+        /// Gets the <see cref="IIntegrationDatabaseConfiguration" /> object associated with a database.
         /// It encapsulates the necessary information to connect to a database instance.
         /// </summary>
+        /// <value>
+        /// The database configuration.
+        /// </value>
         IRuntimeDatabaseConfiguration DatabaseConfiguration { get; }
 
         /// <summary>
         /// Returns a factory capable of creating database information objects from qualified names. If required, this object might access the database.
         /// </summary>
+        /// <value>
+        /// The object factory.
+        /// </value>
         IDatabaseObjectFactory ObjectFactory { get; }
 
         /// <summary>
-        /// Gets the <see cref="ITransactionService"/>object associated with a database.
+        /// Gets the <see cref="ITransactionService" /> object associated with a database.
         /// Represents a specific database connection or transaction.
         /// </summary>
+        /// <value>
+        /// The transaction service.
+        /// </value>
         ITransactionService TransactionService { get; }
 
         /// <summary>
-        /// Gets the <see cref="IExecutionService"/> associated with the database.
+        /// Gets the <see cref="IExecutionService" /> associated with the database.
         /// Represents an execution context to run SQL commands on a database.
         /// </summary>
+        /// <value>
+        /// The execution service.
+        /// </value>
         IExecutionService ExecutionService { get; }
 
         /// <summary>
-        /// Gets the <see cref="IDMLService"/>object associated with the database.
+        /// Gets the <see cref="IDMLService" /> object associated with the database.
         /// Represents a service that generates SQL statements.
         /// </summary>
+        /// <value>
+        /// The DML service.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>
-        /// Gets the <see href="IIntrospectionService"/>object associated with the database.
+        /// Gets the <see href="IIntrospectionService" /> object associated with the database.
         /// Represents a service that provides information about meta-data of the database.
         /// </summary>
+        /// <value>
+        /// The introspection service.
+        /// </value>
         IIntrospectionService IntrospectionService { get; }
     }
 }

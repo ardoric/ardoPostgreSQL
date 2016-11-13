@@ -14,12 +14,18 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <summary>
         /// Gets the associated DML service.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>
         /// Gets the maximum length of a simple (not compound) identifier. This value should be the minimum valid
         /// length for any kind of identifier (e.g. table name, parameter name)
         /// </summary>
+        /// <value>
+        /// The maximum length.
+        /// </value>
         int MaxLength { get; }
         
         /// <summary>
@@ -36,7 +42,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <param name="baseName">An identifier name.</param>
         /// <param name="truncateUsingRandomDigits">
         /// Indicates if the identifier should be truncated if its length exceeds the <see cref="MaxLength"/>. In this case, 
-        /// random digitis should be used as a suffix to prevent name clashing.
+        /// random digits should be used as a suffix to prevent name clashing.
         /// </param>
         /// <returns>A string representing a valid identifier.</returns>
         string GetValidIdentifier(string baseName, bool truncateUsingRandomDigits);

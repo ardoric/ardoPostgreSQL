@@ -21,7 +21,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
 
         private void AssertValue<T>(IDatabaseServices services, string defaultValueName, string defaultValue, object expectedValue) {
             var sqlExecutor = new SQLExecutor(services);
-            string sql = "SELECT " + defaultValue + " o1 FROM DUMMY";
+            string sql = "SELECT " + defaultValue + " o1 FROM DUMMY" + MachineName;
             object result = sqlExecutor.ExecuteScalar(sql).RuntimeValue<T>();
             AssertEqual(expectedValue, result, string.Format(errorMessageFormat, defaultValueName, sql));
         }
@@ -31,6 +31,13 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         public void TestIntegerDefaultValue(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             AssertValue<int>(databaseServices, "Integer", databaseServices.DMLService.DefaultValues.Integer, 0);
+        }
+
+        [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that reading the value produced by the LongInteger default value returns the number zero")]
+        [TestDetails(TestIssue = "610152", Feature = "Database Abstraction Layer", CreatedBy = "lsl")]
+        public void TestLongIntegerDefaultValue(DatabaseProviderTestCase tc) {
+            var databaseServices = tc.Services;
+            AssertValue<long>(databaseServices, "LongInteger", databaseServices.DMLService.DefaultValues.LongInteger, (long)0);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that reading the value produced by the Decimal default value returns the number zero")]
@@ -81,7 +88,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             var databaseServices = tc.Services;
             var sqlExecutor = new SQLExecutor(databaseServices);
             IDMLDefaultValues dmlDefaultValues = databaseServices.DMLService.DefaultValues;
-            string sql = "SELECT " + dmlDefaultValues.BinaryData + " o1 FROM DUMMY";
+            string sql = "SELECT " + dmlDefaultValues.BinaryData + " o1 FROM DUMMY"+MachineName;
             byte[] result = sqlExecutor.ExecuteScalar(sql).RuntimeValue<byte[]>();
             AssertEqual(0, (result ?? new byte[0]).Length, string.Format(errorMessageFormat, "Null", sql));
         }

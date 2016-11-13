@@ -72,6 +72,14 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         }
 
         /// <summary>
+        /// Returns an SQL expression that transforms a value of a specified type, to be used in conditions and calculated columns.
+        /// This implementation returns the value without making any modification to it.
+        /// </summary>
+        public virtual string TransformValue(string value, DBDataType type) {
+            return value;
+        }
+
+        /// <summary>
         /// Escapes special characters in a text value to be used in SQL statements (e.g replace ' by '').
         /// This implementation replaces the null string by the empty string and the character ' by ''.
         /// </summary>

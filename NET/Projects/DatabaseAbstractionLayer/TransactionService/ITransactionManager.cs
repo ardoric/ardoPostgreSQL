@@ -18,24 +18,30 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
     public interface ITransactionManager : IDisposable {
 
         /// <summary>
-        /// This property represents the <see cref="ITransactionService"/> associated with this transaction manager.
+        /// This property represents the <see cref="ITransactionService" /> associated with this transaction manager.
         /// </summary>
+        /// <value>
+        /// The transaction service associated.
+        /// </value>
         ITransactionService TransactionService { get; set; }
 
         /// <summary>
         /// Gets the number of busy transactions.
         /// </summary>
+        /// <value>
+        /// The number of busy transactions.
+        /// </value>
         int BusyTransactionCount { get; }
 
         /// <summary>
         /// Returns a transaction to be used during a web request.
-        /// This transaction is only commited or rolled back by invoking <see cref="FreeupResources"/>.
+        /// This transaction is only committed or rolled back by invoking <see cref="FreeupResources"/>.
         /// </summary>
         /// <returns>A transaction to be used in the applications.</returns>
         IDbTransaction GetRequestTransaction();
 
         /// <summary>
-        /// Returns a transaction that ismanaged by extension developers.
+        /// Returns a transaction that is managed by extension developers.
         /// Extension developers explicitly commit or rollback this transaction.
         /// </summary>
         /// <returns>A private transaction managed by the user.</returns>
@@ -79,7 +85,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// Releases all database resources being used.
         /// All transactions are committed or rolled back, and connections are returned to the pool.
         /// </summary>
-        /// <param name="commit">If True, all transaction are commited. Otherwise, are rolled back.</param>
+        /// <param name="commit">If True, all transaction are committed. Otherwise, are rolled back.</param>
         void FreeupResources(bool commit);
 
         /// <summary>
@@ -96,5 +102,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// <param name="trans">A transaction.</param>
         /// <returns>Returns True if the transaction belongs to this transaction manager, False otherwise.</returns>
         bool IsManaging(IDbTransaction trans);
+    
+        /// <summary>
+        /// Aborts a transaction and releases it.
+        /// </summary>
+        /// <param name="trans">Transaction to be aborted.</param>
+        void AbortTransaction(IDbTransaction trans);    
     }
 }

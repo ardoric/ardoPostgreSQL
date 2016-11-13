@@ -20,19 +20,25 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// <summary>
         /// This property returns the credentials for the elevated user.
         /// Changes to this property must be reflected by the RuntimeDatabaseConfigurations
-        /// returned by the method <see cref="ElevatedRuntimeDatabaseConfiguration"/>.
+        /// returned by the method <see cref="ElevatedRuntimeDatabaseConfiguration" />.
         /// </summary>
+        /// <value>
+        /// The elevated user credentials.
+        /// </value>
         NetworkCredential ElevatedAuthenticationCredential { get; set; }
 
         /// <summary>
         /// Gets the object that compacts all the needed configuration parameters to be used in runtime.
         /// </summary>
-        /// <returns>The configuration that allows acessing the database as an elevated user.</returns>
+        /// <returns>The configuration that allows accessing the database as an elevated user.</returns>
         IRuntimeDatabaseConfiguration ElevatedRuntimeDatabaseConfiguration();
 
         /// <summary>
         /// The authentication mode used by the elevated user.
         /// </summary>
+        /// <value>
+        /// The elevated user authentication mode.
+        /// </value>
         AuthenticationType ElevatedUserAuthenticationMode { get; set; }
     }
 }

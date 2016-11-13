@@ -16,8 +16,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
     public interface ITransactionService {
 
         /// <summary>
-        /// Gets the <see cref="IDatabaseServices"/> instance associated with this service.
+        /// Gets the <see cref="IDatabaseServices" /> instance associated with this service.
         /// </summary>
+        /// <value>
+        /// The database services associated.
+        /// </value>
         IDatabaseServices DatabaseServices { get; }
 
         /// <summary>
@@ -35,14 +38,17 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// <summary>
         /// Returns a new connection to the database.
         /// </summary>
-        /// <param name="numRetries">The number retries for establish the connection.</param>
+        /// <param name="numRetries">The number of retries for establishing the connection.</param>
         /// <returns>The database connection.</returns>
         IDbConnection CreateConnection(int numRetries);
 
         /// <summary>
         /// Checks if it is possible to establish a connection.
         /// </summary>
-        /// <returns>True if it was established a connection successfully, False otherwise.</returns>
+        /// <param name="errorMessage">Error message raised during the creation of the connection.</param>
+        /// <returns>
+        /// True if it was established a connection successfully, False otherwise.
+        /// </returns>
         bool TestConnection(out string errorMessage);
 
         /// <summary>

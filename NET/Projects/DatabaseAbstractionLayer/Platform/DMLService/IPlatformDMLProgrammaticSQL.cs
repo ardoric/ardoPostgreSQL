@@ -27,10 +27,13 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DMLService {
         /// <summary>
         /// Gets the associated DML service.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IPlatformDMLService DMLService { get; }
         
         /// <summary>
-        /// This method generates sql that represents the if else statement.
+        /// This method generates SQL that represents the if else statement.
         /// </summary>
         /// <param name="condition">Condition to test.</param>
         /// <param name="ifBody">SQL to execute if the condition is true.</param>

@@ -16,28 +16,43 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
     public interface IDMLSyntaxHighlightDefinitions {
 
         /// <summary>
-        /// Gets the associated <see cref="IDMLService"/>.
+        /// Gets the associated <see cref="IDMLService" />.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>
         /// Returns a set of reserved keywords (e.g. SELECT, FROM, JOIN)
         /// </summary>
+        /// <value>
+        /// The keywords.
+        /// </value>
         IEnumerable<string> Keywords { get; }
 
         /// <summary>
         /// Returns a set of function names (e.g. MAX, ROUND, UPPER))
         /// </summary>
+        /// <value>
+        /// The functions.
+        /// </value>
         IEnumerable<string> Functions { get; }
 
         /// <summary>
         /// Returns a set of operators (e.g. +, LIKE, EXISTS)
         /// </summary>
+        /// <value>
+        /// The operators.
+        /// </value>
         IEnumerable<string> Operators { get; }
 
         /// <summary>
         /// Returns a set of data types (e.g. INTEGER, CHAR, NVARCHAR)
         /// </summary>
+        /// <value>
+        /// The data types.
+        /// </value>
         IEnumerable<string> DataTypes { get; }
         
     }

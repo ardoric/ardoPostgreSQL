@@ -42,11 +42,13 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         /// <summary>
         /// Returns a basic connection string with attributes such as username and password.
         /// </summary>
+        /// <returns>A basic connection string.</returns>
         protected abstract string AssembleBasicConnectionString();
 
         /// <summary>
         /// Returns an advanced connection string with attributes that might be specific for a particular database.
         /// </summary>
+        /// <returns>An advanced connection string.</returns>
         protected abstract string AssembleAdvancedConnectionString();
 
         /// <summary>
@@ -56,8 +58,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.ConfigurationService {
         public virtual string ConnectionStringOverride { get; set; }
 
         /// <summary>
-        /// This property represents the advanced configuration object
+        /// This property represents the advanced configuration object.
         /// </summary>
+        /// <value>The advanced configuration object.</value>
         public abstract AdvancedConfiguration AdvancedConfiguration { get; set; }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.ConfigurationService {
         [TestDetails(CreatedBy = "rcn", Feature = "Database Abstraction Layer", TestIssue = "613292")]
         [IterativeTestCase(typeof(TestConfiguration), Description = "Checks if parameters with a visibility checker have a corresponding method")]
         public void CheckIfVisibilityMethodsExist(DatabaseProviderTestCase tc) {
-            var _ = new MetaDatabaseConfiguration(CreateIntegrationDatabaseConfiguration(tc)).VisibleParameters;
+            var configuration = new MetaDatabaseConfiguration(CreateIntegrationDatabaseConfiguration(tc)).VisibleParameters;
         }
 
         [TestDetails(CreatedBy = "rcn", Feature = "Database Abstraction Layer", TestIssue = "613292")]

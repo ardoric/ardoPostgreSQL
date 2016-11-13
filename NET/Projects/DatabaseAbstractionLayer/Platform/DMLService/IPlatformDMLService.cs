@@ -16,16 +16,25 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DMLService {
         /// <summary>
         /// Gets an object that generates and manipulates SQL identifiers.
         /// </summary>
+        /// <value>
+        /// An object that generates and manipulates SQL identifiers.
+        /// </value>
         new IPlatformDMLIdentifiers Identifiers { get; }
 
         /// <summary>
-        /// Gets an object that generates the SQL functions required to execute simple queries
+        /// Gets an object that generates the SQL functions required to execute simple queries.
         /// </summary>
+        /// <value>
+        /// An object that generates the SQL functions required to execute simple queries
+        /// </value>
         new IPlatformDMLFunctions Functions { get; }
 
         /// <summary>
         /// Gets an object that generates Programmatic SQL fragments to interact with a database.
         /// </summary>
+        /// <value>
+        /// An object that generates Programmatic SQL fragments to interact with a database.
+        /// </value>
         IPlatformDMLProgrammaticSQL ProgrammaticSql { get; }
     }
 }

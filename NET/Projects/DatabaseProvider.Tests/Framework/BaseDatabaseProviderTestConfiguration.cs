@@ -103,7 +103,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
             public IEnumerable<string> Bootstrap { get; set; }
             public IEnumerable<string> Teardown { get; set; }
         }
-
+        
         protected class TestSettings {
             public static string Get(string settingKey) {
                 
@@ -119,6 +119,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
         private const string CONFIG_FILE_EXTENSION = "_NET.config";
         private const string BOOTSTRAP_CONFIG_FILE = "bootstrap" + CONFIG_FILE_EXTENSION;
         private const string BASE_CONFIGURATION_FILES_SETTING = "DatabaseProviderTests.BaseFilesPath";
+        private const string DEFAULT_CONFIGURATION_FILES_SETTING = "DatabaseProviderTests.DefaultConfigurationFilesPath";
         private const string SQLSCRIPT_FILE_EXTENSION = ".sql";
         private const string TEARDOWN_FILE_SUFFIX = "_teardown" + SQLSCRIPT_FILE_EXTENSION;
         private const string BOOTSTRAP_FILE_SUFFIX = "_bootstrap" + SQLSCRIPT_FILE_EXTENSION;
@@ -147,7 +148,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
 
             foreach (var config in configs) {
                 var testCase = new TDatabaseProviderTestCase();
-                testCase.Name = provider.Properties.DisplayName + " with conf " + config.Name;
+                testCase.Name = provider.Properties.DisplayName.Replace(" / ","_") + " with conf " + config.Name;
                 testCase.InitializeServices(provider, config.Run, config.Bootstrap, RunWithBootstrapUser);
 
                 // The placeholders should be replaced with the configuration of runtime... because of the grants for the runtime user...
@@ -163,6 +164,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
 
             var baseScriptsDir = Path.Combine(BaseConfigurationDirectory, pluginKey);
             var specificScriptsDir = Path.Combine(TestConfigurationDirectory, pluginKey);
+            var defaultScriptsDir = Path.Combine(DefaultConfigurationDirectory, pluginKey);
 
             Func<string, IEnumerable<string>> tryLoadScripts = (scriptFileSuffix) => {
                 var loader = new SQLScriptLoader(scriptFileSuffix);
@@ -172,6 +174,9 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
                 }
                 if (scripts == null && Directory.Exists(baseScriptsDir)) {
                     scripts = loader.Load(baseScriptsDir);
+                }
+                if (scripts == null && Directory.Exists(defaultScriptsDir)) {
+                    scripts = loader.Load(defaultScriptsDir);
                 }
                 return scripts;
             };
@@ -208,6 +213,9 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
             } else {
                 IList<TestCaseConfiguration> resultList = new List<TestCaseConfiguration>();
                 string configurationsPath = Path.Combine(BaseConfigurationDirectory, providerKey);
+                if (!Directory.Exists(configurationsPath)) {
+                    configurationsPath = Path.Combine(DefaultConfigurationDirectory, providerKey);
+                }
 
                 if (Directory.Exists(configurationsPath)) { 
                     DirectoryInfo configDir = new DirectoryInfo(configurationsPath);
@@ -239,12 +247,23 @@ namespace OutSystems.ServerTests.DatabaseProvider.Framework {
             }
         }
 
+        private static string DefaultConfigurationDirectory {
+            get {
+                return TestSettings.Get(DEFAULT_CONFIGURATION_FILES_SETTING);
+            }
+        }
+
         private static IEnumerable<string> ProcessScripts(IEnumerable<string> scripts, IRuntimeDatabaseConfiguration config) {
             return scripts.Select(script => Replace(script, configParamRegex, m => ProcessScript(m, config)));
         }
 
         private static string ProcessScript(Match match, IRuntimeDatabaseConfiguration config) {
             string configParamName = match.Groups[1].Value.Substring(1, match.Groups[1].Value.Length - 2);
+
+            if (configParamName == "Machine") {
+                return BaseDatabaseProviderTest.MachineName;
+            }
+
             IParameter param = new MetaDatabaseConfiguration(config).GetParameter(configParamName);
             if (param == null) {
                 throw new Exception("Configuration parameter '" + configParamName + "' used in SQL script was not found in the configuration.");

@@ -31,6 +31,18 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DDLService {
         public abstract bool CanAlterColumn(IPlatformTableSourceColumnInfo existingColumn, IPlatformTableSourceColumnInfo newColumn,
                                             out string errorMessage);
 
+        //dvn: Both CanCreateColumn and CanCreateTable are only needed because we don't validate the model 
+        public virtual bool CanCreateColumn(IPlatformTableSourceColumnInfo newColumn, out string errorMessage) {
+            errorMessage = "";
+            return true;
+        }
+
+        public virtual bool CanCreateTable(ITableSourceInfo newTable, ColumnDetails[] columns, out string errorMessage) {
+            errorMessage = "";
+            return true;
+        }
+
+
         /// <summary>
         /// This method returns the SQL for the column definition to be used inside the create table and create column statements. 
         /// This implementation returns "escapedColumnName columnSQLDataType DEFAULT defaultValue NOT NULL"
@@ -40,14 +52,20 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DDLService {
         /// <returns>SQL for the column definition.</returns>
         protected virtual string GetColumnDefinition(IPlatformTableSourceColumnInfo column, string defaultValue) {
             return Identifiers.EscapeIdentifier(column.Name) + " " + column.DataType.SqlDataType 
-                + (UseDefaultValue(column, defaultValue)? " DEFAULT " + defaultValue: String.Empty) 
-                + (GetFinalMandatoryValue(column, defaultValue, column.IsMandatory)? " NOT": String.Empty) + " NULL";
+                + (UseDefaultValue(column, defaultValue)
+                    ? " DEFAULT " + defaultValue
+                    : String.Empty) 
+                + (GetFinalMandatoryValue(column, defaultValue, column.IsMandatory)
+                    ? " NOT"
+                    : String.Empty)
+                + " NULL";
         }
+
 
         /// <summary>
         /// Returns true if we can use the default value passed as argument in the column definition.
         /// </summary>
-        /// <param name="column"></param>
+        /// <param name="column">The column to use.</param>
         /// <param name="defaultValue">The default value for the column that we want to change to (tentatively).</param>
         /// <returns>True if we can use the default value, false otherwise.</returns>
         protected virtual bool UseDefaultValue(IPlatformTableSourceColumnInfo column, string defaultValue) {
@@ -103,7 +121,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DDLService {
         /// Returns a name that can be used as a primary key identifier name.
         /// </summary>
         /// <param name="tableName">Name of the table for which we want to create a primary key</param>
-        /// <returns>A name that can be used as a sql identifier name</returns>
+        /// <returns>A name that can be used as a SQL identifier name</returns>
         protected string GetNewPrimaryKeyName(string tableName) {
             string primaryKeyName = ObjectFactory.GetNewPrimaryKeyName(DatabaseServices, tableName);
             generatedPrimaryKeyConstraintNames[tableName] = primaryKeyName;
@@ -166,6 +184,10 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DDLService {
                         case DBDataType.INTEGER:
                             nullIfSnippet = "NULLIF({0}, " + GetDefaultValue(DBDataType.INTEGER) + ")";
                             coalesceSnippet = "COALESCE({0}, " + GetDefaultValue(DBDataType.INTEGER) + ")";
+                            break;
+                        case DBDataType.LONGINTEGER:
+                            nullIfSnippet = "NULLIF({0}, " + GetDefaultValue(DBDataType.LONGINTEGER) + ")";
+                            coalesceSnippet = "COALESCE({0}, " + GetDefaultValue(DBDataType.LONGINTEGER) + ")";
                             break;
                         case DBDataType.TEXT:
                             nullIfSnippet = "NULLIF({0}, " + GetDefaultValue(DBDataType.TEXT) + ")";

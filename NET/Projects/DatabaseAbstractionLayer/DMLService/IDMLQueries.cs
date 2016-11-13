@@ -9,15 +9,25 @@ using OutSystems.HubEdition.Extensibility.Data.DMLService.DMLPlaceholders;
 using System.Collections.Generic;
 
 namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
-    
+
+    public enum QueryJoinType {
+        Inner,
+        Right,
+        Left,
+        Full,
+    }
+
     /// <summary>
     /// Defines a contract for generating DML fragments required by applications to perform specific queries (e.g. count query)
     /// </summary>
     public interface IDMLQueries {
 
         /// <summary>
-        /// Gets the associated <see cref="IDMLService"/>.
+        /// Gets the associated <see cref="IDMLService" />.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>
@@ -34,5 +44,12 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <param name="maxRecordsParam">Number of records to return.</param>
         /// <returns>An <see cref="IDictionary{TKey,TValue}"/> with the DML expressions.</returns>
         IDictionary<SelectPlaceholder, string> SQLPlaceholderValuesForMaxRecords(string maxRecordsParam);
+
+        /// <summary>
+        /// Determines if the given join type is supported.
+        /// </summary>
+        /// <param name="joinType">The join type</param>
+        /// <returns>True if the join type is supported, false otherwise</returns>
+        bool IsSupported(QueryJoinType joinType);
     }
 }

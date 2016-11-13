@@ -27,7 +27,17 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             }
         }
     }
-    
+
+    public class ServerOnlyTestConfiguration : TestConfiguration {
+
+        protected override bool IsServerOnly {
+            get {
+                return true;
+            }
+        }
+
+    }
+
     [DashboardTestFixture(DashboardTest.DashboardTestKind)]
     public class IntrospectionServiceTests : DatabaseProviderTest<TestConfiguration> {
 
@@ -111,11 +121,11 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
                 Decimals = decimals;
             }
 
-            public DBDataType Type { get; private set; }
+            public DBDataType Type { get; set; }
 
             public string SqlDataType { get; private set; }
 
-            public int Length { get; private set; }
+            public int Length { get; set; }
 
             public int Decimals { get; private set; }
 
@@ -151,28 +161,29 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
         private const int UNCHECKED_LENGTH = -1;
         private const int UNCHECKED_DECIMALS = -1;
 
-        private static readonly ExpectedTableSource tableIntrospectionTestTable = new ExpectedTableSource("IntrospectionTestTable");
-        private static readonly ExpectedTableSource viewIntrospectionViewOverTestTable = new ExpectedTableSource("IntrospectionViewOverTestTable");
-        private static readonly ExpectedTableSource tableSelect = new ExpectedTableSource("SELECT");
-        private static readonly ExpectedTableSource viewFrom = new ExpectedTableSource("FROM");
-        private static readonly ExpectedTableSource tableForeignKeysTable = new ExpectedTableSource("ForeignKeysTable");
+        private static readonly ExpectedTableSource tableIntrospectionTestTable = new ExpectedTableSource("IntrospecTbl" + MachineName);
+        private static readonly ExpectedTableSource viewIntrospectionViewOverTestTable = new ExpectedTableSource("IntrospecView" + MachineName);
+        private static readonly ExpectedTableSource tableSelect = new ExpectedTableSource("SELECT" + MachineName);
+        private static readonly ExpectedTableSource viewFrom = new ExpectedTableSource("FROM" + MachineName);
+        private static readonly ExpectedTableSource tableForeignKeysTable = new ExpectedTableSource("ForeignKeysTable" + MachineName);
 
         // We are deliberately not testing the DBDataType.DATE and DBDataType.TIME types because there isn't much support for this concepts (at least separated from DATETIME) in different database vendors
 
         private static readonly ExpectedColumnInfo colId = new ExpectedColumnInfo("ID", new ExpectedDataTypeInfo(DBDataType.INTEGER), true, true, true);
         private static readonly ExpectedColumnInfo colDbText = new ExpectedColumnInfo("DBTEXT", new ExpectedDataTypeInfo(DBDataType.TEXT, 255), true, false, false);
         private static readonly ExpectedColumnInfo colDbInteger = new ExpectedColumnInfo("DBINTEGER", new ExpectedDataTypeInfo(DBDataType.INTEGER), false, false, false);
-        private static readonly ExpectedColumnInfo colDbDecimal = new ExpectedColumnInfo("DBDECIMAL", new ExpectedDataTypeInfo(DBDataType.DECIMAL, 37, 8), false, false, false);
+        private static readonly ExpectedColumnInfo colDbLongInteger = new ExpectedColumnInfo("DBLONGINTEGER", new ExpectedDataTypeInfo(DBDataType.LONGINTEGER), false, false, false);
+        private static readonly ExpectedColumnInfo colDbDecimal = new ExpectedColumnInfo("DBDECIMAL", new ExpectedDataTypeInfo(DBDataType.DECIMAL, 28, Constants.DecimalDecimals), false, false, false);
         private static readonly ExpectedColumnInfo colDbBoolean = new ExpectedColumnInfo("DBBOOLEAN", new ExpectedDataTypeInfo(DBDataType.BOOLEAN), false, false, false);
         private static readonly ExpectedColumnInfo colDbDateTime = new ExpectedColumnInfo("DBDATETIME", new ExpectedDataTypeInfo(DBDataType.DATE_TIME), false, false, false);
         private static readonly ExpectedColumnInfo colDbBinaryData = new ExpectedColumnInfo("DBBINARYDATA", new ExpectedDataTypeInfo(DBDataType.BINARY_DATA), false, false, false);
         
-        private static readonly ExpectedColumnInfo[] expectedColumns = { colId, colDbText, colDbInteger, colDbDecimal, colDbBoolean, colDbDateTime, colDbBinaryData };
+        private static readonly ExpectedColumnInfo[] expectedColumns = { colId, colDbText, colDbInteger, colDbLongInteger, colDbDecimal, colDbBoolean, colDbDateTime, colDbBinaryData };
 
         private static readonly ExpectedForeignKeyInfo fkInstrospectionId = new ExpectedForeignKeyInfo(tableForeignKeysTable,
-            "FK_FKT_IntrospectionTestTable", "INTROSPECTIONID", tableIntrospectionTestTable, "ID");
+            "FK_FKT_IspecTbl"+MachineName, "INTROSPECTIONID", tableIntrospectionTestTable, "ID");
         private static readonly ExpectedForeignKeyInfo fkSelectId = new ExpectedForeignKeyInfo(tableForeignKeysTable,
-            "FK_FKT_Select", "SELECTID", tableSelect, "TEXTID");
+            "FK_FKT_Select"+MachineName, "SELECTID", tableSelect, "TEXTID");
 
         private static readonly ExpectedForeignKeyInfo[] expectedForeignKeys = {fkInstrospectionId, fkSelectId};
 
@@ -182,7 +193,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             return services.DMLService.Identifiers.EscapeIdentifier(services.DatabaseConfiguration.DatabaseIdentifier);
         }
     
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that current database is returned in the list of databases, by looking for the database name associated with the current IDatabaseConfiguration.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that current database is returned in the list of databases, by looking for the database name associated with the current IDatabaseConfiguration.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestListDatabasesFindCurrentDatabase(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
@@ -191,7 +202,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             Assert.IsNotNull(databases.FirstOrDefault(db => db.Equals(currentDBInfo)), "Current database (" + currentDBInfo.Identifier + ") not found in the list.");
         }
         
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that all the table sources created by the bootstrap script appear in the list.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that all the table sources created by the bootstrap script appear in the list.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestListTableSourcesFindAllExpectedTableSources(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
@@ -202,7 +213,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             }
         }
 
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that all the ListTableSources can receive a filter.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that all the ListTableSources can receive a filter.")]
         [TestDetails(TestIssue = "629873", Feature = "Database Abstraction Layer", CreatedBy = "rfe")]
         public void TestListTableSourcesFilter(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
@@ -221,21 +232,23 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             }
         }
 
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that it is possible to query all the table sources by using their qualified name. This test depends on the IExecutionService.ExecuteScalar().")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that it is possible to query all the table sources by using their qualified name. This test depends on the IExecutionService.ExecuteScalar().")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestListTableSourcesValidateAllQualifiedNames(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             IDatabaseInfo db = databaseServices.ObjectFactory.CreateDatabaseInfo(GetDatabaseIdentifier(databaseServices));
             IEnumerable<ITableSourceInfo> tableSources = databaseServices.IntrospectionService.ListTableSourcesWithoutFilter(db);
             foreach (var tableSource in tableSources) {
-                SQLExecutor sqlExecutor = new SQLExecutor(databaseServices);
-                string sql = "SELECT COUNT(*) FROM " + tableSource.QualifiedName;
-                Scalar result = sqlExecutor.ExecuteScalar(sql);
-                Assert.IsTrue(result.Value<int>() >= 0, "Error counting the rows of table source '" + tableSource.Name + "' using the SQL: " + sql);
+                if (tableSource.QualifiedName.ToLowerInvariant().EndsWith(MachineName.ToLowerInvariant())) {
+                    SQLExecutor sqlExecutor = new SQLExecutor(databaseServices);
+                    string sql = "SELECT COUNT(*) FROM " + tableSource.QualifiedName;
+                    Scalar result = sqlExecutor.ExecuteScalar(sql);
+                    Assert.IsTrue(result.Value<int>() >= 0, "Error counting the rows of table source '" + tableSource.Name + "' using the SQL: " + sql);
+                }
             }
         }
 
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that from all the IDatabaseInfo.Identifierdentifier of the current introspection service it is possible to obtain an instance of a IDatabaseInfoInfo that is equivalent to the one where the qualified name was retrieved from by using the Equals() method.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that from all the IDatabaseInfo.Identifierdentifier of the current introspection service it is possible to obtain an instance of a IDatabaseInfoInfo that is equivalent to the one where the qualified name was retrieved from by using the Equals() method.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestCreateDatabaseInfoFromQualifiedName(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
@@ -247,34 +260,36 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             }
         }
 
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that from all ITableSourceInfo.QualifiedName of the current database it is possible to obtain an instance of a ITableSourceInfo that is equivalent to the one where the qualified name was retrieved from by using the Equals() method.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that from all ITableSourceInfo.QualifiedName of the current database it is possible to obtain an instance of a ITableSourceInfo that is equivalent to the one where the qualified name was retrieved from by using the Equals() method.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestCreateTableSourceInfoFromQualifiedName(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             IDatabaseInfo db = databaseServices.ObjectFactory.CreateDatabaseInfo(GetDatabaseIdentifier(databaseServices));
             IEnumerable<ITableSourceInfo> tableSources = databaseServices.IntrospectionService.ListTableSourcesWithoutFilter(db);
             foreach (var tableSource in tableSources) {
-                ITableSourceInfo inferredTableSource = databaseServices.ObjectFactory.CreateTableSourceInfo(tableSource.QualifiedName);
-                bool equals = tableSource.Equals(inferredTableSource);
-                Assert.IsTrue(equals, "The inferred ITableSourceInfo is not equal to the original ITableSourceInfo for table source with qualified name: " + tableSource.QualifiedName);
+                if (tableSource.QualifiedName.ToLowerInvariant().EndsWith(MachineName.ToLowerInvariant())) {
+                    ITableSourceInfo inferredTableSource = databaseServices.ObjectFactory.CreateTableSourceInfo(tableSource.QualifiedName);
+                    bool equals = tableSource.Equals(inferredTableSource);
+                    Assert.IsTrue(equals, "The inferred ITableSourceInfo is not equal to the original ITableSourceInfo for table source with qualified name: " + tableSource.QualifiedName);
+                }
             }
         }
 
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that the list of columns matches the ones defined in the bootstrap script for a given table and validates all the column contents.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that the list of columns matches the ones defined in the bootstrap script for a given table and validates all the column contents.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestGetTableSourceDetailsWithColumnsForTable(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             ValidateTableSourceColumns(databaseServices, tableIntrospectionTestTable.Name, false);
         }
         
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that the list of columns matches the ones defined in the bootstrap script for a given view and validates all the column contents.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that the list of columns matches the ones defined in the bootstrap script for a given view and validates all the column contents.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestGetTableSourceDetailsWithColumnsForView(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
             ValidateTableSourceColumns(databaseServices, viewIntrospectionViewOverTestTable.Name, true);
         }
 
-        [IterativeTestCase(typeof(TestConfiguration), Description = "Validates that the list of foreign keys matches the ones defined in the bootstrap script for a given table and validates all the foreign key contents.")]
+        [IterativeTestCase(typeof(ServerOnlyTestConfiguration), Description = "Validates that the list of foreign keys matches the ones defined in the bootstrap script for a given table and validates all the foreign key contents.")]
         [TestDetails(TestIssue = "622296", Feature = "Database Abstraction Layer", CreatedBy = "rls")]
         public void TestGetTableSourceDetailsWithForeignKeys(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
@@ -305,24 +320,38 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             return result;
         }
 
+        private static string ColumnPropertyMustMatch(string tableSource, string columnName, string propertyName) {
+            return "Table Source: " + tableSource + " Column: " + columnName + " Property: " + propertyName + " introspected value doesn't match";
+        }
+
         internal static void AssertColumns(IEnumerable<ExpectedColumnInfo> expectedColumns, IEnumerable<ITableSourceColumnInfo> obtainedColumns, 
                 bool isView) {
 
             Assert.IsNotNull(obtainedColumns, "Obtained columns for table source are null.");
             string tableSourceName = obtainedColumns.First().TableSource.Name;
 
-            Assert.AreEqual(obtainedColumns.Count(), expectedColumns.Count(),
+            Assert.AreEqual(expectedColumns.Count(), obtainedColumns.Count(),
                 "Number of columns retrieved for table source '" + tableSourceName + "' doesn't match the expected value.");
             foreach (var ec in expectedColumns) {
                 var obtainedColumn = obtainedColumns.FirstOrDefault(col => col.Name.EqualsIgnoreCase(ec.Name));
                 Assert.IsNotNull(obtainedColumn, "Couldn't find column '" + ec.Name + "' from table source '" + tableSourceName + "'");
-                Assert.IsTrue(obtainedColumn.IsMandatory == ec.IsMandatory &&
-                    (isView || obtainedColumn.IsPrimaryKey == ec.IsPrimaryKey) &&
-                    (isView || obtainedColumn.IsAutoGenerated == ec.IsAutoGenerated) &&
-                    obtainedColumn.DataType.Type == ec.DataType.Type &&
-                    (!obtainedColumn.DataType.Type.HasLength() || ec.DataType.Length == UNCHECKED_LENGTH || obtainedColumn.DataType.Length == ec.DataType.Length) &&
-                    (!obtainedColumn.DataType.Type.HasDecimals() || ec.DataType.Decimals == UNCHECKED_DECIMALS || obtainedColumn.DataType.Decimals == ec.DataType.Decimals),
-                    "Expected information for column '" + ec.Name + "' from table source '" + tableSourceName + "' doesn't match the column information retrieved from the database");
+                
+                Assert.AreEqual(ec.IsMandatory, obtainedColumn.IsMandatory, ColumnPropertyMustMatch(tableSourceName, ec.Name, "IsMandatory"));
+
+                if (!isView) {
+                    Assert.AreEqual(ec.IsPrimaryKey, obtainedColumn.IsPrimaryKey, ColumnPropertyMustMatch(tableSourceName, ec.Name, "IsPrimaryKey"));
+                    Assert.AreEqual(ec.IsAutoGenerated, obtainedColumn.IsAutoGenerated, ColumnPropertyMustMatch(tableSourceName, ec.Name, "IsAutoGenerated"));
+                }
+
+                Assert.AreEqual(ec.DataType.Type, obtainedColumn.DataType.Type, ColumnPropertyMustMatch(tableSourceName, ec.Name, "DataType.Type"));
+
+                if (obtainedColumn.DataType.Type.HasLength() && ec.DataType.Length != UNCHECKED_LENGTH) {
+                    Assert.AreEqual(ec.DataType.Length, obtainedColumn.DataType.Length, ColumnPropertyMustMatch(tableSourceName, ec.Name, "DataType.Length"));
+                }
+
+                if (obtainedColumn.DataType.Type.HasDecimals() && ec.DataType.Decimals != UNCHECKED_DECIMALS) {
+                    Assert.AreEqual(ec.DataType.Decimals, obtainedColumn.DataType.Decimals, ColumnPropertyMustMatch(tableSourceName, ec.Name, "DataType.Decimals"));
+                }
             }
         }
 
@@ -336,7 +365,7 @@ namespace OutSystems.ServerTests.DatabaseProvider.IntrospectionService {
             Assert.IsNotNull(obtainedForeignKeys, "ForeignKeys for table source are null.");
             string tableSourceName = obtainedForeignKeys.First().TableSource.Name;
 
-            Assert.AreEqual(obtainedForeignKeys.Count(), expectedForeignKeys.Count(),
+            Assert.AreEqual(expectedForeignKeys.Count(), obtainedForeignKeys.Count(),
                 "Number of foreign keys retrieved for table source '" + tableSourceName + "' doesn't match the expected value.");
 
             foreach (var efk in expectedForeignKeys) {

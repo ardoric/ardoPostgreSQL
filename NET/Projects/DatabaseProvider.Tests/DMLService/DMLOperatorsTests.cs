@@ -55,62 +55,62 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestEqual(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.Equal("NAME", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Name);
-            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.Equal("AGE", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.Equal("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Weight);
-            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.Equal("DEAD", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Dead);
-            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.Equal("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.LastLogin);
+            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON"+MachineName+" WHERE " + databaseServices.DMLService.Operators.Equal("NAME", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Name);
+            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Equal("AGE", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Equal("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Weight);
+            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Equal("DEAD", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Dead);
+            AssertValue(databaseServices, "Equal", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Equal("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.LastLogin);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the NotEqual operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestNotEqual(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.NotEqual("NAME", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Name);
-            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.NotEqual("AGE", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Age);
-            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.NotEqual("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Weight);
-            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.NotEqual("DEAD", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Dead);
-            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.NotEqual("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.LastLogin);
+            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.NotEqual("NAME", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Name);
+            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.NotEqual("AGE", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Age);
+            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.NotEqual("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Weight);
+            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.NotEqual("DEAD", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Dead);
+            AssertValue(databaseServices, "NotEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.NotEqual("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.LastLogin);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the LessThan operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestLessThan(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThen("NAME", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Name);
-            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThen("AGE", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Age);
-            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThen("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Weight);
-            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThen("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.LastLogin);
+            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThen("NAME", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Name);
+            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThen("AGE", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Age);
+            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThen("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.Weight);
+            AssertValue(databaseServices, "LessThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThen("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.JohnOps.LastLogin);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the LessThanOrEqual operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestLessThanOrEqual(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("NAME", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Name);
-            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("AGE", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Weight);
-            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.LastLogin);
+            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("NAME", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Name);
+            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("AGE", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("WEIGHT", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.Weight);
+            AssertValue(databaseServices, "LessThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.LessThanOrEqual("LASTLOGIN", "{0}"), Person.DaveLauper.PersonId, Person.DaveLauper.LastLogin);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the GreaterThan operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestGreaterThan(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThan("NAME", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.Name);
-            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThan("AGE", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThan("WEIGHT", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.Weight);
-            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThan("LASTLOGIN", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.LastLogin);
+            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThan("NAME", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.Name);
+            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThan("AGE", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThan("WEIGHT", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.Weight);
+            AssertValue(databaseServices, "GreaterThan", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThan("LASTLOGIN", "{0}"), Person.JohnOps.PersonId, Person.DaveLauper.LastLogin);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the GreaterThanOrEqual operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestGreaterThanOrEqual(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("NAME", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.Name);
-            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("AGE", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.Age);
-            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("WEIGHT", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.Weight);
-            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("LASTLOGIN", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.LastLogin);
+            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("NAME", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.Name);
+            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("AGE", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.Age);
+            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("WEIGHT", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.Weight);
+            AssertValue(databaseServices, "GreaterThanOrEqual", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.GreaterThanOrEqual("LASTLOGIN", "{0}"), Person.JohnOps.PersonId, Person.JohnOps.LastLogin);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the And operator is correct. This test also uses the Equal operator.")]
@@ -120,10 +120,10 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string nameEquals = databaseServices.DMLService.Operators.Equal("NAME", "{0}");
             string ageEquals = databaseServices.DMLService.Operators.Equal("AGE", "{1}");
 
-            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 1, Person.DaveLauper.Name, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 0, Person.DaveLauper.Name, Person.JohnOps.Age);
-            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 0, Person.JohnOps.Name, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 1, Person.JohnOps.Name, Person.JohnOps.Age);
+            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 1, Person.DaveLauper.Name, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 0, Person.DaveLauper.Name, Person.JohnOps.Age);
+            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 0, Person.JohnOps.Name, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "And", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.And(nameEquals, ageEquals), 1, Person.JohnOps.Name, Person.JohnOps.Age);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Or operator is correct. This test also uses the Equal operator.")]
@@ -133,46 +133,46 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             string nameEquals = databaseServices.DMLService.Operators.Equal("NAME", "{0}");
             string ageEquals = databaseServices.DMLService.Operators.Equal("AGE", "{1}");
 
-            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 1, Person.DaveLauper.Name, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 2, Person.DaveLauper.Name, Person.JohnOps.Age);
-            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 2, Person.JohnOps.Name, Person.DaveLauper.Age);
-            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 1, Person.JohnOps.Name, Person.JohnOps.Age);
+            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 1, Person.DaveLauper.Name, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 2, Person.DaveLauper.Name, Person.JohnOps.Age);
+            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 2, Person.JohnOps.Name, Person.DaveLauper.Age);
+            AssertValue(databaseServices, "Or", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Or(nameEquals, ageEquals), 1, Person.JohnOps.Name, Person.JohnOps.Age);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Add operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestAdd(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Add", "SELECT " + databaseServices.DMLService.Operators.Add("{0}", "{1}") + " FROM DUMMY", 2, 1, 1);
-            AssertValue(databaseServices, "Add", "SELECT " + databaseServices.DMLService.Operators.Add("{0}", "{1}") + " FROM DUMMY", 0, 1, -1);
-            AssertValue(databaseServices, "Add", "SELECT " + databaseServices.DMLService.Operators.Add("{0}", "{1}") + " FROM DUMMY", 4m, 3.14m, 0.86m);
+            AssertValue(databaseServices, "Add", "SELECT " + databaseServices.DMLService.Operators.Add("{0}", "{1}") + " FROM DUMMY" + MachineName, 2, 1, 1);
+            AssertValue(databaseServices, "Add", "SELECT " + databaseServices.DMLService.Operators.Add("{0}", "{1}") + " FROM DUMMY" + MachineName, 0, 1, -1);
+            AssertValue(databaseServices, "Add", "SELECT " + databaseServices.DMLService.Operators.Add("{0}", "{1}") + " FROM DUMMY" + MachineName, 4m, 3.14m, 0.86m);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Subtract operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestSubtract(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Subtract", "SELECT " + databaseServices.DMLService.Operators.Subtract("{0}", "{1}") + " FROM DUMMY", 0, 1, 1);
-            AssertValue(databaseServices, "Subtract", "SELECT " + databaseServices.DMLService.Operators.Subtract("{0}", "{1}") + " FROM DUMMY", -2, -4, -2);
-            AssertValue(databaseServices, "Subtract", "SELECT " + databaseServices.DMLService.Operators.Subtract("{0}", "{1}") + " FROM DUMMY", 0.86m, 4m, 3.14m);
+            AssertValue(databaseServices, "Subtract", "SELECT " + databaseServices.DMLService.Operators.Subtract("{0}", "{1}") + " FROM DUMMY" + MachineName, 0, 1, 1);
+            AssertValue(databaseServices, "Subtract", "SELECT " + databaseServices.DMLService.Operators.Subtract("{0}", "{1}") + " FROM DUMMY" + MachineName, -2, -4, -2);
+            AssertValue(databaseServices, "Subtract", "SELECT " + databaseServices.DMLService.Operators.Subtract("{0}", "{1}") + " FROM DUMMY" + MachineName, 0.86m, 4m, 3.14m);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Multiply operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestMultiply(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Multiply", "SELECT " + databaseServices.DMLService.Operators.Multiply("{0}", "{1}") + " FROM DUMMY", 0, 1, 0);
-            AssertValue(databaseServices, "Multiply", "SELECT " + databaseServices.DMLService.Operators.Multiply("{0}", "{1}") + " FROM DUMMY", -1, -1, 1);
-            AssertValue(databaseServices, "Multiply", "SELECT " + databaseServices.DMLService.Operators.Multiply("{0}", "{1}") + " FROM DUMMY", 6m, 2m, 3m);
+            AssertValue(databaseServices, "Multiply", "SELECT " + databaseServices.DMLService.Operators.Multiply("{0}", "{1}") + " FROM DUMMY" + MachineName, 0, 1, 0);
+            AssertValue(databaseServices, "Multiply", "SELECT " + databaseServices.DMLService.Operators.Multiply("{0}", "{1}") + " FROM DUMMY" + MachineName, -1, -1, 1);
+            AssertValue(databaseServices, "Multiply", "SELECT " + databaseServices.DMLService.Operators.Multiply("{0}", "{1}") + " FROM DUMMY" + MachineName, 6m, 2m, 3m);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Divide operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestDivide(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Divide", "SELECT " + databaseServices.DMLService.Operators.Divide("{0}", "{1}") + " FROM DUMMY", 0, 0, 1);
-            AssertValue(databaseServices, "Divide", "SELECT " + databaseServices.DMLService.Operators.Divide("{0}", "{1}") + " FROM DUMMY", -1, -1, 1);
-            AssertValue(databaseServices, "Divide", "SELECT " + databaseServices.DMLService.Operators.Divide("{0}", "{1}") + " FROM DUMMY", 1.5m, 3m, 2m);
+            AssertValue(databaseServices, "Divide", "SELECT " + databaseServices.DMLService.Operators.Divide("{0}", "{1}") + " FROM DUMMY" + MachineName, 0m, 0m, 1m);
+            AssertValue(databaseServices, "Divide", "SELECT " + databaseServices.DMLService.Operators.Divide("{0}", "{1}") + " FROM DUMMY" + MachineName, -1m, -1m, 1m);
+            AssertValue(databaseServices, "Divide", "SELECT " + databaseServices.DMLService.Operators.Divide("{0}", "{1}") + " FROM DUMMY" + MachineName, 1.5m, 3m, 2m);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Not operator is correct. This test also uses the Equal operator.")]
@@ -181,53 +181,53 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
             var databaseServices = tc.Services;
             string ageEqual = databaseServices.DMLService.Operators.Equal("AGE", "{0}");
             string notExpression = databaseServices.DMLService.Operators.Not(ageEqual);
-            AssertValue(databaseServices, "Not", "SELECT PERSONID FROM PERSON WHERE " + notExpression, Person.DaveLauper.PersonId, Person.JohnOps.Age);
+            AssertValue(databaseServices, "Not", "SELECT PERSONID FROM PERSON" + MachineName+" WHERE " + notExpression, Person.DaveLauper.PersonId, Person.JohnOps.Age);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IsNotNull operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestIsNotNull(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "IsNotNull", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.IsNotNull("DEAD"), Person.DaveLauper.PersonId, new object[0]);
+            AssertValue(databaseServices, "IsNotNull", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.IsNotNull("DEAD"), Person.DaveLauper.PersonId, new object[0]);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IsNull operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestIsNull(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "IsNull", "SELECT PERSONID FROM PERSON WHERE " + databaseServices.DMLService.Operators.IsNull("DEAD"), Person.JohnOps.PersonId, new object[0]);
+            AssertValue(databaseServices, "IsNull", "SELECT PERSONID FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.IsNull("DEAD"), Person.JohnOps.PersonId, new object[0]);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the IsNull operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestNegative(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY", -1, 1);
-            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY", 1, -1);
-            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY", -1.5m, 1.5m);
-            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY", 1.5m, -1.5m);
+            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY" + MachineName, -1, 1);
+            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY" + MachineName, 1, -1);
+            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY" + MachineName, -1.5m, 1.5m);
+            AssertValue(databaseServices, "Negative", "SELECT " + databaseServices.DMLService.Operators.Negative("{0}") + " FROM DUMMY" + MachineName, 1.5m, -1.5m);
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Concatenate operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestConcatenate(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY", "DaveLauper", "Dave", "Lauper");
-            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY", "Dave", "Dave", "");
-            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY", "Lauper", "", "Lauper");
-            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY", "", "", "");
+            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY" + MachineName, "DaveLauper", "Dave", "Lauper");
+            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY" + MachineName, "Dave", "Dave", "");
+            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY" + MachineName, "Lauper", "", "Lauper");
+            AssertValue(databaseServices, "Concatenate", "SELECT " + databaseServices.DMLService.Operators.Concatenate("{0}", "{1}") + " FROM DUMMY" + MachineName, "", "", "");
         }
 
         [IterativeTestCase(typeof(DMLTestsConfiguration), Description = "Validates that the behavior of the SQL fragment produced by the Like operator is correct")]
         [TestDetails(TestIssue = "610149", Feature = "Database Abstraction Layer", CreatedBy = "mar")]
         public void TestLike(DatabaseProviderTestCase tc) {
             var databaseServices = tc.Services;
-            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 1, "DaveLauper");
-            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 0, "Dave");
-            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 1, "Dave%");
-            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 0, "Lauper");
-            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 1, "%Lauper");
-            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 3, "%");
+            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 1, "DaveLauper");
+            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 0, "Dave");
+            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 1, "Dave%");
+            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 0, "Lauper");
+            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 1, "%Lauper");
+            AssertValue(databaseServices, "Like", "SELECT COUNT(*) FROM PERSON" + MachineName + " WHERE " + databaseServices.DMLService.Operators.Like("NAME", "{0}"), 3, "%");
         }
     }
 }

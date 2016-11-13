@@ -17,11 +17,17 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.DatabaseObjects {
         /// <summary>
         /// Table source that owns the trigger.
         /// </summary>
+        /// <value>
+        /// The table source.
+        /// </value>
         ITableSourceInfo TableSource { get; }
 
         /// <summary>
         /// Name that identifies the trigger.
         /// </summary>
+        /// <value>
+        /// The name of the trigger.
+        /// </value>
         string Name { get; }
         
     }

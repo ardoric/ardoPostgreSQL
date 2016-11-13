@@ -22,6 +22,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// <summary>
         /// Gets the isolation level to be used in the transactions.
         /// </summary>
+        /// <value>
+        /// The isolation level of the transactions.
+        /// </value>
         protected abstract IsolationLevel IsolationLevel { get; }
 
         /// <summary>
@@ -40,6 +43,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// <summary>
         /// Checks if a separate connection is needed to connect to another catalog.
         /// </summary>
+        /// <value>
+        /// True if is needed a separate admin connection. False otherwise.
+        /// </value>
         public abstract bool NeedsSeparateAdminConnection { get; }
 
         protected abstract IDbConnection GetConnectionFromDriver();
@@ -55,6 +61,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         /// <summary>
         /// This property represents the <see cref="IDatabaseServices"/> instance associated with this service.
         /// </summary>
+        /// <value>
+        /// The database services associated.
+        /// </value>
         public virtual IDatabaseServices DatabaseServices { get; private set; }
 
         /// <summary>
@@ -96,9 +105,18 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
 
                     string message;
 
-                    if (retryNumber >= numRetries) {
+                    if (IsNonTransientConnectionException(e)) {
                         message = String.Format(
-                            "Error openning connection to the database: {0}\nThe retrying was unsuccessful.\n\n{1}\n{2}",
+                            "Error opening connection to the database: {0}\nNot retrying because connection will not succeed unless the cause of the failure is corrected.\n\n{1}\n{2}",
+                            e.Message, e.StackTrace, (new StackTrace(true)).ToString());
+
+                        EventLogger.WriteError(message);
+
+                        // Since we already retried it connectionCreationMaxRetries rethrow the exception occurred
+                        throw;
+                    } else if (retryNumber >= numRetries) {
+                        message = String.Format(
+                            "Error opening connection to the database: {0}\nThe retrying was unsuccessful.\n\n{1}\n{2}",
                             e.Message, e.StackTrace, (new StackTrace(true)).ToString());
 
                         EventLogger.WriteError(message);
@@ -107,7 +125,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
                         throw;
                     } else if (retryNumber == 1) {
                         message = String.Format(
-                            "Error openning connection to the database: {0}\nRetrying...\n\n{1}\n{2}", e.Message, e.StackTrace, (new StackTrace(true)).ToString());
+                            "Error opening connection to the database: {0}\nRetrying...\n\n{1}\n{2}", e.Message, e.StackTrace, (new StackTrace(true)).ToString());
 
                         EventLogger.WriteWarning(message);
                     } else if (retryNumber == TransactionServiceConstants.CONNECTION_POOL_CLEANUP_RETRIES) {
@@ -122,9 +140,21 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
         }
 
         /// <summary>
+        /// Checks if an exception thrown while trying to connect to the database is non-transient. If so, no retry is attempted.
+        /// </summary>
+        /// <param name="exception">The exception to test.</param>
+        /// <returns>True if it the exception is non-transient, False otherwise.</returns>
+        protected virtual bool IsNonTransientConnectionException(Exception exception) {
+            return false;
+        }
+
+        /// <summary>
         /// Checks if it is possible to establish a connection.
         /// </summary>
-        /// <returns>True if it was established a connection successfully, False otherwise.</returns>
+        /// <param name="errorMessage">Error message that occurred during the test connection.</param>
+        /// <returns>
+        /// True if it was established a connection successfully, False otherwise.
+        /// </returns>
         public virtual bool TestConnection(out string errorMessage) {
             IDbConnection conn = null;
             errorMessage = string.Empty;
@@ -137,13 +167,10 @@ namespace OutSystems.HubEdition.Extensibility.Data.TransactionService {
                             e.Message, e.StackTrace, (new StackTrace(true))));
 
                 return false;
-            } 
-            finally {
-                
+            } finally {
                 if (conn != null) {
                     conn.Close();
                 }
-
             }
             return true;
         }

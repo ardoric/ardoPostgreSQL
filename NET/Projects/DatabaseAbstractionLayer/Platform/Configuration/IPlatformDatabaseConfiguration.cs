@@ -20,20 +20,29 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// Gets the database provider. It provides information about the database,
         /// and access to its services.
         /// </summary>
+        /// <value>
+        /// The database provider.
+        /// </value>
         IPlatformDatabaseProvider PlatformDatabaseProvider { get; }
 
         /// <summary>
         /// This property indicates if the plugin implements the <code>IElevatedUserConfiguration</code> interface,
-        ///  meaning that it has operations that require elevated privileges user.
+        /// meaning that it has operations that require elevated privileges user.
         /// When true, the caller (e.g. Configuration Tool) will ask the user for credentials, and use them in operations that require elevated user permissions.
         /// </summary>
+        /// <value>
+        /// True if it implements elevated privileges operations, False otherwise.
+        /// </value>
         bool ImplementsElevatedPrivilegesOperations {
             get;
         }
-        
+
         /// <summary>
         /// Indicates the current state of the Configuration, if the property is true, then IntegratedAuthenticationMode is set
         /// </summary>
+        /// <value>
+        /// The authentication type of the configuration.
+        /// </value>
         AuthenticationType AuthenticationMode {
             get;
         }
@@ -47,15 +56,21 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         IRuntimeDatabaseConfiguration RuntimeDatabaseConfiguration(Source source, User userType);
 
         /// <summary>
-        /// Indicates the current state of the Configuration, if the property is true, then Advanced Configuration mode is set is set
+        /// Indicates the current state of the Configuration, if the property is true, then Advanced Configuration mode is set.
         /// </summary>
+        /// <value>
+        /// True if Advanced Configuration mode is set. False otherwise.
+        /// </value>
         bool AdvancedConfigurationMode {
             get;set;
         }
-        
+
         /// <summary>
         /// Contextual text to help the user understand what does the Advanced configuration consist of.
         /// </summary>
+        /// <value>
+        /// The contextual help for advanced mode.
+        /// </value>
         string ContextualHelpForAdvancedMode {
             get;
         }
@@ -63,6 +78,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         /// <summary>
         /// Contextual text to help the user understand what does the Basic configuration consist of.
         /// </summary>
+        /// <value>
+        /// The contextual help for basic mode.
+        /// </value>
         string ContextualHelpForBasicMode {
             get;
         }
@@ -70,8 +88,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         #region Admin
 
         /// <summary>
-        /// This property returns the credentials for the admin user. 
+        /// This property returns the credentials for the admin user.
         /// </summary>
+        /// <value>
+        /// The admin authentication credentials.
+        /// </value>
         NetworkCredential AdminAuthenticationCredential {
             get;
         }
@@ -81,8 +102,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         #region Runtime
 
         /// <summary>
-        /// This property returns the credentials for the runtime user. 
+        /// This property returns the credentials for the runtime user.
         /// </summary>
+        /// <value>
+        /// The runtime authentication credentials.
+        /// </value>
         NetworkCredential RuntimeAuthenticationCredential {
             get;
         }
@@ -92,8 +116,11 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
         #region Log
 
         /// <summary>
-        /// This property returns the credentials for the log user. 
+        /// This property returns the credentials for the log user.
         /// </summary>
+        /// <value>
+        /// The log authentication credentials.
+        /// </value>
         NetworkCredential LogAuthenticationCredential {
             get;
         }

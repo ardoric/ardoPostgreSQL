@@ -10,7 +10,7 @@ using System;
 namespace OutSystems.HubEdition.Extensibility.Data.Platform.DDLService {
 
     /// <summary>
-    /// Set of permisisons that can be granted.
+    /// Set of permissions that can be granted.
     /// </summary>
     [Flags]
     public enum Permissions {

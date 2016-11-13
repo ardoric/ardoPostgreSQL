@@ -8,10 +8,13 @@
 using System.Collections.Generic;
 using System.IO;
 using OutSystems.RuntimeCommon;
+using System;
 
 namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
     public abstract class BaseSessionConfigurationManager : BaseConfigurationManager, ISessionConfigurationManager {
         protected ISessionDatabaseConfiguration sessionConfiguration;
+
+        protected const string TAG_ROWCOUNT = "[ROWCOUNT]";
 
         public BaseSessionConfigurationManager(ISessionDatabaseConfiguration sessionConfiguration) {
             this.sessionConfiguration = sessionConfiguration;
@@ -23,6 +26,14 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
 
         public abstract FileStream StreamForScriptFile {
             get;
+        }
+
+        public virtual bool RequiresElevatedPrivileges() {
+            return sessionConfiguration.ImplementsElevatedPrivilegesOperations;
+        }
+
+        public virtual string GenerateSetupScript(){
+            throw new NotImplementedException("Setup script generation not implemented for this database provider");
         }
 
         public abstract void Pre_CreateOrUpgradeSession();

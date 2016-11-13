@@ -7,6 +7,7 @@
 
 using System;
 using System.Text;
+using OutSystems.RuntimeCommon;
 
 namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
 
@@ -16,7 +17,8 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
     /// </summary>
     public abstract class BaseDMLIdentifiers : IDMLIdentifiers {
         
-        private static readonly Random randomNumber = new Random();
+        // No need for secure stuff here
+        private static readonly Random random = RandomGenerator.GetRandomGenerator();
         
         protected BaseDMLIdentifiers(IDMLService dmlService) {
             DMLService = dmlService;
@@ -55,7 +57,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <param name="baseName">An identifier name.</param>
         /// <param name="truncateUsingRandomDigits">
         /// Indicates if the identifier should be truncated if its length exceeds the <see cref="MaxLength"/>. In this case, 
-        /// random digitis should be used as a suffix to prevent name clashing.
+        /// random digits should be used as a suffix to prevent name clashing.
         /// </param>
         /// <returns>A string representing a valid identifier.</returns>
         public virtual string GetValidIdentifier(string baseName, bool truncateUsingRandomDigits) {
@@ -77,7 +79,7 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
                 return escapedBaseName.ToString();
             }
             escapedBaseName.Length = Math.Max(0, MaxLength - 5);
-            return escapedBaseName.Append(String.Format("{0:00000}", randomNumber.Next(99999))).ToString();
+            return escapedBaseName.Append(String.Format("{0:00000}", random.Next(99999))).ToString();
         }
     }
 }

@@ -15,21 +15,33 @@ namespace OutSystems.HubEdition.Extensibility.Data.DatabaseObjects {
         /// <summary>
         /// Database type that can be mapped to the data types available in the platform.
         /// </summary>
-        DBDataType Type { get; }
+        /// <value>
+        /// The Database type.
+        /// </value>
+        DBDataType Type { get; set; }
 
         /// <summary>
         /// Original database-specific type, used for auditing.
         /// </summary>
+        /// <value>
+        /// The type of the SQL data.
+        /// </value>
         string SqlDataType { get; }
 
         /// <summary>
         /// Size of the data type, when applicable (e.g. text of decimal numbers).
         /// </summary>
-        int Length { get; }
+        /// <value>
+        /// The length of the data type.
+        /// </value>
+        int Length { get; set; }
 
         /// <summary>
         /// Number of decimal places of the data type, when applicable (e.g. decimal numbers).
         /// </summary>
+        /// <value>
+        /// Number of decimal plates.
+        /// </value>
         int Decimals { get; }
     }
 }

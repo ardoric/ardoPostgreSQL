@@ -25,6 +25,15 @@ namespace OutSystems.HubEdition.Extensibility.Data.Platform.Configuration {
             get;
         }
 
+        public virtual bool RequiresElevatedPrivilges() {
+            return uiConfiguration.ImplementsElevatedPrivilegesOperations;
+        }
+
+        public virtual string GenerateSetupScript(){
+            throw new NotImplementedException("Setup script generation not implemented for this database provider");
+        }
+
+        
         public abstract void Pre_CreateOrUpgradePlatform();
 
         public virtual bool TestAdminConnection(out string friendlyMessage, Source source) {

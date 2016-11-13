@@ -15,6 +15,9 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// <summary>
         /// Gets the associated DML service.
         /// </summary>
+        /// <value>
+        /// The DML service associated.
+        /// </value>
         IDMLService DMLService { get; }
 
         /// <summary>
@@ -40,6 +43,12 @@ namespace OutSystems.HubEdition.Extensibility.Data.DMLService {
         /// </summary>
         /// <returns>DML expression of type Integer</returns>
         string Integer { get; }
+
+        /// <summary>
+        /// Gets a DML expression that returns the default value for Long Integer elements.
+        /// </summary>
+        /// <returns>DML expression of type Integer</returns>
+        string LongInteger { get; }
 
         /// <summary>
         /// Gets a DML expression that returns the default value for Decimal elements.
