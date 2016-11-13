@@ -21,3 +21,4 @@ J2EE/ardoPostgreSQL.Tests/res.txt
 *.dll
 *.css
 *.suo
+NET/Libraries/TemporaryGeneratedFile_*
