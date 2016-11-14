@@ -26,7 +26,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
 
         public override string Length(string t)
         {
-            return string.Format("Length({0})", t);
+            return string.Format("length({0})", t);
         }
 
         public override string Substr(string t, string start, string length)
@@ -37,7 +37,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
 
         public override string Trim(string t)
         {
-            return string.Format("Trim({0})", t);
+            return string.Format("trim({0})", t);
         }
         #endregion
 
@@ -98,6 +98,11 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
             return string.Format("cast({0} as text)",d); ;
         }
 
+        public override string DecimalToLongInteger(string d)
+        {
+            return string.Format("cast({0} as bigint)", d);
+        }
+
         public override string IntegerToBoolean(string i)
         {
             return string.Format("cast({0} as boolean)", i);
@@ -111,6 +116,11 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
         public override string IntegerToText(string i)
         {
             return string.Format("cast({0} as text)", i);
+        }
+
+        public override string IntegerToLongInteger(string b)
+        {
+            return string.Format("cast({0} as bigint)", b);
         }
 
         public override string TextToDecimal(string t)
@@ -128,10 +138,49 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
             return string.Format("(to_timestamp('1900-01-01 ' || {0}, 'YYYY-MM-DD HH24:MI:SS')::timestamp without time zone)", t);
         }
 
+        public override string TextToLongInteger(string t)
+        {
+            return string.Format("cast({0} as bigint)", t);
+        }
+
+        public override string LongIntegerToInteger(string b)
+        {
+            return string.Format("cast({0} as int)", b);
+        }
+
+        public override string LongIntegerToDecimal(string b)
+        {
+            return string.Format("cast({0} as decimal)", b);
+        }
+
+
+        public override string LongIntegerToText(string b)
+        {
+            return string.Format("cast({0} as text)", b);
+        }
+
         public override string TimeToText(string t)
         {
             return string.Format("to_char({0},'HH24:MI:SS')", t);
         }
+
+        // ?? why isn't this the default implementation ??
+        public override string IdentifierToInteger(string id)
+        {
+            return id;
+        }
+
+        public override string IdentifierToLongInteger(string id)
+        {
+            return id;
+        }
+
+        public override string IdentifierToText(string id)
+        {
+            return id;
+        }
+
+
         #endregion
 
         // You will find only suffering within the realm of dates.
@@ -255,53 +304,6 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
         public override string Year(string dt)
         {
             return string.Format("extract(year from {0})",dt);
-        }
-        #endregion
-
-        #region new unsorted stuff
-        public override string DecimalToLongInteger(string d)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string IdentifierToInteger(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string IdentifierToLongInteger(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string IdentifierToText(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string LongIntegerToInteger(string b)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string LongIntegerToDecimal(string b)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string IntegerToLongInteger(string b)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string LongIntegerToText(string b)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string TextToLongInteger(string t)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 
