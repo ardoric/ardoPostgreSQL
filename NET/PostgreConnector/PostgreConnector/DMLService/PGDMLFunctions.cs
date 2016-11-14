@@ -13,7 +13,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.DMLService
         #region Math
         public override string Trunc(string n)
         {
-            return string.Format("Trunc({0})", n);
+            return string.Format("trunc({0})", n);
         }
         #endregion
 
