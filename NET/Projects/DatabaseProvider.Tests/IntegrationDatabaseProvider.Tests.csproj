@@ -40,13 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\NUnitPlugin\NUnitOSAddIn.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="OutSystems.RuntimeCommon, Version=9.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OutSystems.RuntimeCommon, Version=10.0.105.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\OutSystemsLibraries\OutSystems.RuntimeCommon.dll</HintPath>
-    </Reference>
-    <Reference Include="OutSystems.Common, Version=9.0.0.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\OutSystemsLibraries\OutSystems.Common.dll</HintPath>
+      <HintPath>..\..\Libraries\OutSystems.RuntimeCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
