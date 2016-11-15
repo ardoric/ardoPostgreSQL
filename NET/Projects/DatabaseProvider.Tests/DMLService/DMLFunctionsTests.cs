@@ -6,7 +6,6 @@
 */
 
 using NUnitExtension.OutSystems.Framework;
-using OutSystems.Common;
 using OutSystems.HubEdition.Extensibility.Data;
 using OutSystems.RuntimeCommon;
 using OutSystems.ServerTests.DatabaseProvider.Framework;
@@ -20,11 +19,11 @@ namespace OutSystems.ServerTests.DatabaseProvider.DMLService {
     public class DMLFunctionsTests : DMLTest {
                 
         private static readonly string[] DATE_FORMATS = new[] {
-            "dd/MM/yyyy", "dd-MM-yyyy", "MM-dd-yyyy", "MM/dd/yyyy", CommonConstants.DefaultDateFormat, "yyyy/MM/dd"
+            "dd/MM/yyyy", "dd-MM-yyyy", "MM-dd-yyyy", "MM/dd/yyyy", "yyyy-MM-dd", "yyyy/MM/dd"
         };
 
         private const string DEFAULT_TIME_FORMAT = "HH:mm:ss";
-        private const string DEFAULT_DATE_FORMAT = CommonConstants.DefaultDateFormat;
+        private const string DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 
         private const string ERROR_MESSAGE_FORMAT = "Error executing function {0} with parameters: {1}. Executed SQL: {2}";
 
