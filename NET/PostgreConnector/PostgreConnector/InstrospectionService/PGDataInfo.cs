@@ -64,15 +64,17 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
 
                 case "numeric":
                 case "decimal":
-                case "bigint": 
-                case "int8":
-                case "bigserial":
-                case "serial8":
                 case "real":
                 case "double precision":
                     Type = DBDataType.DECIMAL;
                     Length = precision;
                     Decimals = numeric_scale; // not really sure if ...
+                    break;
+                case "bigint":
+                case "int8":
+                case "bigserial":
+                case "serial8":
+                    Type = DBDataType.LONGINTEGER;
                     break;
 
                 case "bytea":
