@@ -1,9 +1,11 @@
 <project name="DatabaseAbstractionLayer" default="all" basedir=".">
 
 	<property name="global.lib" location="../../Libraries" />
+	<property name="thirdparty.lib" location="../../ThirdPartyLibraries" />
+	<property name="outsystems.lib" location="../../Libraries" />
+	
 	<property name="lib" location="lib" />
 	<property name="src" location="src" />
-	<property name="gensrc" location="generatedSrc" />
 	<property name="build" location="bin" />
 	<property name="dist" location="dist" />
 	<property name="docs" location="docs" />
@@ -18,13 +20,19 @@
 		<fileset dir="${global.lib}">
 			<include name="**.jar" />
 		</fileset>
+		<fileset dir="${thirdparty.lib}">
+			<include name="**.jar" />
+		</fileset>
+		<fileset dir="${outsystems.lib}">
+			<include name="**.jar" />
+		</fileset>
 		<fileset dir="${lib}">
 			<include name="**.jar" />
 		</fileset>
 	</path>
 
 	<target name="compile" depends="init">
-		<javac target="1.6" source="1.6" srcdir="${src}:${gensrc}" destdir="${build}" includeantruntime="false">
+		<javac srcdir="${src}" destdir="${build}" includeantruntime="false">
 			<classpath refid="project.classpath" />
 		</javac>
 	</target>
@@ -50,7 +58,7 @@
 			header           = "Database Abstraction Layer - OutSystems"
 			doctitle         = "Database Abstraction Layer - OutSystems"
 			nodeprecatedlist = "no"
-			sourcepath       = "${src}:${gensrc}"
+			sourcepath       = "${src}"
 			destdir          = "${docs}" 
 			breakIterator	 = "yes" >	      	
 			<packageset dir="${src}" defaultexcludes="yes"/>

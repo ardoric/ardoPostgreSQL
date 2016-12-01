@@ -133,22 +133,21 @@ public class ADOCommand implements IDisposable {
             if (getOutputParameterValues) {
                 getAllOutputParameterValues();
             }
-            
-            ResultSet executedStatementJavaResultSet = null;
-            
+                       
             for (;;) {      
                 if (nextResultIsResultSet) {
-                    executedStatementJavaResultSet = executedStatement.getResultSet();
+                	ResultSet executedStatementJavaResultSet = executedStatement.getResultSet();
                                     
                     if (needResultSet) {
-                        break; // Already got what we want...
+                        resultSet.setVal(transformJavaResultSetInOsResultSet(executedStatementJavaResultSet, executedStatement));
+                        return executedStatement;
                     }
                 } else {                    
                     updateCount.setVal(executedStatement.getUpdateCount());               
                                     
                     if (updateCount.getVal() == -1) {
                         // No more results...
-                        break;
+                        break; 
                     }
                     
                     if (!needResultSet) {
@@ -159,7 +158,7 @@ public class ADOCommand implements IDisposable {
                 nextResultIsResultSet = executedStatement.getMoreResults();
             }
             
-            resultSet.setVal(transformJavaResultSetInOsResultSet(executedStatementJavaResultSet, executedStatement));
+            resultSet.setVal(new EmptyResultSet(executedStatement));
             return executedStatement;
         } catch (SQLException e) {
             cleanUp();
@@ -174,7 +173,7 @@ public class ADOCommand implements IDisposable {
     /**
 	 * Creates a new command owned by the connection conn.
 	 * 
-	 * @param conn
+	 * @param conn The connection that will be used to execute the command.
 	 */
 	public ADOCommand(Connection conn) {
 		this.conn = conn;
@@ -216,10 +215,15 @@ public class ADOCommand implements IDisposable {
 	private void cleanUpPreparedStatement() {
 		if (preparedStatement != null) {
 			try {
+				if (preparedStatement.isClosed()) {
+					preparedStatement = null;
+					return;
+				}
+			} catch (SQLException e) {}
+			try {
 				ResultSet rs = preparedStatement.getResultSet();
 				if (rs != null) {
 					rs.close();
-					rs = null;
 				}
 			} catch (Exception e) { }
 			try {
@@ -235,10 +239,15 @@ public class ADOCommand implements IDisposable {
 	private void cleanUpStatement() {
 		if (statement != null) {
 			try {
+				if (statement.isClosed()) {
+					statement = null;
+					return;
+				}
+			} catch (SQLException e) {}
+			try {
 				ResultSet rs = statement.getResultSet();
 				if (rs != null) {
 					rs.close();
-					rs = null;
 				}
 			} catch (Exception e) { }
 			try {
@@ -265,7 +274,7 @@ public class ADOCommand implements IDisposable {
 	private void parseCommandText() {
 		cleanUp();
 		
-		if (commandText.indexOf("@") == -1) {
+		if (!commandText.contains("@")) {
 			return;
 		}
 		
@@ -316,7 +325,7 @@ public class ADOCommand implements IDisposable {
 	
 	/**
 	 * Frees any temporary lob parameter created for the command's execution
-	 * @throws SQLException 
+	 * @throws SQLException Exception that is thrown whenever a database access error or an a problem in the execution of the SQL statement occurs.
 	 */
 	private void freeTemporaryLobParameters() {
 	    try {
@@ -331,7 +340,7 @@ public class ADOCommand implements IDisposable {
 	/**
 	 * Executes the command.
 	 * @return Number of results 
-	 * @throws SQLException 
+	 * @throws SQLException Exception that is thrown whenever a database access error or an a problem in the execution of the SQL statement occurs.
 	 */
 	public int execute() throws SQLException {		
 	    RefParmHolderInteger updateCount = new RefParmHolderInteger();
@@ -342,7 +351,7 @@ public class ADOCommand implements IDisposable {
 	/**
 	 * Executes a command returning a scalar value.
 	 * @return A scalar value returned by the query.
-	 * @throws SQLException
+	 * @throws SQLException Exception that is thrown whenever a database access error or an a problem in the execution of the SQL statement occurs.
 	 */
 	public Object executeScalar() throws SQLException {
 		OSResultSet rs = executeQuery();
@@ -451,12 +460,10 @@ public class ADOCommand implements IDisposable {
 		if (preparedCommandText == null)
 			return commandText;
 
-		StringBuffer str = new StringBuffer(preparedCommandText);
+		StringBuilder str = new StringBuilder(preparedCommandText);
 		str.append(" [");
-		Iterator<String> iter = parameterValues.keySet().iterator();
-		while (iter.hasNext()) {
-			String key = iter.next();
-			str.append(parameterValues.get(key) + " ");
+		for (String key : parameterValues.keySet()) {
+			str.append(parameterValues.get(key)).append(' ');
 		}
 		str.append("]");
 
@@ -467,7 +474,8 @@ public class ADOCommand implements IDisposable {
 	 * Retrieves the return value of a blob output parameter
 	 * @param param The parameter's name
 	 * @return The value of a blob output parameter with the given name.
-	 * @throws SQLException, IOException
+	 * @throws SQLException Exception that is thrown whenever a database access error or an a problem in the execution of the SQL statement occurs while accessing the Blob.
+	 * @throws IOException Exception that is thrown when there was a problem reading the data from Blob.
 	 */
 	public byte[] getBlobOutputParameterValue(String param) throws SQLException, IOException {
 		int index = parameters.indexOf(param.toLowerCase()) + 1;		
@@ -527,7 +535,7 @@ public class ADOCommand implements IDisposable {
 	/**
      * Executes a command that returns a result set (or not).
      * @return  A result set returned by the query.
-     * @throws SQLException 
+     * @throws SQLException Exception that is thrown whenever a database access error or an a problem in the execution of the SQL statement occurs.
      */
     public OSResultSet executeQuery() throws SQLException {
         RefParmHolder<OSResultSet> resultSet = new RefParmHolder<OSResultSet>();

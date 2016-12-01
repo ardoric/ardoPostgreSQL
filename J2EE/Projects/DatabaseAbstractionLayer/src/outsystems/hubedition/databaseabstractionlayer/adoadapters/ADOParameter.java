@@ -7,6 +7,7 @@
 
 package outsystems.hubedition.databaseabstractionlayer.adoadapters;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
@@ -87,8 +88,8 @@ public class ADOParameter implements IDisposable {
     }
 
     /**
-	 * Sets the name of the parameter. The name should be of ther form "@IDENTIFIER".
-	 * @param name
+	 * Sets the name of the parameter. The name should be of their form "@IDENTIFIER".
+	 * @param name The parameter's name.
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -109,7 +110,7 @@ public class ADOParameter implements IDisposable {
 	/**
 	 * Sets the parameter DB type. If the parameter value is set by calling
 	 * setValue(Object) then this property must also be set.
-	 * @param dbType
+	 * @param dbType The parameter's DB type.
 	 */
 	public void setDbType(int dbType) {
 		this.dbType = dbType;
@@ -117,6 +118,7 @@ public class ADOParameter implements IDisposable {
 	
 	/**
 	 * Returns the parameter DB type.
+	 * @return Parameter's DB type.
 	 */
 	public int getDbType() {
 		return this.dbType;
@@ -124,7 +126,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(BigDecimal value) {
 		this.valueType = BIGDECIMAL_VALUE;
@@ -133,7 +135,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(boolean value) {
 		this.valueType = BOOLEAN_VALUE;
@@ -142,7 +144,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(byte value) {
 		this.valueType = BYTE_VALUE;
@@ -151,7 +153,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(DateTime value) {
 		this.valueType = DATE_VALUE;
@@ -160,7 +162,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(double value) {
 		this.valueType = DOUBLE_VALUE;
@@ -169,7 +171,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(float value) {
 		this.valueType = FLOAT_VALUE;
@@ -178,7 +180,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(int value) {
 		this.valueType = INT_VALUE;
@@ -187,7 +189,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(Object value) {
 		this.valueType = OBJECT_VALUE;
@@ -201,7 +203,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(short value) {
 		this.valueType = SHORT_VALUE;
@@ -210,7 +212,7 @@ public class ADOParameter implements IDisposable {
 
 	/**
 	 * Sets the parameter value.
-	 * @param value
+	 * @param value The parameter's value.
 	 */
 	public void setValue(String value) {
 		this.valueType = STRING_VALUE;
@@ -228,7 +230,7 @@ public class ADOParameter implements IDisposable {
 	
 	/**
 	 * Sets the parameter direction
-	 * @param direction
+	 * @param direction The parameter's direction.
 	 */
 	public void setDirection(int direction) {
 		this.direction = direction;
@@ -267,7 +269,7 @@ public class ADOParameter implements IDisposable {
                     os.write((byte[]) objectValue);
                     os.flush();
                     os.close();
-                } catch (Throwable e) {
+                } catch (IOException e) {
                     throw new SQLException("Error Writing Binary Data.", e);
                 }
                 // Set blob parameter
@@ -282,7 +284,7 @@ public class ADOParameter implements IDisposable {
                         os.write((String) objectValue);
                         os.flush();
                         os.close();
-                    } catch (Throwable e) {
+                    } catch (IOException e) {
                         throw new SQLException("Error Writing Binary Data.", e);
                     }
 
@@ -353,14 +355,15 @@ public class ADOParameter implements IDisposable {
 	}
 	
 	/**
-	 * Frees any temporary Blob or Clob generated in this parameter
+	 * Frees any temporary Blob or Clob generated in this parameter.
+	 * @throws SQLException Exception that is thrown whenever a database access error or an a problem in the execution of dispose of the Lob occurs.
 	 */
 	public void freeTemporaryLobs() throws SQLException {
 	    if (blob != null) {
             try {
                 blob.dispose();
             } catch (RuntimeException e) {
-                OSTrace.exception(e);
+                OSTrace.error("Freeing blob", e);
                 throw e;
             }
 
@@ -370,7 +373,7 @@ public class ADOParameter implements IDisposable {
             try {
                 clob.dispose();
             } catch (RuntimeException e) {
-                OSTrace.exception(e);
+                OSTrace.error("Freeing clob", e);
                 throw e;
             }
 

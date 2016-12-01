@@ -38,7 +38,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to a Decimal.
 	 */
     public String trunc(String n) {
-        return String.format("Trunc(%s)", n);
+        return String.format("trunc(%s)", n);
     }
     
     /**
@@ -57,7 +57,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to an Integer.
 	 */
     public String length(String t) {
-        return String.format("Length(%s)", t);
+        return String.format("length(%s)", t);
     }
     
     /**
@@ -77,7 +77,7 @@ public class DMLFunctions extends BaseDMLFunctions {
 	 *	@return	A DML expression that evaluates to Text.
 	 */
     public String trim(String t) {
-        return String.format("Trim(%s)", t);
+        return String.format("trim(%s)", t);
     }
     
     private String addDate(String dt, String n, String unit) {
@@ -486,11 +486,57 @@ public class DMLFunctions extends BaseDMLFunctions {
     }
     
     public String timeToDateTime(String t) {
-        return "(" + t + " :: timestamp without time zone)";
+        return String.format("(%s :: timestamp without time zone)", t);
     }
 
     public String dateToDateTime(String d) {
-        return "(" + d + " :: timestamp without time zone)";
+        return String.format("(%s :: timestamp without time zone)", d);
     }
+
+	@Override
+	public String decimalToLongInteger(String d) {
+		// TODO Auto-generated method stub
+		return String.format("cast(%s as bigint)", d);
+	}
+
+	@Override
+	public String identifierToInteger(String id) {
+		return id;
+	}
+
+	@Override
+	public String identifierToLongInteger(String id) {
+		return id;
+	}
+
+	@Override
+	public String identifierToText(String id) {
+		return id;
+	}
+
+	@Override
+	public String longIntegerToInteger(String b) {
+		return String.format("cast(%s as int)", b);
+	}
+
+	@Override
+	public String longIntegerToDecimal(String b) {
+		return String.format("cast(%s as decimal)", b);
+	}
+
+	@Override
+	public String integerToLongInteger(String b) {
+		return String.format("cast(%s as bigint)", b);
+	}
+
+	@Override
+	public String longIntegerToText(String b) {
+		return String.format("cast(%s as text)", b);
+	}
+
+	@Override
+	public String textToLongInteger(String t) {
+		return String.format("cast(%s as bigint)", t);
+	}
     
 }

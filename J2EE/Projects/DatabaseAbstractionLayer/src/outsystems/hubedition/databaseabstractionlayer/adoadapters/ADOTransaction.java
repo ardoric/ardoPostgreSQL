@@ -19,10 +19,13 @@ public class ADOTransaction {
 	}
 	
 	public ADOTransaction(Connection conn) throws SQLException {
+		this(conn, false);
+	}
+	
+	public ADOTransaction(Connection conn, boolean autoCommit) throws SQLException {
 		this.conn = conn;
-		
-		conn.setAutoCommit(false);
-	}	
+		conn.setAutoCommit(autoCommit);
+	}
 	
 	public Connection getConnection() {
 		return conn;

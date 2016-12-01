@@ -15,12 +15,14 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Statement;
 import java.text.ParseException;
 
 import outsystems.hubedition.util.ConvertUtils;
 import outsystems.hubedition.util.DateTime;
 import outsystems.hubedition.util.OSResultSet;
+import outsystems.runtimecommon.OSTrace;
 
 public class ADOReader implements OSResultSet {
 	OSResultSet parentResultSet;
@@ -88,15 +90,25 @@ public class ADOReader implements OSResultSet {
         if (result instanceof Clob) {
             try {
                 return readClob((Clob) result);
-            } catch (IOException exception) { }
+            } catch (IOException exception) { 
+            	throw new SQLException(exception);
+            }
         } else if (result instanceof Blob) {
             try {
                 return readBlob((Blob) result);
-            } catch (IOException exception) { }
+            } catch (IOException exception) { 
+            	throw new SQLException(exception);
+            }
         } else if (result instanceof java.sql.Date){
             return new DateTime(((java.sql.Date) result));
         } else if (result instanceof java.sql.Timestamp) {
             return new DateTime( (java.sql.Timestamp) result);
+        } else if (result instanceof SQLXML) {
+        	try {
+                return readSQLXML((SQLXML) result);
+            } catch (IOException exception) { 
+            	throw new SQLException(exception);
+            }
         }
 
         return result;
@@ -129,7 +141,7 @@ public class ADOReader implements OSResultSet {
         Clob clob = (Clob) obj;
 
         // Read a the blob stream. ReadBytes only returns 86 bytes
-        StringBuffer clobBuffer = new StringBuffer();
+        StringBuilder clobBuffer = new StringBuilder();
         Reader reader = clob.getCharacterStream();
 
         // Read the data and append it to the clobBuffer
@@ -142,6 +154,25 @@ public class ADOReader implements OSResultSet {
         }
 
         return clobBuffer.toString();
+    }
+    
+    public String readSQLXML(Object obj) throws SQLException, IOException {
+        SQLXML xml = (SQLXML) obj;
+
+        // Read the xml stream. 
+        StringBuilder xmlBuffer = new StringBuilder();
+        Reader reader = xml.getCharacterStream();
+
+        // Read the data and append it to the clobBuffer
+        // Uses a 1024 character buffer
+        char[] buffer = new char[1024];
+        int readCount;
+
+        while ((readCount = reader.read(buffer)) != -1) {
+        	xmlBuffer.append(buffer, 0, readCount);
+        }
+
+        return xmlBuffer.toString();
     }
 		
 	@Override

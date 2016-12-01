@@ -22,10 +22,14 @@ public class ConnectionPoolBridge {
 	private volatile JDBCPool pool;	
 	
 	public Connection getConnection(String connectionString) throws SQLException {
-		return getConnection(connectionString, "");
+		return getConnection(connectionString, "", true);
 	}
 
 	public Connection getConnection(String connectionString, String onsConfig) throws SQLException {
+		return getConnection(connectionString, onsConfig, true);
+	}
+
+	public Connection getConnection(String connectionString, String onsConfig, boolean autoCommit) throws SQLException {
 	    if (pool == null) {
             synchronized (this) {
                 if (pool == null) {
@@ -40,7 +44,16 @@ public class ConnectionPoolBridge {
          * When we start a transaction we set the auto-commit to false... 
          * See the constructor of ADOTransaction. 
          */
-	    conn.setAutoCommit(true);	    
+	    try{
+	    	//#872102 - When the database is full this will throw an exception.
+	    	conn.setAutoCommit(autoCommit);
+	    } catch (SQLException e) {
+	    	//#872102 - We need to invalidate the connection (remove from the queue) to avoid using broken connections
+	    	invalidateConnectionInPool(conn);
+	    	//#872102 - Also close the connection to avoid connection leaks.
+	    	conn.close();
+	    	throw e;
+	    }
 	    ConnectionUtils.logOpenConnection(conn);
         return conn;
 	}

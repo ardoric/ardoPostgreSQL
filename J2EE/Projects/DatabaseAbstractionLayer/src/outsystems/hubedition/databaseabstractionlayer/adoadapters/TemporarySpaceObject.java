@@ -115,7 +115,7 @@ public abstract class TemporarySpaceObject<TObject> extends RefParmHolder<TObjec
                     }
                 }
             } catch (Exception e) {
-                OSTrace.exception(e);
+                OSTrace.error("Freeing temporary object", e);
             }
         }
         
