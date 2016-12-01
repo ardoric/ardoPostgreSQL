@@ -7,6 +7,6 @@
 	<classpathentry kind="lib" path="../Libraries/outsystems.hubedition.runtimeplatformutil.jar"/>
 	<classpathentry kind="lib" path="../Libraries/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="../Libraries/ucp.jar"/>
-	<classpathentry kind="lib" path="../Libraries/postgresql-9.4-1201.jdbc4.jar"/>
+	<classpathentry kind="lib" path="../Libraries/postgresql-9.4.1212.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
