@@ -310,11 +310,17 @@ public class DatabaseConfigurationSerializerTests extends DashboardTest {
     @TestDetails(Description="Test that fields can be multiline - serialize", CreatedBy="lfl", Feature="Database Abstraction Layer", TestIssue="609920")
     public final void serializeMultiline() throws IOException {
         MockDatabaseConfiguration mockDB = new MockDatabaseConfiguration();
-        mockDB.setMockText( "Multi\nLine\nText!" );
+        
+        StringWriter writer = new StringWriter();
+        StreamUtils.writeLine(writer, "Multi");
+        StreamUtils.writeLine(writer, "Line");
+        writer.write("Text!");
+        
+        mockDB.setMockText( writer.toString() );
         String serialized = Serializers.getForIntegration().serialize(mockDB);
         
         // platform agnostic newline
-        StringWriter writer = new StringWriter();
+        writer = new StringWriter();
         StreamUtils.writeLine(writer, "MockText>Multi");
         StreamUtils.writeLine(writer, "Line");
         writer.write("Text!");
