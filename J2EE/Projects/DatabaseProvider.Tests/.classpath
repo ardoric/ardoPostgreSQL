@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="**/.svn/**|**/_svn/**" kind="src" path="generatedSrc"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="../../Libraries/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="../../Libraries/outsystems.hubedition.databaseabstractionlayer.jar"/>
-	<classpathentry kind="lib" path="../../Libraries/testscommon.jar"/>
-	<classpathentry kind="lib" path="../../Libraries/allatori-annotations.jar"/>
-	<classpathentry kind="lib" path="../../Libraries/outsystems.hubedition.common.jar"/>
-	<classpathentry kind="lib" path="../../Libraries/outsystems.hubedition.runtimecommon.jar"/>
-	<classpathentry kind="lib" path="../../Libraries/outsystems.hubedition.runtimeplatformutil.jar"/>
-	<classpathentry kind="lib" path="../../Libraries/outsystems.junit.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ardoric/Documents/GitHub/ardoPostgreSQL/J2EE/Libraries/testscommon.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ardoric/Documents/GitHub/ardoPostgreSQL/J2EE/Libraries/outsystems.hubedition.common.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ardoric/Documents/GitHub/ardoPostgreSQL/J2EE/Libraries/outsystems.hubedition.runtimecommon.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ardoric/Documents/GitHub/ardoPostgreSQL/J2EE/Libraries/outsystems.hubedition.runtimeplatformutil.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ardoric/Documents/GitHub/ardoPostgreSQL/J2EE/Libraries/outsystems.junit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

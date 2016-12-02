@@ -34,11 +34,15 @@ public class DataTypeInfo extends BaseDataTypeInfo implements IDataTypeInfo {
 	};
 	
 	private static final String[] decimalTypes = new String[] {
-		"numeric", "decimal", "bigint", "int8", "bigserial", "serial8", "real", "double precision"
+		"numeric", "decimal", "real", "double precision"
 	};
 	
 	private static final String[] binaryDataTypes = new String[] {
 		"bytea"
+	};
+	
+	private static final String[] longIntTypes = new String[] {
+			"bigint", "int8", "bigserial", "serial8"
 	};
 	
 	public static IDataTypeInfo create(String data_type, int maxLength, int precision, int precision_radix, int numeric_scale) {
@@ -67,6 +71,10 @@ public class DataTypeInfo extends BaseDataTypeInfo implements IDataTypeInfo {
 		
 		if (isIn(dt, intTypes)) {
 			return new DataTypeInfo(DBDataType.INTEGER, data_type, 0, 0);
+		}
+		
+		if (isIn(dt, longIntTypes)) {
+			return new DataTypeInfo(DBDataType.LONGINTEGER, data_type, 0, 0);
 		}
 		
 		if (isIn(dt, decimalTypes)) {

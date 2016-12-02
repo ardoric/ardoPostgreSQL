@@ -50,6 +50,9 @@ public class ExecutionService extends BaseExecutionService {
             case INTEGER: {
                 return SqlTypes.INTEGER;
             }
+            case LONGINTEGER: {
+            	return SqlTypes.BIGINT;
+            }
             case DECIMAL: {
                 return SqlTypes.DECIMAL;
             }

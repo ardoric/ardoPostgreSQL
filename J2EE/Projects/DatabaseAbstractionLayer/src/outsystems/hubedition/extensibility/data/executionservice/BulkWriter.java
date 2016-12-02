@@ -97,6 +97,7 @@ public class BulkWriter {
     		try {
     			result = statement.executeBatch();
     		} catch (BatchUpdateException e) {
+    			outsystems.runtimecommon.log.EventLogger.writeError(e);
     			result = e.getUpdateCounts();
     		} finally {
     			statement.close();

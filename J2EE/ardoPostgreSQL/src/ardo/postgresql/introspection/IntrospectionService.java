@@ -22,6 +22,7 @@ import outsystems.hubedition.extensibility.data.databaseobjects.ITableSourceFore
 import outsystems.hubedition.extensibility.data.databaseobjects.ITableSourceInfo;
 import outsystems.hubedition.extensibility.data.introspectionservice.BaseIntrospectionService;
 import outsystems.hubedition.extensibility.data.introspectionservice.IsTableSourceToIgnore;
+import outsystems.hubedition.extensibility.data.introspectionservice.IsTableSourceToIgnore_Lambda;
 import outsystems.hubedition.util.TypeInformation;
 
 /**
@@ -78,7 +79,7 @@ public class IntrospectionService extends BaseIntrospectionService {
 	 *	@return	List of available table sources in the given database
 	 *	@throws	SQLException	if an error occurs while accessing the database
 	 */
-    public Iterable<ITableSourceInfo> listTableSources(IDatabaseInfo database, IsTableSourceToIgnore isTableSourceToIgnore) throws SQLException {
+    public Iterable<ITableSourceInfo> listTableSources(IDatabaseInfo database, IsTableSourceToIgnore_Lambda isTableSourceToIgnore) throws SQLException {
         List<ITableSourceInfo> result = new LinkedList<ITableSourceInfo>();
         
     	Connection conn = getConnection();
