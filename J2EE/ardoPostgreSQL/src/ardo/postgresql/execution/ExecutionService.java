@@ -7,11 +7,12 @@
 
 package ardo.postgresql.execution;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
 
 import outsystems.hubedition.databaseabstractionlayer.adoadapters.ADOCommand;
-import outsystems.hubedition.databaseabstractionlayer.adoadapters.ADOParameter;
 import outsystems.hubedition.extensibility.data.DBDataType;
 import outsystems.hubedition.extensibility.data.IDatabaseServices;
 import outsystems.hubedition.extensibility.data.executionservice.BaseExecutionService;
@@ -75,6 +76,10 @@ public class ExecutionService extends BaseExecutionService {
                 throw new UnsupportedOperationException("Unable to convert " + type.toString() + " to SqlTypes");
             }
         }
+    }
+    
+    protected ADOCommand createCommand(Connection connection) throws SQLException {
+        return new PGADOCommand(connection);
     }
 
     
