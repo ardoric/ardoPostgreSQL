@@ -1,11 +1,12 @@
 <module xmlns="urn:jboss:module:1.1" name="outsystems" slot="ardopgsql">
  <resources>
-  <resource-root path="postgresql-9.4-1201.jdbc4.jar"/>   	
+  <resource-root path="postgresql-9.4.1212.jar"/>   	
  </resources>
  <dependencies>
    <system export="true">
      <paths>
        <path name="javax/net/ssl"/>
+       <path name="javax/net"/>
      </paths>
    </system>
  </dependencies>
