@@ -78,7 +78,21 @@ public class DataTypeInfo extends BaseDataTypeInfo implements IDataTypeInfo {
 		}
 		
 		if (isIn(dt, decimalTypes)) {
-			return new DataTypeInfo(DBDataType.DECIMAL, data_type, precision, numeric_scale);
+			if (numeric_scale <= 0) {
+				if (precision <= 9)
+					return new DataTypeInfo(DBDataType.INTEGER, data_type, 0, 0);
+				if (precision <= 18)
+					return new DataTypeInfo(DBDataType.LONGINTEGER, data_type, 0, 0);
+				if (precision <= 28)
+					return new DataTypeInfo(DBDataType.DECIMAL, data_type, precision, numeric_scale);
+				return new DataTypeInfo(DBDataType.TEXT, data_type, precision, 0);
+			} else {
+				if (precision > 28 || numeric_scale > 8) {
+					new DataTypeInfo(DBDataType.TEXT, data_type, precision + 1, 0);
+				} else {
+					return new DataTypeInfo(DBDataType.DECIMAL, data_type, precision, numeric_scale);
+				}
+			}
 		}
 		
 		if (isIn(dt, binaryDataTypes)) {
