@@ -66,10 +66,9 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
                 case "decimal":
                 case "real":
                 case "double precision":
-                    Type = DBDataType.DECIMAL;
-                    Length = precision;
-                    Decimals = numeric_scale; // not really sure if ...
+                    SetNumberType(maxLength, precision, precision_radix, numeric_scale);
                     break;
+                
                 case "bigint":
                 case "int8":
                 case "bigserial":
@@ -97,7 +96,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
                 case "tsvector":
                 case "txid_snapshot":
                 case "xml": // text ?
-                case "bit": // text ?
+                case "bit": // boolean ?
                 case "bit varying": // text ?
                 case "ARRAY":
                 case "USER-DEFINED":
@@ -105,6 +104,49 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
                 default:
                     Type = DBDataType.UNKNOWN;
                     break;
+            }
+        }
+
+        private void SetNumberType(int maxLength, int precision, int precision_radix, int numeric_scale)
+        {
+            if (numeric_scale <= 0)
+            {
+                if (precision <= 9)
+                {
+                    Type = DBDataType.INTEGER;
+                    return;
+                }
+
+                if (precision <= 18)
+                {
+                    Type = DBDataType.LONGINTEGER;
+                    return;
+                }
+
+                if (precision <= 28)
+                {
+                    Length = precision;
+                    Type = DBDataType.DECIMAL;
+                    Decimals = numeric_scale; // 0 here
+                    return;
+                }
+
+                Type = DBDataType.TEXT;
+                return;
+            }
+            else {
+                if (precision > 28 || numeric_scale > 8)
+                {
+                    Type = DBDataType.TEXT;
+                    Length = precision;
+                    return;
+                }
+                else {
+                    Type = DBDataType.DECIMAL;
+                    Length = precision;
+                    Decimals = numeric_scale;
+                    return;
+                }
             }
         }
 
