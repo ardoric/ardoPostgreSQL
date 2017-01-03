@@ -138,7 +138,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.InstrospectionService
                 if (precision > 28 || numeric_scale > 8)
                 {
                     Type = DBDataType.TEXT;
-                    Length = precision + 1; // for the '.'
+                    Length = precision + 3; // for the sign, . and optional 0 after 
                     return;
                 }
                 else {

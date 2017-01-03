@@ -88,7 +88,7 @@ public class DataTypeInfo extends BaseDataTypeInfo implements IDataTypeInfo {
 				return new DataTypeInfo(DBDataType.TEXT, data_type, precision, 0);
 			} else {
 				if (precision > 28 || numeric_scale > 8) {
-					new DataTypeInfo(DBDataType.TEXT, data_type, precision + 1, 0);
+					new DataTypeInfo(DBDataType.TEXT, data_type, precision + 3, 0); // +3 for the sign, . and 0 after
 				} else {
 					return new DataTypeInfo(DBDataType.DECIMAL, data_type, precision, numeric_scale);
 				}
