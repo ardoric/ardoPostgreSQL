@@ -25,7 +25,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.ExecutionService
                 return false;
 
             // TODO: handle localization ? do it by Code ?
-            return exception.BaseMessage.StartsWith("Failed to establish a connection to ");
+            return exception.GetBaseException().Message.StartsWith("Failed to establish a connection to ");
         }
 
         // http://www.mono-project.com/PostgreSQL says "You can use parameter names with Npgsql (:) or SqlServer (@) prefix style."

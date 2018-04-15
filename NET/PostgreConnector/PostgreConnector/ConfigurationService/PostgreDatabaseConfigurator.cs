@@ -49,7 +49,7 @@ namespace ardo.DatabaseProvider.PostgreSQL.ConfigurationService
 
         protected override string AssembleBasicConnectionString()
         {
-            return string.Format("Host={0};Username={1};Password={2};Database={3};MaxPoolSize=100;ConnectionLifeTime=120;ApplicationName=ardoPGSQL;SSL=True;Sslmode=Prefer;", Server, Username, Password, Database);
+            return string.Format("Host={0};Username={1};Password={2};Database={3};MaxPoolSize=100;ApplicationName=ardoPGSQL;SSL Mode=Prefer;Trust Server Certificate=true;", Server, Username, Password, Database);
         }
 
         public override string DatabaseIdentifier

@@ -70,7 +70,7 @@ namespace ardo.DatabaseProvider.Redshift.ConfigurationService
 
         protected override string AssembleBasicConnectionString()
         {
-            return string.Format("Host={0};Username={1};Password={2};Database={3};Port={4};MaxPoolSize=100;ConnectionLifeTime=120;SSL=True;Sslmode=Prefer;", Server, Username, Password, Database, Port);
+            return string.Format("Host={0};Username={1};Password={2};Database={3};Port={4};MaxPoolSize=100;SSL Mode=Prefer;Trust Server Certificate=true;Server Compatibility Mode=Redshift", Server, Username, Password, Database, Port);
         }
 
 
